@@ -1,36 +1,45 @@
+import requests
+import json
 
+# ====== Модель доски ======
 class Catalog:
 
 	def __init__(self, board):
-		self.board = board
-		self.schema = json.loads(requests.get(''.join(["https://2ch.hk/", board "/catalog.json"])).text)
-		self.threadsCount = len(self.schema["threads"])
+		self.board = board  # доска
+		print("Скачиваю доску", self.board)
+		self.schema = json.loads(requests.get(''.join(["https://2ch.hk/", board, "/catalog.json"])).text)  # DOM доски
+		self.threadsCount = len(self.schema["threads"])  # число активных тредов на доске
 
 
+# ====== Прикрепление к посту ======
 class Media:
 
 	def __init__(self, name, path):
-		self.name = name
-		self.path = path
-		self.cached = False
+		self.name = name  # имя прикрепления
+		self.path = path  # путь на сервере к прикреплению
+		self.cached = False  # флаг загрузки прикрепления на комп с вайпалкой
 
+	# === загрузка прикрепления с сосача ===
 	def download(self):
 		if self.cached == False:
-			self.file = requests.get("https://2ch.hk"+self.path).content
+			self.file = requests.get("https://2ch.hk"+self.path).content  # сам файл прикрепления
 			self.cached = True
 
 
+# ====== Существующий пост ======
 class Post:
 
 	def __init__(self, schema):
-		self.ID = schema["num"]
+		self.ID = schema["num"]  # номер поста на доске
 		self.set_comment(schema["comment"])
 		self.set_sage(schema)
-		self.medias = []
+		self.num = schema["number"]  # номер поста в треде (с 1)
+		self.medias = []  # прикрепления
 		for media in schema["files"]:
 			self.medias.append(Media(media["name"], media["path"]))
 		print("Триггернулась на", ">>"+self.ID)
-			
+
+	# === форматирование текста поста ===
 	def set_comment(self, text):
 		# === замена <br> на \n ===
 		text = text.replace("<br>", "\n")
@@ -73,30 +82,35 @@ class Post:
 			s.replace_with("[s]"+s.get_text()+"[/s]")
 
 		# === сохранение ===
-		self.comment = str(soup.get_text()).lstrip('\n')
+		self.comment = str(soup.get_text()).lstrip('\n')  # текст поста
 
+	# === определение флага сажи ===
 	def set_sage(self, schema):
 		if schema["email"].find("mailto:sage") == -1:
-			self.sage = False
+			self.sage = False  # флаг сажи
 		else:
-			self.sage = True
+			self.sage = True  # флаг сажи
 
 
+# ====== Модель треда ======
 class Thread:
 
 	def __init__(self, board, ID):
-		self.board = board
-		self.ID = ID
-		self.schema = json.loads(requests.get(''.join(["https://2ch.hk/", sys.argv[1], "/res/", threadID, ".json"])).text)
-		self.postsCount = schema["posts_count"] + 1
-		self.lastID = schema["max_num"]
-		self.posts = []
-		for post in schema["threads"][0]["posts"]:
-			self.posts.append(Post(post))
-		self.loaf = "";
+		self.board = board  # доска
+		self.ID = ID  # номер треда на доске
+		print("Скачиваю тред", self.ID)
+		self.schema = json.loads(requests.get(''.join(["https://2ch.hk/", sys.argv[1], "/res/", threadID, ".json"])).text)  # DOM треда
+		self.postsCount = schema["posts_count"] + 1  # число постов в треде
+		self.lastID = schema["max_num"]  # номер последнего поста треда
+		self.download_posts()  # посты
+		self.loaf = "";  # "батон"
 		for postNum in min(len(self.posts), 30):
 			self.loaf += (">>"+self.posts[postNum]["num"]+" ")
 
-
+	# === загрузка DOM постов ===
+	def download_posts(self):
+		self.posts = []
+		for post in schema["threads"][0]["posts"]:
+			self.posts.append(Post(post))
 
 
