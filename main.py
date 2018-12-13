@@ -92,19 +92,19 @@ class Stats:
 	postsSent = 0
 	captchasSolved = 0
 
-	def setProxies(amount):
+	def setProxies(self, amount):
 		Stats.numOfProxies = amount
 
-	def setnumOfThreads(amount):
+	def setnumOfThreads(self, amount):
 		Stats.numOfThreads = amount
 
-	def incCaptchas():
+	def incCaptchas(self):
 		Stats.captchasSolved += 1
 
-	def incPosts():
+	def incPosts(self):
 		Stats.postsSent += 1
 
-	def printStats():
+	def printStats(self):
 		print("=====================================")
 		print("Проксичек осталось:\t", str(Stats.numOfProxies - len(badproxies)))
 		print("Начальные потоки:\t", str(Stats.numOfThreads))
@@ -120,7 +120,7 @@ class Stats:
 # ====== API капчи сосача ======
 class Captcha:
 
-	def __init__(self, proxy, agent, board, thread, solver):
+	def __init__(self, proxy, agent, board, thread, solver, TIMEOUT):
 		#self.api = "https://2ch.hk/api/captcha/2chaptcha/"
 		self.api = "https://2ch.hk/api/captcha/recaptcha/id"
 		self.proxy = proxy
@@ -128,9 +128,10 @@ class Captcha:
 		self.board = board
 		self.thread = thread
 		self.solver = solver
-		captcha = requests.get(self.api + "id?board=" + self.board + "&thread=" + self.thread, proxies=self.proxy, headers=self.agent, timeout=TIMEOUT, verify=False).json()
+		self.TIMEOUT
+		captcha = requests.get(self.api + "id?board=" + self.board + "&thread=" + self.thread, proxies=self.proxy, headers=self.agent, timeout=self.TIMEOUT, verify=False).json()
 		self.id = captcha["id"]
-		self.image = requests.get(self.api + "image/" + self.id, proxies=self.proxy, headers=self.agent, timeout=TIMEOUT, verify=False).content
+		self.image = requests.get(self.api + "image/" + self.id, proxies=self.proxy, headers=self.agent, timeout=self.TIMEOUT, verify=False).content
 
 	def solve(self):
 		print(self.proxy["http"], "solving captcha")
@@ -138,7 +139,7 @@ class Captcha:
 		return (None, self.id), (None, self.value)
 
 	def verify(self):
-		return requests.get(self.api + "check/" + self.id + '?value=' + self.value, proxies=self.proxy, headers=self.agent, verify=False, timeout=TIMEOUT).json()["result"] == 1
+		return requests.get(self.api + "check/" + self.id + '?value=' + self.value, proxies=self.proxy, headers=self.agent, verify=False, timeout=self.TIMEOUT).json()["result"] == 1
 
 
 # ====== Постинг ======
@@ -182,10 +183,10 @@ class Post:
 		self.headers["Cookie"] = ""
 		self.headers["Connection"] = "keep-alive"
 
-	def prepare(self):
+	def prepare(self, TIMEOUT):
 		try:
 			#self.params["2chaptcha_id"], self.params["2chaptcha_value"] = Captcha(self.proxy, self.agent, self.board, self.thread, self.solver).solve()
-			self.buffer["2chaptcha_id"], self.buffer["g-recaptcha-response"] = Captcha(self.proxy, self.agent, self.board, self.thread, self.solver).solve()
+			self.buffer["2chaptcha_id"], self.buffer["g-recaptcha-response"] = Captcha(self.proxy, self.agent, self.board, self.thread, self.solver, TIMEOUT).solve()
 			self.params.append(("g-recaptcha-response", self.buffer["g-recaptcha-response"]))
 			self.params.append(("2chaptcha_id", self.buffer["2chaptcha_id"]))
 			print(self.proxy["http"], "solved")
@@ -263,7 +264,7 @@ class Post:
 
 		self.params.append(("formimages[]", (file_name_displayed, media, mediaType)))
 
-	def send(self):
+	def send(self, TIMEOUT, PAUSE):
 		response = {}
 		try:
 			print(self.proxy["http"], "posting")
@@ -292,10 +293,13 @@ class Wiper:
 		self.thread = setup.thread
 		if setup.solverType == 0:
 			self.solver = solvers.CaptchaSolver_XCaptcha(setup.key)
-		elif solvertype == 1:
+		elif setup.solverType == 1:
 			self.solver = solvers.CaptchaSolver_captchaguru(setup.key)
-		elif solvertype == 2:
+		elif setup.solverType == 2:
 			self.solver = solvers.CaptchaSolver_anticaptcha(setup.key)
+		self.setup = setup
+		self.catalog = catalog
+		self.threads = threads
 
 	def trap_replace(self, text):
 		if bool(random.getrandbits(1)):
@@ -332,82 +336,82 @@ class Wiper:
 
 		try:
 			#will quit the thread if exception is here. Fixed now.
-			while counter < setup.proxyRepeatsCount:
-				if setup.shrapnelCharge == 0:
+			while counter < self.setup.proxyRepeatsCount:
+				if self.setup.shrapnelCharge == 0:
 					threadNum = 0
 				else:
-					threadNum = random.randint(0, setup.gunCharge-1)
-					self.thread = threads[threadNum].ID
+					threadNum = random.randint(0, self.setup.shrapnelCharge-1)
+					self.thread = self.threads[threadNum].ID
 
 				post = Post(proxy, agent, self.board, self.thread, self.solver)
-				if (post.prepare()):
+				if (post.prepare(self.setup.TIMEOUT)):
 					charnum = random.randint(1, 100)
 					if self.thread != "0":
-						black_anus = random.randint(0, len(threads[threadNum].posts)-1)  # номер поста для триггера
-						white_anus = random.randint(0, len(threads[threadNum].posts)-1)  # номер поста для дублирования
+						black_anus = random.randint(0, len(self.threads[threadNum].posts)-1)  # номер поста для триггера
+						white_anus = random.randint(0, len(self.threads[threadNum].posts)-1)  # номер поста для дублирования
 
 					# === берём сначала триггер ===
-					if setup.triggerForm == 1:
-						trigger = ">>" + threads[threadNum].lastID + '\n'
-					elif setup.triggerForm == 2:
-						trigger = ">>" + threads[threadNum].posts[black_anus].ID + '\n'
-					elif setup.triggerForm == 3:
-						trigger = ">>" + threads[threadNum].loaf + '\n'
-					elif setup.triggerForm == 4:
-						trigger = ">>" + threads[threadNum].posts[0].ID + '\n'
-					elif setup.triggerForm == 0:
+					if self.setup.triggerForm == 1:
+						trigger = ">>" + self.threads[threadNum].lastID + '\n'
+					elif self.setup.triggerForm == 2:
+						trigger = ">>" + self.threads[threadNum].posts[black_anus].ID + '\n'
+					elif self.setup.triggerForm == 3:
+						trigger = ">>" + self.threads[threadNum].loaf + '\n'
+					elif self.setup.triggerForm == 4:
+						trigger = ">>" + self.threads[threadNum].posts[0].ID + '\n'
+					elif self.setup.triggerForm == 0:
 						trigger = ""
 
 					# === потом текст поста ===
-					if profil == 1:
-						post.set_text(trigger + govno[random.randint(0, 9)])
-					elif profil == 2:
+					if self.setup.mode == 1:
+						post.set_text(trigger + self.setup.pastes[random.randint(0, 9)])
+					elif self.setup.mode == 2:
 						post.set_text(trigger)
-					elif profil == 0:
+					elif self.setup.mode == 0:
 						post.set_text(trigger + ''.join(random.choice(TEXT_CHARS) for _ in range(charnum)))
-					elif profil == 3:
-						post.set_text(trigger + ("> " + threads[threadNum].posts[black_anus].comment).replace("\n", "\n> ").replace("\n> \n", "\n\n"))
-					elif profil == 4:
-						post.set_text(trigger + setup.pastes[random.randint(0, len(setup.pastes)-1)])
-					elif profil == 5:
+					elif self.setup.mode == 3:
+						post.set_text(trigger + ("> " + self.threads[threadNum].posts[black_anus].comment).replace("\n", "\n> ").replace("\n> \n", "\n\n"))
+					elif self.setup.mode == 4:
+						post.set_text(trigger + self.setup.pastes[random.randint(0, len(self.setup.pastes)-1)])
+					elif self.setup.mode == 5:
 						post.set_text(trigger + "https://2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J2ch.hk/b/res/MZx7W05J")
-					elif profil == 6:
-						post.set_text(trigger + setup.bigPaste)
-					elif profil == 7:
-						post.set_text(trigger + self.trap_replace(threads[threadNum].posts[white_anus].comment))
-					elif profil == 8:
-						post.set_text(trigger + setup.pastes[random.randint(0, len(setup.pastes)-1)].replace("BANNUMBER", str(random.randint(setup.minBan, setup.maxBan))))
+					elif self.setup.mode == 6:
+						post.set_text(trigger + self.setup.bigPaste)
+					elif self.setup.mode == 7:
+						post.set_text(trigger + self.trap_replace(self.threads[threadNum].posts[white_anus].comment))
+					elif self.setup.mode == 8:
+						post.set_text(trigger + self.setup.pastes[random.randint(0, len(self.setup.pastes)-1)].replace("BANNUMBER", str(random.randint(self.setup.minBan, self.setup.maxBan))))
 
 					# === до 4 прикреплений ===
-					if mediaKind > 0:
+					if self.setup.mediaKind > 0:
 						try:
-							if mediaKind == 3:
-								if setup.shrapnelCharge != 0:
-									mediasCount = min(len(threads[threadNum].posts[white_anus].medias), 4)
-									for media in threads[threadNum].posts[white_anus].medias:
-										print("Скачиваю", media.name, "("+str(white_anus+1)+" пост "+threads[threadNum].ID+" треда)")
+							if self.setup.mediaKind == 3:
+								if self.setup.shrapnelCharge != 0:
+									mediasCount = min(len(self.threads[threadNum].posts[white_anus].medias), 4)
+									for media in self.threads[threadNum].posts[white_anus].medias:
+										print("Скачиваю", media.name, "("+str(white_anus+1)+" пост "+self.threads[threadNum].ID+" треда)")
 										media.download()
 								else:
-									mediasCount = min(len(threads[threadNum].posts[white_anus].medias), 4)
+									mediasCount = min(len(self.threads[threadNum].posts[white_anus].medias), 4)
 							else:
-								mediasCount = setup.mediasCount
+								mediasCount = self.setup.mediasCount
 
 							for mediaNum in range(mediasCount):
-								blue_anus = random.randint(0, setup.mediasCount-1)  # номер пикчи или видео с диска
-								if mediaKind == 1:
-									post.set_image(setup.mediaPaths[blue_anus])
+								blue_anus = random.randint(0, self.setup.mediasCount-1)  # номер пикчи или видео с диска
+								if self.setup.mediaKind == 1:
+									post.set_image(self.setup.mediaPaths[blue_anus])
 								elif MEDIA == 2:
-									post.set_video(setup.mediaPaths[blue_anus])
+									post.set_video(self.setup.mediaPaths[blue_anus])
 								elif MEDIA == 3:
-									post.set_media(threads[threadNum].posts[white_anus].medias[blue_anus].name, threads[threadNum].posts[white_anus].medias[blue_anus].file)
+									post.set_media(self.threads[threadNum].posts[white_anus].medias[blue_anus].name, self.threads[threadNum].posts[white_anus].medias[blue_anus].file)
 						except Exception as e:
 							print(e)
 							print("Не могу открыть файл, проверь имя.")
 							os._exit(-1)
 
 					# === и сажу туды ===
-					if setup.sageMode == 2:
-						if threads[threadNum].posts[white_anus].sage == True:
+					if self.setup.sageMode == 2:
+						if self.threads[threadNum].posts[white_anus].sage == True:
 							post.set_sage()
 						else:
 							post.params.append(("email", (None, "")))
@@ -416,7 +420,7 @@ class Wiper:
 					elif SAGE == 0:
 						post.params.append(("email", (None, "")))
 
-					success, response = post.send()
+					success, response = post.send(self.setup.TIMEOUT, self.setup.PAUSE)
 					if success:
 						Stats.incPosts()
 						post_id = 0
@@ -425,12 +429,12 @@ class Wiper:
 						except:
 							post_id = response["Num"]
 						print(proxy + " - success. Post id: " + str(post_id), end=' ')
-						if setup.shrapnelCharge > 0:
-							print("("+threads[threadNum].ID+" thread)", end='\n')
+						if self.setup.shrapnelCharge > 0:
+							print("("+self.threads[threadNum].ID+" thread)", end='\n')
 						else:
 							print(' ', end='\n')
-						if setup.thread != 0:
-							threads[threadNum].lastID = str(post_id)
+						if self.setup.thread != 0:
+							self.threads[threadNum].lastID = str(post_id)
 
 						print(str(proxyRepeatsCount-counter)+" LOOPS LEFT")
 						counter += 1

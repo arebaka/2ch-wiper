@@ -9,7 +9,7 @@ def activate_debug(logMode):
 	print("\n*** DEBUG MODE ACTIVATED ***")
 	if logMode == 1:
 		logging.basicConfig(filename='LOG.txt', level=logging.DEBUG)
-	elif debug == 2:
+	elif logMode == 2:
 		logging.basicConfig(level=logging.DEBUG)
 
 
@@ -43,6 +43,7 @@ class Setup:
 		self.board = args[1]  # доска
 		self.thread = args[2]  # тред
 		self.potocksCount = int(args[3])  # число потоков
+		self.TIMEOUT, self.PAUSE = self.set_consts(self.potocksCount)  # таймаут, пауза
 
 		self.solverType, self.key = self.set_key(int(args[5]), args[6])  # солвер, ключ
 		self.proxyRepeatsCount = int(args[7])  # число повторов прокси
@@ -73,6 +74,16 @@ class Setup:
 			bansFile = "bans_unix.txt"
 			fullFile = "parasha_unix.txt"
 		return cpFile, bansFile, fullFile
+
+	def set_consts(self, potocksCount):
+		if potocksCount == 0:
+			TIMEOUT = 60
+			PAUSE = 50
+			self.potocksCount = 4
+		else:
+			TIMEOUT = 3
+			PAUSE = 10
+		return TIMEOUT, PAUSE
 
 	# === получение казённого ключа ===
 	def get_key(self, solverType):
@@ -188,7 +199,7 @@ class Setup:
 		mediaPaths = []
 		if mediaKind != 0:
 			if mediaKind > 1:
-				TIMEOUT += 30
+				self.TIMEOUT += 30
 			if mediaKind < 3:
 				if mediaKind == 1:
 					mediaDir = "images"
@@ -209,7 +220,7 @@ class Setup:
 						print("Скачиваю ", media.name, "("+str(post.num)+"/"+str(self.threads[0].postsCount)+" пост)")
 						media.download()
 			else:
-				TIMEOUT += 60
+				self.TIMEOUT += 60
 		else:
 			mediaKind = 0
 		return mediaKind, mediaPaths, mediasCount
