@@ -43,16 +43,6 @@ def show_logo():
 	print("*************************************************")
 
 
-# ====== Запись логов ======
-def activate_debug(logMode):
-	import logging
-	print("\n*** DEBUG MODE ACTIVATED ***")
-	if logMode == 1:
-		logging.basicConfig(filename='LOG.txt', level=logging.DEBUG)
-	elif debug == 2:
-		logging.basicConfig(level=logging.DEBUG)
-
-
 # ====== Отключение ======
 def safe_quit(sig=0, frame=0):
 	print("\n\nЖду, пока обновится лист с проксичками...")

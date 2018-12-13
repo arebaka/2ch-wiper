@@ -2,6 +2,17 @@ import os
 import requests
 import scheme
 
+
+# ====== Запись логов ======
+def activate_debug(logMode):
+	import logging
+	print("\n*** DEBUG MODE ACTIVATED ***")
+	if logMode == 1:
+		logging.basicConfig(filename='LOG.txt', level=logging.DEBUG)
+	elif debug == 2:
+		logging.basicConfig(level=logging.DEBUG)
+
+
 ## args:
 # 1 - доска
 # 2 - тред
@@ -26,6 +37,7 @@ import scheme
 class Setup:
 
 	def __init__(self, args):
+		activate_debug(args[4])
 		self.cpFile, self.bansFile, self.fullFile = self.set_encoding()  # файлы с пастами
 
 		self.board = args[1]  # доска
@@ -46,7 +58,7 @@ class Setup:
 		if self.thread != "0":
 			self.triggerForm, self.shrapnelCharge = set_trigger(int(args[11]), int(args[12]), int(args[13]), args)  # режим триггера, число тредов шрапнели
 
-		self.mediaKind, self.mediaPaths, self.mediasCount = self.set_media(int(args[14]), args[15], int(args[16]))  # вид прикреплений, число прикреплений
+		self.mediaKind, self.mediaPaths, self.mediasCount = self.set_media(int(args[14]), args[15], int(args[16]))  # тип прикреплений, число прикреплений к треду
 		
 		self.sageMode = int(args[17])  # режим сажи
 
