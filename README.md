@@ -55,8 +55,8 @@
 +-board - *доска*  
 +-thread - *тред*  
 +-potocksCount - *число потоков*  
-+-TIMEOUT - *таймаут*
-+-PAUSE - *пауза*
++-TIMEOUT - *таймаут*  
++-PAUSE - *пауза*  
 +-solverType - *решатель*  
 +-key - *ключ к решателю*  
 +-proxyRepeatsCount - *число повторов прокси*  

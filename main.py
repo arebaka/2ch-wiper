@@ -92,19 +92,19 @@ class Stats:
 	postsSent = 0
 	captchasSolved = 0
 
-	def setProxies(self, amount):
+	def setProxies(amount):
 		Stats.numOfProxies = amount
 
-	def setnumOfThreads(self, amount):
+	def setnumOfThreads(amount):
 		Stats.numOfThreads = amount
 
-	def incCaptchas(self):
+	def incCaptchas():
 		Stats.captchasSolved += 1
 
-	def incPosts(self):
+	def incPosts():
 		Stats.postsSent += 1
 
-	def printStats(self):
+	def printStats():
 		print("=====================================")
 		print("Проксичек осталось:\t", str(Stats.numOfProxies - len(badproxies)))
 		print("Начальные потоки:\t", str(Stats.numOfThreads))
@@ -128,7 +128,7 @@ class Captcha:
 		self.board = board
 		self.thread = thread
 		self.solver = solver
-		self.TIMEOUT
+		self.TIMEOUT = TIMEOUT
 		captcha = requests.get(self.api + "id?board=" + self.board + "&thread=" + self.thread, proxies=self.proxy, headers=self.agent, timeout=self.TIMEOUT, verify=False).json()
 		self.id = captcha["id"]
 		self.image = requests.get(self.api + "image/" + self.id, proxies=self.proxy, headers=self.agent, timeout=self.TIMEOUT, verify=False).content
@@ -400,9 +400,9 @@ class Wiper:
 								blue_anus = random.randint(0, self.setup.mediasCount-1)  # номер пикчи или видео с диска
 								if self.setup.mediaKind == 1:
 									post.set_image(self.setup.mediaPaths[blue_anus])
-								elif MEDIA == 2:
+								elif self.setup.mediaKind == 2:
 									post.set_video(self.setup.mediaPaths[blue_anus])
-								elif MEDIA == 3:
+								elif self.setup.mediaKind == 3:
 									post.set_media(self.threads[threadNum].posts[white_anus].medias[blue_anus].name, self.threads[threadNum].posts[white_anus].medias[blue_anus].file)
 						except Exception as e:
 							print(e)
@@ -415,9 +415,9 @@ class Wiper:
 							post.set_sage()
 						else:
 							post.params.append(("email", (None, "")))
-					elif SAGE == 1:
+					elif self.setup.sageMode == 1:
 						post.set_sage()
-					elif SAGE == 0:
+					elif self.setup.sageMode == 0:
 						post.params.append(("email", (None, "")))
 
 					success, response = post.send(self.setup.TIMEOUT, self.setup.PAUSE)
@@ -436,7 +436,7 @@ class Wiper:
 						if self.setup.thread != 0:
 							self.threads[threadNum].lastID = str(post_id)
 
-						print(str(proxyRepeatsCount-counter)+" LOOPS LEFT")
+						print(str(self.setup.proxyRepeatsCount-counter)+" LOOPS LEFT")
 						counter += 1
 					else:
 						print(proxy, "posting failed -", response)
