@@ -27,7 +27,7 @@ def activate_debug(logMode):
 # 11 - номер режима триггера (или -1, если нулевая)
 # 12 - число тредов для шрапнели (или 0, если без неё)
 # 13 - минимальное число постов в тредах для шрапнели (или -1, если без неё или с указанием тредов)
-# 14 - номер вида прикреплений (или -1, если дэ)
+# 14 - номер вида прикреплений (или 0, если дэ)
 # 15 - подкаталог прикреплений (или 0, если из корня)
 # 16 - число прикреплений (или -1, если из постов)
 # 17 - номер режима сажи
@@ -37,7 +37,8 @@ def activate_debug(logMode):
 class Setup:
 
 	def __init__(self, args):
-		activate_debug(args[4])
+		if int(args[4]) != 0:
+			activate_debug(int(args[4]))
 		self.cpFile, self.bansFile, self.fullFile = self.set_encoding()  # файлы с пастами
 
 		self.board = args[1]  # доска
@@ -45,11 +46,11 @@ class Setup:
 		self.potocksCount = int(args[3])  # число потоков
 		self.TIMEOUT, self.PAUSE = self.set_consts(self.potocksCount)  # таймаут, пауза
 
-		self.solverType, self.key = self.set_key(int(args[5]), args[6])  # солвер, ключ
+		self.solver, self.key = self.set_key(int(args[5]), args[6])  # солвер, ключ
 		self.proxyRepeatsCount = int(args[7])  # число повторов прокси
-		self.wiperMode, self.pastes, self.bigPaste = self.set_mode(int(args[8]))  # режим вайпалки, пасты
+		self.mode, self.pastes, self.bigPaste = self.set_mode(int(args[8]))  # режим вайпалки, пасты
 
-		if self.wiperMode == 8:
+		if self.mode == 8:
 			self.minBan = int(args[9])  # минимальный ID бана
 			self.maxBan = int(args[10])  # максимальный ID бана
 
@@ -86,18 +87,18 @@ class Setup:
 		return TIMEOUT, PAUSE
 
 	# === получение казённого ключа ===
-	def get_key(self, solverType):
-		if solverType == 0:
-			solverType = "xcaptcha"
+	def get_key(self, solver):
+		if solver == 0:
+			solver = "xcaptcha"
 			print("Пытаюсь получить казеный ключ для икскаптчи...")
-		elif solverType == 1:
-			solverType = "gurocaptcha"
+		elif solver == 1:
+			solver = "gurocaptcha"
 			print("Пытаюсь получить казеный ключ для гурокаптчи...")
-		elif solverType == 2:
-			solverType = "anticaptcha"
+		elif solver == 2:
+			solver = "anticaptcha"
 			print("Пытаюсь получить казеный ключ для антикапчи...")
 
-		keyreq = requests.get('http://94.140.116.169:8080/captcha/'+solverType)
+		keyreq = requests.get('http://94.140.116.169:8080/captcha/'+solver)
 		if keyreq.status_code == 200 and len(keyreq.text) == 32:
 			print("Ключ загружен!")
 			key = keyreq.text
@@ -110,12 +111,12 @@ class Setup:
 		return key;
 
 	# === валидация ключа ===
-	def set_key(self, solverType, key):
+	def set_key(self, solver, key):
 		if key == "0":
-			key = self.get_key(solverType)
+			key = self.get_key(solver)
 		elif len(KEY) == 32:
 			print("Верифицируем ключ...")
-			if solverType == 0:
+			if solver == 0:
 				keyStatus = requests.get("http://x-captcha2.ru/res.php?key=" + key + "&action=getbalance")
 				if keyStatus.status_code == 200:
 					if keyStatus.text == "ERROR_KEY_USER":
@@ -131,8 +132,8 @@ class Setup:
 					print("Икскапча заблокировала твой IP, перезагрузи роутер!")
 					exit()
 
-			elif solverType == 1 or solverType == 2:
-				if solverType == 1:
+			elif solver == 1 or solver == 2:
+				if solver == 1:
 					keyStatus = requests.post("https://api.captcha.guru/getBalance", json={"clientKey": key}, verify=False).json()
 				else:
 					keyStatus = requests.post("https://api.anti-captcha.com/getBalance", json={"clientKey": KEY}, verify=False).json()
@@ -148,7 +149,7 @@ class Setup:
 		else:
 			print("Неправильно введен ключ!")
 			exit()
-		return solverType, key
+		return solver, key
 
 	# === установка режима вайпалки ===
 	def set_mode(self, mode):

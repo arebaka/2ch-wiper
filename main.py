@@ -291,11 +291,11 @@ class Wiper:
 		self.agents = [agent[:-1] for agent in open("useragents").readlines()]
 		self.board = setup.board
 		self.thread = setup.thread
-		if setup.solverType == 0:
+		if setup.solver == 0:
 			self.solver = solvers.CaptchaSolver_XCaptcha(setup.key)
-		elif setup.solverType == 1:
+		elif setup.solver == 1:
 			self.solver = solvers.CaptchaSolver_captchaguru(setup.key)
-		elif setup.solverType == 2:
+		elif setup.solver == 2:
 			self.solver = solvers.CaptchaSolver_anticaptcha(setup.key)
 		self.setup = setup
 		self.catalog = catalog
