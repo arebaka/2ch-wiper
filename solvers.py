@@ -1,3 +1,7 @@
+## -*- coding: utf-8 -*-
+
+import requests
+
 # ====== X-капча ======
 class CaptchaSolver_XCaptcha:
 

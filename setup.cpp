@@ -41,8 +41,11 @@ bool Setup::is_zero (const string &str) {
 
 
 void Setup::set_board (const string &board) {
-    this->board = board;
-    hasBoard = true;
+    if (board.length() != 0) {
+        this->board = board;
+        hasBoard = true;
+    } else
+        hasBoard = false;
 }
 void Setup::set_thread (const string &thread) {
     if (is_pos_num(thread)) {
@@ -128,8 +131,8 @@ void Setup::set_minPostsCount (const string &minPostsCount) {
     } else
         hasMinPostsCount = false;
 }
-void Setup::set_mediaKind (const char &mediaKing) {
-    if (DIGITS.find(mediaKing) != string::npos) {
+void Setup::set_mediaKind (const char &mediaKind) {
+    if (DIGITS.find(mediaKind) != string::npos) {
         this->mediaKind = mediaKind;
         hasMediaKind = true;
     } else
@@ -160,31 +163,84 @@ void Setup::set_shrapnelThreads (const vector<string> &shrapnelThreads) {
 
 
 
-Setup Setup::parse (const int &argsCount, const char * args[]) {}
-
-unsigned int Setup::validate () {}
-
-bool Setup::complete () {}
-
-string Setup::run () {
-    if (validate()) {
-        string command(get());
-        system(command.c_str());
-        return command;
-    } else {
-        cerr << "Пытаюсь починить..." << endl;
-        complete();
-        if (validate()) {
-            string command(get());
-            system(command.c_str());
-            return command;
-        }
-    }
-    return "ERROR";
+void Setup::clear () {
+    hasBoard = false; hasThread = false; hasPotocksCount= false; hasLogMode= false; hasSolver= false; hasKey= false;
+    hasProxyRepeatsCount= false; hasMode= false; hasMinBan= false; hasMaxBan= false; hasTriggerForm= false;
+    hasShrapnelCharge= false; hasMinPostsCount= false; hasMediaKind= false; hasMediaGroup= false;
+    hasMediasCount= false; hasSageMode = false;
 }
 
-string Setup::get () {
-    string command(board + " " + thread + " " + potocksCount);
+
+/// wiper [-b|--board] <доска>! [-t|--target] <тред>! [-p|--potocks] <потоки>! [-s|--solver] <решатель>!
+/// [-r|--repeats] <повторы проксей>! [-w|--wiper] <режим вайпалки>! [-s|--sage] <режим сажи>! [-d|--debug + <режим логов>]
+/// [-k|--key| + <ключ>] [-x|--max + максимальный бан] [-n|--min + минимальный бан] [-r|--trigger + <режим триггера>]
+/// [-h|--shrapnel + <число тредов для шрапнели>] [-m|--media + <тип прикреплений> [<число прикреплений>]]
+/// [-g|--group + <подкаталог прикреплений>] [-T|--threads + <треды для шрапнели>*]
+Setup Setup::parse (const int &argsCount, const char * args[]) {}
+
+vector<string> Setup::validate () {
+    vector<string> errors;
+    if (!hasBoard) errors.push_back("Доска не задана!");
+    if (!hasThread) errors.push_back("Цель не задана!");
+    if (!hasPotocksCount) errors.push_back("Число потоков не задано!");
+    if (!hasSolver) errors.push_back("Решатель не задан!");
+    if (!hasProxyRepeatsCount) errors.push_back("Число повторов прокси не задано!");
+    if (!hasMode) errors.push_back("Режим вайпалки не задан!");
+    if (!hasSageMode) errors.push_back("Режим сажи не задан!");
+    if (!hasTriggerForm) errors.push_back("Режим триггера не задан!");
+
+    if (!hasKey) errors.push_back("Неправильно введён ключ!");
+
+    if (mode == "8") {
+        if (!hasMinBan) errors.push_back("Не задан нижний номер банов!");
+        if (!hasMaxBan) errors.push_back("Не задан верхний номер банов!");
+    }
+
+    if (thread == "1" && shrapnelCharge == "0" && shrapnelThreads.size() == 0) errors.push_back("Не заданы треды для шрапнели!");
+
+    if ((mediaKind == '1' || mediaKind == '2') && !hasMediaKind) errors.push_back("Не задано число прикреплений!");
+
+    if (errors.size() == 0) errors.push_back("OK");
+    return errors; }
+
+unsigned char Setup::complete () {
+    unsigned char autoCompCount(0);
+
+    if (!hasThread) set_thread("0");
+    else autoCompCount++;
+    if (!hasPotocksCount) set_potocksCount("0");
+    else autoCompCount++;
+    if (!hasLogMode) set_logMode('0');
+    else autoCompCount++;
+    if (!hasProxyRepeatsCount) set_proxyRepeatsCount("10");
+    else autoCompCount++;
+    if (!hasTriggerForm) set_triggerForm("0");
+    else autoCompCount++;
+    if (!hasShrapnelCharge) set_shrapnelCharge("0");
+    else autoCompCount++;
+    if (!hasMinPostsCount) set_minPostsCount("0");
+    else autoCompCount++;
+    if (!hasMediasCount) set_mediasCount("1");
+    else autoCompCount++;
+    if (!hasSageMode) set_sageMode('0');
+    else autoCompCount++;
+
+    return autoCompCount;
+}
+
+vector<string> Setup::start () {
+    complete();
+    vector<string> errors = validate();
+    if (errors[0] == "OK") {
+        string command(comline());
+        system(command.c_str());
+    }
+    return errors;
+}
+
+string Setup::comline () {
+    string command("python3 main.py ");
+    command += (board + " " + thread + " " + potocksCount + " ");
     command += logMode;
 
     command += (" " + solver + " ");
@@ -218,6 +274,6 @@ string Setup::get () {
     if (hasShrapnelCharge && !hasMinPostsCount)
         for (unsigned int i(0); i < shrapnelThreads.size(); i++)
             command += (" " + shrapnelThreads[i]);
-
+cout << command << endl;
     return command;
 }

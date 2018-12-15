@@ -1,5 +1,8 @@
+## -*- coding: utf-8 -*-
+
 import requests
 import json
+from bs4 import BeautifulSoup
 
 # ====== Модель доски ======
 class Catalog:
@@ -29,9 +32,9 @@ class Media:
 # ====== Существующий пост ======
 class Post:
 
-	def __init__(self, schema):
-		self.ID = schema["num"]  # номер поста на доске
-		self.set_comment(schema["comment"])
+	def __init__(self, schema, mode, triggerForm):
+		self.ID = str(schema["num"])  # номер поста на доске
+		self.set_comment(schema["comment"], mode, triggerForm)
 		self.set_sage(schema)
 		self.num = schema["number"]  # номер поста в треде (с 1)
 		self.medias = []  # прикрепления
@@ -40,7 +43,7 @@ class Post:
 		print("Триггернулась на", ">>"+self.ID)
 
 	# === форматирование текста поста ===
-	def set_comment(self, text):
+	def set_comment(self, text, mode, triggerForm):
 		# === замена <br> на \n ===
 		text = text.replace("<br>", "\n")
 		# === разметка жирного ===
@@ -60,7 +63,7 @@ class Post:
 		text = text.replace("</code>", "[/code]")
 
 		# === удаление ссылок на посты, либо метки (OP) ===
-		if profil == 7 and moremore == 0:
+		if mode == 7 and triggerForm == 0:
 			text = text.replace(" (OP)", "")
 			soup = BeautifulSoup(text, features="html.parser")
 		else:
@@ -95,22 +98,22 @@ class Post:
 # ====== Модель треда ======
 class Thread:
 
-	def __init__(self, board, ID):
+	def __init__(self, board, ID, mode, triggerForm):
 		self.board = board  # доска
 		self.ID = ID  # номер треда на доске
 		print("Скачиваю тред", self.ID)
-		self.schema = json.loads(requests.get(''.join(["https://2ch.hk/", sys.argv[1], "/res/", threadID, ".json"])).text)  # DOM треда
-		self.postsCount = schema["posts_count"] + 1  # число постов в треде
-		self.lastID = schema["max_num"]  # номер последнего поста треда
-		self.download_posts()  # посты
+		self.schema = json.loads(requests.get(''.join(["https://2ch.hk/", board, "/res/", ID, ".json"])).text)  # DOM треда
+		self.postsCount = self.schema["posts_count"] + 1  # число постов в треде
+		self.lastID = self.schema["max_num"]  # номер последнего поста треда
+		self.download_posts(mode, triggerForm)  # посты
 		self.loaf = "";  # "батон"
-		for postNum in min(len(self.posts), 30):
-			self.loaf += (">>"+self.posts[postNum]["num"]+" ")
+		for postNum in range(min(len(self.posts), 30)):
+			self.loaf += (">>"+self.posts[postNum].ID+" ")
 
 	# === загрузка DOM постов ===
-	def download_posts(self):
+	def download_posts(self, mode, triggerForm):
 		self.posts = []
-		for post in schema["threads"][0]["posts"]:
-			self.posts.append(Post(post))
+		for post in self.schema["threads"][0]["posts"]:
+			self.posts.append(Post(post, mode, triggerForm))
 
 

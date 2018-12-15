@@ -1,0 +1,68 @@
+QWidget {
+	background-image: url(gui/images/gui.png);
+}
+
+QPushButton {
+	background-image: url(gui/images/button.png);
+	margin-top: -5;
+}
+
+
+QRadioButton::indicator {
+	width: 20;
+	height: 20;
+}
+QRadioButton::indicator::unchecked {
+	image: url(gui/images/radio_out.png);
+}
+QRadioButton::indicator::unchecked::hover {
+	image: url(gui/images/radio_out_hover.png);
+}
+QRadioButton::indicator::unchecked::pressed {
+	image: url(gui/images/radio_pressed.png);
+}
+
+QRadioButton::indicator::checked {
+	image: url(gui/images/radio_in.png);
+}
+QRadioButton::indicator::checked::hover {
+	image: url(gui/images/radio_in_hover.png);
+}
+QRadioButton::indicator::checked::pressed {
+	image: url(gui/images/radio_pressed.png)
+}
+
+
+QCheckBox::indicator {
+	width: 16;
+	height: 16;
+}
+QCheckBox::indicator::unchecked {
+	image: url(gui/images/check_out.png);
+}
+QCheckBox::indicator::unchecked::hover {
+	image: url(gui/images/check_out_hover.png);
+}
+QCheckBox::indicator::unchecked::pressed {
+	image: url(gui/images/check_pressed.png);
+}
+
+QCheckBox::indicator::checked {
+	image: url(gui/images/check_in.png);
+}
+QCheckBox::indicator::checked::hover {
+	image: url(gui/images/check_in_hover.png)
+}
+QCheckBox::indicator::checked::pressed {
+	image: url(gui/images/check_pressed.png);
+}
+
+
+QTextBrowser {
+	background: none; 
+	background-color: #20272B;
+	border: none;
+	border-radius: 3px;
+	font: monospace;
+	color: white;
+}

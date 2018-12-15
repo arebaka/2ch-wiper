@@ -1,3 +1,5 @@
+## -*- coding: utf-8 -*-
+
 import os
 import requests
 import scheme
@@ -58,7 +60,7 @@ class Setup:
 		self.threads = []
 
 		if self.thread != "0":
-			self.triggerForm, self.shrapnelCharge = set_trigger(int(args[11]), int(args[12]), int(args[13]), args)  # режим триггера, число тредов шрапнели
+			self.triggerForm, self.shrapnelCharge = self.set_trigger(int(args[11]), int(args[12]), int(args[13]), args)  # режим триггера, число тредов шрапнели
 
 		self.mediaKind, self.mediaPaths, self.mediasCount = self.set_media(int(args[14]), args[15], int(args[16]))  # тип прикреплений, число прикреплений к треду
 		
@@ -114,7 +116,7 @@ class Setup:
 	def set_key(self, solver, key):
 		if key == "0":
 			key = self.get_key(solver)
-		elif len(KEY) == 32:
+		elif len(key) == 32:
 			print("Верифицируем ключ...")
 			if solver == 0:
 				keyStatus = requests.get("http://x-captcha2.ru/res.php?key=" + key + "&action=getbalance")
@@ -136,7 +138,7 @@ class Setup:
 				if solver == 1:
 					keyStatus = requests.post("https://api.captcha.guru/getBalance", json={"clientKey": key}, verify=False).json()
 				else:
-					keyStatus = requests.post("https://api.anti-captcha.com/getBalance", json={"clientKey": KEY}, verify=False).json()
+					keyStatus = requests.post("https://api.anti-captcha.com/getBalance", json={"clientKey": key}, verify=False).json()
 				if (keyStatus["errorId"] == 0):
 					print("Ключ подтверждён, ваш баланс:", (keyStatus["balance"]))
 				elif (keyStatus["errorId"] == 1):
@@ -178,17 +180,17 @@ class Setup:
 	# === установка триггера ===
 	def set_trigger(self, form, shrapnelCharge, minPostsCount, args):
 		if shrapnelCharge == 0: # and self.thread > 1
-			self.threads.append(scheme.Thread(self.board, self.thread))
+			self.threads.append(scheme.Thread(self.board, self.thread, self.mode, form))
 		elif shrapnelCharge > 0: # and self.thread > 0
 			self.catalog = scheme.Catalog(self.board)
 			if minPostsCount == -1:
 				for i in range(shrapnelCharge):
-					self.threads.append(scheme.Thread(self.board, args[18+i]))
+					self.threads.append(scheme.Thread(self.board, args[18+i], self.mode, form))
 				else:
 					i = 0
 					for thread in self.catalog.schema["threads"]:
 						if int(thread["posts_count"]) >= minPostsCount:
-							self.threads.append(scheme.Thread(self.board, str(thread["num"])))
+							self.threads.append(scheme.Thread(self.board, str(thread["num"], self.mode, form)))
 							i += 1
 							if i == shrapnelCharge:
 								break

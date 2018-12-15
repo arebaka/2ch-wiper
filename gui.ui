@@ -1,0 +1,829 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GUI</class>
+ <widget class="QMainWindow" name="GUI">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>574</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1280</width>
+    <height>574</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1280</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="mouseTracking">
+   <bool>false</bool>
+  </property>
+  <property name="windowTitle">
+   <string notr="true" comment="test" extracomment="test">GUI</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QPushButton" name="button">
+    <property name="geometry">
+     <rect>
+      <x>1034</x>
+      <y>282</y>
+      <width>235</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="board">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>122</y>
+      <width>125</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="thread">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>149</y>
+      <width>125</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="potocks">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>177</y>
+      <width>125</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="threads">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>233</y>
+      <width>125</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="key">
+    <property name="geometry">
+     <rect>
+      <x>308</x>
+      <y>176</y>
+      <width>290</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="repeats">
+    <property name="geometry">
+     <rect>
+      <x>688</x>
+      <y>96</y>
+      <width>39</width>
+      <height>24</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="imagesCount">
+    <property name="geometry">
+     <rect>
+      <x>1214</x>
+      <y>95</y>
+      <width>39</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="videosCount">
+    <property name="geometry">
+     <rect>
+      <x>1214</x>
+      <y>123</y>
+      <width>39</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="mainMode">
+    <property name="geometry">
+     <rect>
+      <x>25</x>
+      <y>102</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="shrapnelMode">
+    <property name="geometry">
+     <rect>
+      <x>26</x>
+      <y>212</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="anticaptcha">
+    <property name="geometry">
+     <rect>
+      <x>305</x>
+      <y>103</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_2</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="gurocaptcha">
+    <property name="geometry">
+     <rect>
+      <x>305</x>
+      <y>132</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_2</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="x_captcha">
+    <property name="geometry">
+     <rect>
+      <x>477</x>
+      <y>103</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_2</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="reserved">
+    <property name="geometry">
+     <rect>
+      <x>477</x>
+      <y>132</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_2</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="noText">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>132</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_3</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="overload">
+    <property name="geometry">
+     <rect>
+      <x>817</x>
+      <y>133</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_3</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="pastes">
+    <property name="geometry">
+     <rect>
+      <x>817</x>
+      <y>270</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_3</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="random">
+    <property name="geometry">
+     <rect>
+      <x>817</x>
+      <y>412</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_3</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="copying">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>410</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_3</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="quoting">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>269</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_3</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="images">
+    <property name="geometry">
+     <rect>
+      <x>1045</x>
+      <y>104</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_4</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="videos">
+    <property name="geometry">
+     <rect>
+      <x>1045</x>
+      <y>129</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_4</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="medias">
+    <property name="geometry">
+     <rect>
+      <x>1045</x>
+      <y>151</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_4</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="noMedia">
+    <property name="geometry">
+     <rect>
+      <x>1045</x>
+      <y>177</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_4</string>
+    </attribute>
+   </widget>
+   <widget class="QCheckBox" name="serverKey">
+    <property name="geometry">
+     <rect>
+      <x>306</x>
+      <y>213</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_2">
+    <property name="geometry">
+     <rect>
+      <x>644</x>
+      <y>155</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_5</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_3">
+    <property name="geometry">
+     <rect>
+      <x>644</x>
+      <y>178</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_5</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_4">
+    <property name="geometry">
+     <rect>
+      <x>644</x>
+      <y>201</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_5</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_5">
+    <property name="geometry">
+     <rect>
+      <x>644</x>
+      <y>224</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_5</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_6">
+    <property name="geometry">
+     <rect>
+      <x>644</x>
+      <y>247</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_5</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_17">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>201</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_6</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_18">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>178</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_6</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_19">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>224</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_6</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_20">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>155</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_6</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_21">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>247</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_6</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_22">
+    <property name="geometry">
+     <rect>
+      <x>645</x>
+      <y>337</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_7</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_23">
+    <property name="geometry">
+     <rect>
+      <x>645</x>
+      <y>291</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_7</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_24">
+    <property name="geometry">
+     <rect>
+      <x>645</x>
+      <y>383</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_7</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_25">
+    <property name="geometry">
+     <rect>
+      <x>645</x>
+      <y>314</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_7</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_26">
+    <property name="geometry">
+     <rect>
+      <x>645</x>
+      <y>360</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_7</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_27">
+    <property name="geometry">
+     <rect>
+      <x>841</x>
+      <y>337</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_28">
+    <property name="geometry">
+     <rect>
+      <x>841</x>
+      <y>291</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_29">
+    <property name="geometry">
+     <rect>
+      <x>841</x>
+      <y>383</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_30">
+    <property name="geometry">
+     <rect>
+      <x>841</x>
+      <y>314</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_31">
+    <property name="geometry">
+     <rect>
+      <x>841</x>
+      <y>360</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_32">
+    <property name="geometry">
+     <rect>
+      <x>644</x>
+      <y>481</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_8</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_33">
+    <property name="geometry">
+     <rect>
+      <x>644</x>
+      <y>435</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_8</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_34">
+    <property name="geometry">
+     <rect>
+      <x>644</x>
+      <y>527</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_8</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_35">
+    <property name="geometry">
+     <rect>
+      <x>644</x>
+      <y>458</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_8</string>
+    </attribute>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_36">
+    <property name="geometry">
+     <rect>
+      <x>644</x>
+      <y>504</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <attribute name="buttonGroup">
+     <string notr="true">buttonGroup_8</string>
+    </attribute>
+   </widget>
+   <widget class="QCheckBox" name="sage">
+    <property name="geometry">
+     <rect>
+      <x>1048</x>
+      <y>204</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="textBrowser">
+    <property name="geometry">
+     <rect>
+      <x>1035</x>
+      <y>342</y>
+      <width>231</width>
+      <height>221</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup_8"/>
+  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup_6"/>
+  <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_7"/>
+  <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup_4"/>
+  <buttongroup name="buttonGroup_5"/>
+ </buttongroups>
+</ui>
