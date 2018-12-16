@@ -68,9 +68,12 @@ QCheckBox::indicator::checked::pressed {
 
 QTextBrowser {
 	background: none; 
-	background-color: #20272B;
-	border: none;
-	border-radius: 3px;
+/*	background-color: #20272B; */
+	background-image: url(gui/images/pocik.jpg);
+	margin-top: 10;
 	font: monospace;
 	color: white;
+	border: none;
+	border-radius: 3px;
 }
+
