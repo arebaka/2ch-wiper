@@ -6,19 +6,23 @@ GUI::GUI (QWidget * parent)
 {
     ui->setupUi(this);
 
-//    setWindowFlags(Qt::FramelessWindowHint);
+    setWindowFlags(Qt::FramelessWindowHint);
 
     QFile style;
-    style.setFileName("gui/gui.css");
+    style.setFileName(QDir::currentPath() + "/gui/gui.css");
     style.open(QFile::ReadOnly);
     QString QSS = style.readAll();
     setStyleSheet(QSS);
+
 }
 
 GUI::~GUI () {
     delete ui;
     system("exit");
 }
+
+
+
 
 
 void GUI::on_button_clicked () {
@@ -31,12 +35,13 @@ bool GUI::start () {
     setup.clear();
     ui->textBrowser->clear();
 
-    setup.set_board(ui->board->text().toStdString());
-    setup.set_potocksCount(ui->potocks->text().toStdString());
-
-    if (ui->mainMode->isChecked())
+    if (ui->mainMode->isChecked()) {
+        setup.set_board(ui->board->text().toStdString());
+        setup.set_potocksCount(ui->potocks->text().toStdString());
         setup.set_thread(ui->thread->text().toStdString());
-    else if (ui->shrapnelMode->isChecked()) {
+    } else if (ui->shrapnelMode->isChecked()) {
+        setup.set_board(ui->board->text().toStdString());
+        setup.set_potocksCount(ui->potocks->text().toStdString());
         setup.set_thread("1");
         setup.set_shrapnelCharge(ui->threads->text().toStdString());
     }
@@ -103,3 +108,12 @@ bool GUI::stop () {
 void GUI::closeEvent (QCloseEvent * event) {
     system("exit");
 }
+
+void GUI::on_close_clicked () {
+    close();
+}
+
+void GUI::on_rollUp_clicked () {
+    hide();
+}
+
