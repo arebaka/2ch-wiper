@@ -1,6 +1,25 @@
 ## -*- coding: utf-8 -*-
 
+import base64
+import time
+import sys
+import threading
+import io
+import random
+import string
+import os
+import json
+import signal
+import socks
+# import asyncio
 import requests
+import PIL.Image
+from bs4 import BeautifulSoup
+# from python3_anticaptcha import NoCaptchaTaskProxyless
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+import tools
 
 # ====== X-капча ======
 class CaptchaSolver_XCaptcha:
@@ -31,13 +50,13 @@ class CaptchaSolver_XCaptcha:
                     solveResponse = solveResponse.split("|")
 
                     if (solveResponse[0] == "OK"):
-                        Stats.incCaptchas()
+                        tools.Stats.incCaptchas()
                         return solveResponse[1]
                     
                     time.sleep(3)
             elif data.text == "ERROR_KEY_USER":
                 print("\nОшибка ключа, не могу продолжать работу...")
-                safe_quit()
+                tools.safe_quit(badproxies)
             time.sleep(3)
 
 
@@ -68,16 +87,16 @@ class CaptchaSolver_captchaguru:
         elif (data["errorId"] == 1):
             if (data["errorDescription"] == "ERROR_KEY_DOES_NOT_EXIST"):
                 print("\nКлюч отозван, не могу продолжать работу...")
-                safe_quit()
+                tools.safe_quit(badproxies)
             elif (data["errorDescription"] == "ERROR_ZERO_BALANCE"):
                 print("\nЗакончились деньги на капче, не могу продолжать работу...")
-                safe_quit()
+                tools.safe_quit(badproxies)
             elif (data["errorDescription"] == "ERROR_NO_SLOT_AVAILABLE"):
                 print("\nНет свободных индуссов на сервере, таймаут 10 секунд...")
                 time.sleep(7)
             else:
                 print("\nПроизошла неведомая ебаная хуйня, сорян. Вот ответ от сервера:", (data["errorDescription"]))
-                safe_quit()
+                tools.safe_quit(badproxies)
         time.sleep(3)
 
 
@@ -109,11 +128,11 @@ class CaptchaSolver_anticaptcha:
         elif (data["errorId"] == 1):
             if (data["errorDescription"] == "ERROR_KEY_DOES_NOT_EXIST"):
                 print("\nКлюч отозван, не могу продолжать работу...")
-                safe_quit()
+                tools.safe_quit(badproxies)
             elif (data["errorDescription"] == "ERROR_ZERO_BALANCE"):
                 print("\nЗакончились деньги на капче, не могу продолжать работу...")
-                safe_quit()
+                tools.safe_quit(badproxies)
             else:
                 print("\nПроизошла неведомая ебаная хуйня, сорян. Вот ответ от сервера:", (data["errorDescription"]))
-                safe_quit()
+                tools.safe_quit(badproxies)
         time.sleep(3)

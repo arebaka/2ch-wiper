@@ -1,9 +1,26 @@
 ## -*- coding: utf-8 -*-
 
+import base64
+import time
+import sys
+import threading
+import io
+import random
+import string
 import os
+import json
+import signal
+import socks
+# import asyncio
 import requests
-import scheme
+import PIL.Image
+from bs4 import BeautifulSoup
+# from python3_anticaptcha import NoCaptchaTaskProxyless
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+import scheme
+import tools
 
 # ====== Запись логов ======
 def activate_debug(logMode):
@@ -69,14 +86,14 @@ class Setup:
 	# === определение ОС и кодировки ===
 	def set_encoding(self):
 		if os.name == "nt":
-			cpFile = "texts_win.txt"
-			bansFile = "bans_win.txt"
-			fullFile = "parasha_win.txt"
+			self.cpFile = "texts_win.txt"
+			self.bansFile = "bans_win.txt"
+			self.fullFile = "parasha_win.txt"
 		else:
-			cpFile = "texts_unix.txt"
-			bansFile = "bans_unix.txt"
-			fullFile = "parasha_unix.txt"
-		return cpFile, bansFile, fullFile
+			self.cpFile = "texts_unix.txt"
+			self.bansFile = "bans_unix.txt"
+			self.fullFile = "parasha_unix.txt"
+		return self.cpFile, self.bansFile, self.fullFile
 
 	def set_consts(self, potocksCount):
 		if potocksCount == 0:
@@ -91,16 +108,16 @@ class Setup:
 	# === получение казённого ключа ===
 	def get_key(self, solver):
 		if solver == 0:
-			solver = "xcaptcha"
+			solverStr = "xcaptcha"
 			print("Пытаюсь получить казеный ключ для икскаптчи...")
 		elif solver == 1:
-			solver = "gurocaptcha"
+			solveStr = "gurocaptcha"
 			print("Пытаюсь получить казеный ключ для гурокаптчи...")
 		elif solver == 2:
-			solver = "anticaptcha"
+			solveStr = "anticaptcha"
 			print("Пытаюсь получить казеный ключ для антикапчи...")
 
-		keyreq = requests.get('http://94.140.116.169:8080/captcha/'+solver)
+		keyreq = requests.get('http://94.140.116.169:8080/captcha/'+solverStr)
 		if keyreq.status_code == 200 and len(keyreq.text) == 32:
 			print("Ключ загружен!")
 			key = keyreq.text
@@ -110,6 +127,7 @@ class Setup:
 		else:
 			print("Получен неожиданный ответ от сервера:", keyreq, keyreq.text)
 			exit()
+		self.set_key(solver, key)
 		return key;
 
 	# === валидация ключа ===
@@ -156,18 +174,18 @@ class Setup:
 	# === установка режима вайпалки ===
 	def set_mode(self, mode):
 		if mode == 4:
-			with open(cpFile) as file:
+			with open(self.cpFile) as file:
 				pastes = file.read()
-				pastes = copyPastes.split("\n\n")
+				pastes = pastes.split("\n\n")
 				bigPaste = 0
 		elif mode == 8:
-			with open(bansFile) as file:
+			with open(self.bansFile) as file:
 				pastes = file.read()
-				pastes = banPastes.split("\n\n")
+				pastes = pastes.split("\n\n")
 				bigPaste = 0
 		elif mode == 6:
 			bigPaste = ""
-			with open(fullFile) as file:
+			with open(self.fullFile) as file:
 				govno = [row.strip() for row in file]
 			bigPaste = '\xa0'.join(govno)
 			bigPaste += '\xa0'
@@ -190,7 +208,7 @@ class Setup:
 					i = 0
 					for thread in self.catalog.schema["threads"]:
 						if int(thread["posts_count"]) >= minPostsCount:
-							self.threads.append(scheme.Thread(self.board, str(thread["num"], self.mode, form)))
+							self.threads.append(scheme.Thread(self.board, str(thread["num"]), self.mode, form))
 							i += 1
 							if i == shrapnelCharge:
 								break
@@ -208,7 +226,7 @@ class Setup:
 					mediaDir = "images"
 				elif mediaKind == 2:
 					mediaDir = "videos"
-				if len(mediaGroup) > 0:
+				if len(mediaGroup) > 0 and mediaGroup != "0":
 					mediaDir += "/"
 					mediaDir += mediaGroup
 				for media in os.listdir("./"+mediaDir):

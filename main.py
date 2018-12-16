@@ -22,7 +22,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import scheme
 import setting
 import solvers
-
+import tools
 
 # ====== Макросы макросики ======
 CHARS = string.ascii_uppercase + string.digits
@@ -41,80 +41,6 @@ def show_logo():
 	print("*	  Быдлокод: owodelta, kobato, arelive	  *")
 	print("*			cryptostimor, tsunamaru			*")
 	print("*************************************************")
-
-
-# ====== Отключение ======
-def safe_quit(sig=0, frame=0):
-	print("\n\nЖду, пока обновится лист с проксичками...")
-
-	f = open("proxies", "r+")
-	d = f.readlines()
-	f.seek(0)
-
-	for i in d:
-		if i.rstrip() not in badproxies:
-			f.write(i)
-
-	f.truncate()
-	f.close()
-
-	print(str(len(badproxies)), "плохих проксичек почищено!")
-	print("Выключаюсь...")
-
-	os._exit(0)
-
-# ====== Обработка клавиш ======
-def eternal_input():
-	while True:
-		print("Choose your option")
-		choice = input("[S]tatistics, [Q]uit, [C]lear parasha\n")
-		choice = choice.rstrip()
-		try:
-			if choice.lower() == "s" or choice.lower() == "ы":
-				Stats.printStats()
-			elif choice.lower() == "q" or choice.lower() == "й":
-				safe_quit()
-				badproxies.clear()
-			elif choice.lower() == "c" or choice.lower() == "с":
-				badproxies.clear()
-				print("Параша почищена")
-			else:
-				print("Ты пишешь хуйню")
-		except Exception as e:
-			pass
-
-
-# ====== Стата ======
-class Stats:
-
-	numOfProxies = 0
-	numOfThreads = 0
-	postsSent = 0
-	captchasSolved = 0
-
-	def setProxies(amount):
-		Stats.numOfProxies = amount
-
-	def setnumOfThreads(amount):
-		Stats.numOfThreads = amount
-
-	def incCaptchas():
-		Stats.captchasSolved += 1
-
-	def incPosts():
-		Stats.postsSent += 1
-
-	def printStats():
-		print("=====================================")
-		print("Проксичек осталось:\t", str(Stats.numOfProxies - len(badproxies)))
-		print("Начальные потоки:\t", str(Stats.numOfThreads))
-		print("Каптч решено:\t\t", str(Stats.captchasSolved))
-		print("Плохие проксички:\t", str(len(badproxies)))
-		print("Текущие потоки:\t\t", str(threading.active_count()))
-		#print("Создано тредов/постов: ", posti, "\n")
-		if threading.active_count() <= 2:
-			print("ALL THREADS FINISHED, PRESS \"Q\"")
-		print("=====================================\n")
 
 
 # ====== API капчи сосача ======
@@ -271,8 +197,8 @@ class Post:
 			wait_time = random.randint(6, 15)
 			time.sleep(PAUSE)
 			response = requests.post("https://2ch.hk/makaba/posting.fcgi?json=1", files=self.params, proxies=self.proxy, headers=self.headers, timeout=TIMEOUT, verify=False).json()
-			Stats.incPosts()
-			Stats.printStats()
+			tools.Stats.incPosts()
+			tools.Stats.printStats(badproxies)
 			return response['Status'] == 'OK', response
 		except Exception as e:
 			print(e)
@@ -287,7 +213,7 @@ class Wiper:
 		# print("Patched by @owodelta / X-Captcha by kobato / patched again by @owodelta")
 		self.proxies = [proxy[:-1] for proxy in open("proxies", "r").readlines()]
 		random.shuffle(self.proxies)
-		Stats.setProxies(len(self.proxies))
+		tools.Stats.setProxies(len(self.proxies))
 		self.agents = [agent[:-1] for agent in open("useragents").readlines()]
 		self.board = setup.board
 		self.thread = setup.thread
@@ -422,7 +348,7 @@ class Wiper:
 
 					success, response = post.send(self.setup.TIMEOUT, self.setup.PAUSE)
 					if success:
-						Stats.incPosts()
+						tools.Stats.incPosts()
 						post_id = 0
 						try:
 							post_id = response["Target"]
@@ -451,7 +377,7 @@ class Wiper:
 								proxy = self.proxies.pop(0)
 							elif response["Error"] == -7:
 								print("Моча вычищает тред. КОНЧАЮ.")
-								safe_quit()
+								tools.safe_quit(badproxies)
 							elif not response:
 								print("Ошибка сети, пробуем ещё раз...")
 								pass
@@ -474,7 +400,7 @@ class Wiper:
 		return True
 
 	def wipe(self, thread_count):
-		Stats.setnumOfThreads(thread_count)
+		tools.Stats.setnumOfThreads(thread_count)
 
 		class WiperThread(threading.Thread):
 
@@ -491,8 +417,8 @@ class Wiper:
 				threading.Thread.__init__(self)
 
 			def run(self):
-				Stats.printStats()
-				eternal_input()
+				tools.Stats.printStats(badproxies)
+				tools.eternal_input(badproxies)
 
 		threads = []
 		inthr = InputThread()
@@ -508,8 +434,8 @@ class Wiper:
 
 setup = setting.Setup(sys.argv)
 WiperObj = Wiper(setup, setup.catalog, setup.threads)
-signal.signal(signal.SIGINT, safe_quit)
+signal.signal(signal.SIGINT, tools.safe_quit)
 WiperObj.wipe(setup.potocksCount)
 
-safe_quit()
+tools.safe_quit(badproxies)
 

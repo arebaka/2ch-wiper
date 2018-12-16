@@ -1,8 +1,23 @@
 ## -*- coding: utf-8 -*-
 
-import requests
+import base64
+import time
+import sys
+import threading
+import io
+import random
+import string
+import os
 import json
+import signal
+import socks
+# import asyncio
+import requests
+import PIL.Image
 from bs4 import BeautifulSoup
+# from python3_anticaptcha import NoCaptchaTaskProxyless
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # ====== Модель доски ======
 class Catalog:
