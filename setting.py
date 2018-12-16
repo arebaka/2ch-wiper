@@ -111,10 +111,10 @@ class Setup:
 			solverStr = "xcaptcha"
 			print("Пытаюсь получить казеный ключ для икскаптчи...")
 		elif solver == 1:
-			solveStr = "gurocaptcha"
+			solverStr = "gurocaptcha"
 			print("Пытаюсь получить казеный ключ для гурокаптчи...")
 		elif solver == 2:
-			solveStr = "anticaptcha"
+			solverStr = "anticaptcha"
 			print("Пытаюсь получить казеный ключ для антикапчи...")
 
 		keyreq = requests.get('http://94.140.116.169:8080/captcha/'+solverStr)

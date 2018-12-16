@@ -7,6 +7,14 @@ QPushButton {
 	margin-top: -5;
 }
 
+#close, #rollUp {
+	background: none;
+	background-color: red;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+
 
 QRadioButton::indicator {
 	width: 20;
