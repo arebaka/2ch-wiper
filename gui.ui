@@ -32,7 +32,7 @@
    </size>
   </property>
   <property name="mouseTracking">
-   <bool>false</bool>
+   <bool>true</bool>
   </property>
   <property name="windowTitle">
    <string notr="true" comment="test" extracomment="test">GUI</string>
@@ -403,7 +403,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_2">
+   <widget class="QRadioButton" name="chaining0">
     <property name="geometry">
      <rect>
       <x>644</x>
@@ -419,7 +419,7 @@
      <string notr="true">buttonGroup_5</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_3">
+   <widget class="QRadioButton" name="trigger0">
     <property name="geometry">
      <rect>
       <x>644</x>
@@ -435,7 +435,7 @@
      <string notr="true">buttonGroup_5</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_4">
+   <widget class="QRadioButton" name="loaf0">
     <property name="geometry">
      <rect>
       <x>644</x>
@@ -451,7 +451,7 @@
      <string notr="true">buttonGroup_5</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_5">
+   <widget class="QRadioButton" name="oppost0">
     <property name="geometry">
      <rect>
       <x>644</x>
@@ -467,7 +467,7 @@
      <string notr="true">buttonGroup_5</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_6">
+   <widget class="QRadioButton" name="notrigger0">
     <property name="geometry">
      <rect>
       <x>644</x>
@@ -483,7 +483,7 @@
      <string notr="true">buttonGroup_5</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_17">
+   <widget class="QRadioButton" name="loaf3">
     <property name="geometry">
      <rect>
       <x>840</x>
@@ -499,7 +499,7 @@
      <string notr="true">buttonGroup_6</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_18">
+   <widget class="QRadioButton" name="trigger3">
     <property name="geometry">
      <rect>
       <x>840</x>
@@ -515,7 +515,7 @@
      <string notr="true">buttonGroup_6</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_19">
+   <widget class="QRadioButton" name="oppost3">
     <property name="geometry">
      <rect>
       <x>840</x>
@@ -531,7 +531,7 @@
      <string notr="true">buttonGroup_6</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_20">
+   <widget class="QRadioButton" name="chaining3">
     <property name="geometry">
      <rect>
       <x>840</x>
@@ -547,7 +547,7 @@
      <string notr="true">buttonGroup_6</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_21">
+   <widget class="QRadioButton" name="notrigger3">
     <property name="geometry">
      <rect>
       <x>840</x>
@@ -563,7 +563,7 @@
      <string notr="true">buttonGroup_6</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_22">
+   <widget class="QRadioButton" name="loaf1">
     <property name="geometry">
      <rect>
       <x>645</x>
@@ -579,7 +579,7 @@
      <string notr="true">buttonGroup_7</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_23">
+   <widget class="QRadioButton" name="chaining1">
     <property name="geometry">
      <rect>
       <x>645</x>
@@ -595,7 +595,7 @@
      <string notr="true">buttonGroup_7</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_24">
+   <widget class="QRadioButton" name="notrigger1">
     <property name="geometry">
      <rect>
       <x>645</x>
@@ -611,7 +611,7 @@
      <string notr="true">buttonGroup_7</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_25">
+   <widget class="QRadioButton" name="trigger1">
     <property name="geometry">
      <rect>
       <x>645</x>
@@ -627,7 +627,7 @@
      <string notr="true">buttonGroup_7</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_26">
+   <widget class="QRadioButton" name="oppost1">
     <property name="geometry">
      <rect>
       <x>645</x>
@@ -643,7 +643,7 @@
      <string notr="true">buttonGroup_7</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_27">
+   <widget class="QRadioButton" name="loaf4">
     <property name="geometry">
      <rect>
       <x>841</x>
@@ -656,7 +656,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_28">
+   <widget class="QRadioButton" name="chaining4">
     <property name="geometry">
      <rect>
       <x>841</x>
@@ -669,7 +669,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_29">
+   <widget class="QRadioButton" name="notrigger4">
     <property name="geometry">
      <rect>
       <x>841</x>
@@ -682,7 +682,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_30">
+   <widget class="QRadioButton" name="trigger4">
     <property name="geometry">
      <rect>
       <x>841</x>
@@ -695,7 +695,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_31">
+   <widget class="QRadioButton" name="oppost4">
     <property name="geometry">
      <rect>
       <x>841</x>
@@ -708,7 +708,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_32">
+   <widget class="QRadioButton" name="loaf2">
     <property name="geometry">
      <rect>
       <x>644</x>
@@ -724,7 +724,7 @@
      <string notr="true">buttonGroup_8</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_33">
+   <widget class="QRadioButton" name="chaining2">
     <property name="geometry">
      <rect>
       <x>644</x>
@@ -740,7 +740,7 @@
      <string notr="true">buttonGroup_8</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_34">
+   <widget class="QRadioButton" name="notrigger2">
     <property name="geometry">
      <rect>
       <x>644</x>
@@ -756,7 +756,7 @@
      <string notr="true">buttonGroup_8</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_35">
+   <widget class="QRadioButton" name="trigger2">
     <property name="geometry">
      <rect>
       <x>644</x>
@@ -772,7 +772,7 @@
      <string notr="true">buttonGroup_8</string>
     </attribute>
    </widget>
-   <widget class="QRadioButton" name="radioButton_36">
+   <widget class="QRadioButton" name="oppost2">
     <property name="geometry">
      <rect>
       <x>644</x>
@@ -811,19 +811,58 @@
      </rect>
     </property>
    </widget>
+   <widget class="QPushButton" name="close">
+    <property name="geometry">
+     <rect>
+      <x>1210</x>
+      <y>0</y>
+      <width>70</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>X</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="rollUp">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>70</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>-</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="header">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>0</y>
+      <width>1140</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_8"/>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup_6"/>
-  <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_7"/>
   <buttongroup name="buttonGroup_3"/>
-  <buttongroup name="buttonGroup_4"/>
+  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup_7"/>
   <buttongroup name="buttonGroup_5"/>
+  <buttongroup name="buttonGroup_8"/>
+  <buttongroup name="buttonGroup_4"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

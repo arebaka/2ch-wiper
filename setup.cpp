@@ -200,6 +200,12 @@ vector<string> Setup::validate () {
 
     if ((mediaKind == '1' || mediaKind == '2') && !hasMediaKind) errors.push_back("Не задано число прикреплений!");
 
+    if (board == "d" && mediasCount != "0") errors.push_back("Прикрепления в /d/!");
+
+    if (thread == "0" && (mode == "3" || mode == "7")) errors.push_back("Этим режимом нельзя вайпать нулевую!");
+
+    if (thread == "0" && triggerForm != "0") errors.push_back("Триггер на нулевой!");
+
     if (errors.size() == 0) errors.push_back("OK");
     return errors; }
 
@@ -212,7 +218,7 @@ unsigned char Setup::complete () {
     else autoCompCount++;
     if (!hasLogMode) set_logMode('0');
     else autoCompCount++;
-    if (!hasProxyRepeatsCount) set_proxyRepeatsCount("10");
+    if (!hasProxyRepeatsCount) set_proxyRepeatsCount("50");
     else autoCompCount++;
     if (!hasTriggerForm) set_triggerForm("0");
     else autoCompCount++;
@@ -220,7 +226,10 @@ unsigned char Setup::complete () {
     else autoCompCount++;
     if (!hasMinPostsCount) set_minPostsCount("0");
     else autoCompCount++;
-    if (!hasMediasCount) set_mediasCount("1");
+    if (!hasMediasCount) {
+        if (board == "d") set_mediasCount("0");
+        else set_mediasCount("1");
+    }
     else autoCompCount++;
     if (!hasSageMode) set_sageMode('0');
     else autoCompCount++;
@@ -238,6 +247,9 @@ vector<string> Setup::start () {
     return errors;
 }
 
+/// python3 main.py <доска> <тред> <потоки> <режим логов> <решатель> <ключ> <повторы прокси> <минимальный бан> <максимальный бан>
+/// <триггер> <заряд шрапнели> <минимальное число постов для шрапнели> <вид прикреплений> <подкаталог прикреплений>
+/// <число прикреплений> <сажа> <треды для шрапнели>
 string Setup::comline () {
     string command("python3 main.py ");
     command += (board + " " + thread + " " + potocksCount + " ");

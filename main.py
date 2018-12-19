@@ -1,6 +1,6 @@
 ## -*- coding: utf-8 -*-
 
-import base64
+# import base64
 import time
 import sys
 import threading
@@ -8,21 +8,20 @@ import io
 import random
 import string
 import os
-import json
+# import json
 import signal
-import socks
+#import socks
 # import asyncio
 import requests
 import PIL.Image
-from bs4 import BeautifulSoup
 # from python3_anticaptcha import NoCaptchaTaskProxyless
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-import scheme
-import setting
-import solvers
-import tools
+from scheme import Catalog, Thread
+from setting import Setup
+from solvers import *
+from tools import *
 
 # ====== Макросы макросики ======
 CHARS = string.ascii_uppercase + string.digits
@@ -61,7 +60,7 @@ class Captcha:
 
 	def solve(self):
 		print(self.proxy["http"], "solving captcha")
-		self.value = self.solver.solve(self.image)
+		self.value = self.solver.solve(self.image, badproxies)
 		return (None, self.id), (None, self.value)
 
 	def verify(self):
@@ -72,7 +71,17 @@ class Captcha:
 class Post:
 
 	def __init__(self, proxy, agent, board, thread, solver):
-		self.proxy = {"http": proxy, "https": proxy, "socks4": proxy, "socks5": proxy}
+		if proxy.find("socks4://") != -1:
+			proxy = proxy[proxy.find("://")+3:len(proxy)]
+			self.proxy = {"socks4": proxy}
+		elif proxy.find("socks5://") != -1:
+			proxy = proxy[proxy.find("://")+3:len(proxy)]
+			self.proxy = {"socks5": proxy}
+		elif proxy.find("http://") != -1 or proxy.find("https://") != -1:
+			proxy = proxy[proxy.find("://")+3:len(proxy)]
+			self.proxy = {"http": proxy, "https": proxy}
+		else:
+			self.proxy = {"http": proxy}
 		self.agent = {"User-Agent": agent}
 		self.board = board
 		self.thread = thread
@@ -160,13 +169,14 @@ class Post:
 		file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
 
 		if mediaName.find(".jpg") != -1 or mediaName.find(".png") != -1 or mediaName.find(".gif") != -1:
-			image = PIL.Image.frombytes(media).convert("RGB")
+			image = PIL.Image.open(io.BytesIO(media)).convert("RGB")
 			width, height = image.size
 			for x in range(random.randint(1, 10)): image.putpixel((random.randint(0, width-1), random.randint(0, height-1)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
 			image = image.crop((0 + random.randint(0, 10), 0 + random.randint(0, 10), width-1 - random.randint(0, 10), height-1 - random.randint(0, 10)))
 			image_bytes = io.BytesIO()
 			image.save(image_bytes, "JPEG", quality=60 + random.randint(10, 30), optimize=bool(random.getrandbits(1)), progressive=bool(random.getrandbits(1)))
 			image.close()
+			media = image_bytes.getvalue()
 
 			if mediaName.find(".jpg") != -1:
 				mediaType = "image/jpeg"
@@ -197,8 +207,8 @@ class Post:
 			wait_time = random.randint(6, 15)
 			time.sleep(PAUSE)
 			response = requests.post("https://2ch.hk/makaba/posting.fcgi?json=1", files=self.params, proxies=self.proxy, headers=self.headers, timeout=TIMEOUT, verify=False).json()
-			tools.Stats.incPosts()
-			tools.Stats.printStats(badproxies)
+			Stats.incPosts()
+			Stats.printStats(badproxies)
 			return response['Status'] == 'OK', response
 		except Exception as e:
 			print(e)
@@ -213,16 +223,16 @@ class Wiper:
 		# print("Patched by @owodelta / X-Captcha by kobato / patched again by @owodelta")
 		self.proxies = [proxy[:-1] for proxy in open("proxies", "r").readlines()]
 		random.shuffle(self.proxies)
-		tools.Stats.setProxies(len(self.proxies))
+		Stats.setProxies(len(self.proxies))
 		self.agents = [agent[:-1] for agent in open("useragents").readlines()]
 		self.board = setup.board
 		self.thread = setup.thread
 		if setup.solver == 0:
-			self.solver = solvers.CaptchaSolver_XCaptcha(setup.key)
+			self.solver = CaptchaSolver_XCaptcha(setup.key, setup.keyreq)
 		elif setup.solver == 1:
-			self.solver = solvers.CaptchaSolver_captchaguru(setup.key)
+			self.solver = CaptchaSolver_captchaguru(setup.key, setup.keyreq)
 		elif setup.solver == 2:
-			self.solver = solvers.CaptchaSolver_anticaptcha(setup.key)
+			self.solver = CaptchaSolver_anticaptcha(setup.key, setup.keyreq)
 		self.setup = setup
 		self.catalog = catalog
 		self.threads = threads
@@ -265,15 +275,16 @@ class Wiper:
 			while counter < self.setup.proxyRepeatsCount:
 				if self.setup.shrapnelCharge == 0:
 					threadNum = 0
+					thread = self.thread
 				else:
 					threadNum = random.randint(0, self.setup.shrapnelCharge-1)
-					self.thread = self.threads[threadNum].ID
+					thread = self.threads[threadNum].ID
 
-				post = Post(proxy, agent, self.board, self.thread, self.solver)
+				post = Post(proxy, agent, self.board, thread, self.solver)
 				if (post.prepare(self.setup.TIMEOUT)):
 					charnum = random.randint(1, 100)
 					if self.thread != "0":
-						black_anus = random.randint(0, len(self.threads[threadNum].posts)-1)  # номер поста для триггера
+						black_anus = random.randint(1, len(self.threads[threadNum].posts)-1)  # номер поста для триггера
 						white_anus = random.randint(0, len(self.threads[threadNum].posts)-1)  # номер поста для дублирования
 
 					# === берём сначала триггер ===
@@ -323,13 +334,14 @@ class Wiper:
 								mediasCount = self.setup.mediasCount
 
 							for mediaNum in range(mediasCount):
-								blue_anus = random.randint(0, self.setup.mediasCount-1)  # номер пикчи или видео с диска
+								if self.setup.mediaKind != 3:
+									blue_anus = random.randint(0, len(self.setup.mediaPaths)-1)  # номер пикчи или видео с диска
 								if self.setup.mediaKind == 1:
 									post.set_image(self.setup.mediaPaths[blue_anus])
 								elif self.setup.mediaKind == 2:
 									post.set_video(self.setup.mediaPaths[blue_anus])
 								elif self.setup.mediaKind == 3:
-									post.set_media(self.threads[threadNum].posts[white_anus].medias[blue_anus].name, self.threads[threadNum].posts[white_anus].medias[blue_anus].file)
+									post.set_media(self.threads[threadNum].posts[white_anus].medias[mediaNum].name, self.threads[threadNum].posts[white_anus].medias[mediaNum].file)
 						except Exception as e:
 							print(e)
 							print("Не могу открыть файл, проверь имя.")
@@ -348,17 +360,16 @@ class Wiper:
 
 					success, response = post.send(self.setup.TIMEOUT, self.setup.PAUSE)
 					if success:
-						tools.Stats.incPosts()
+						Stats.incPosts()
 						post_id = 0
 						try:
 							post_id = response["Target"]
 						except:
 							post_id = response["Num"]
-						print(proxy + " - success. Post id: " + str(post_id), end=' ')
-						if self.setup.shrapnelCharge > 0:
-							print("("+self.threads[threadNum].ID+" thread)", end='\n')
+						if self.setup.shrapnelCharge == 0:
+							print(proxy+" - success. Post id: "+str(post_id))
 						else:
-							print(' ', end='\n')
+							print(proxy+" - success. Post id: "+str(post_id)+" ("+self.threads[threadNum].ID+" thread)")
 						if self.setup.thread != 0:
 							self.threads[threadNum].lastID = str(post_id)
 
@@ -377,7 +388,7 @@ class Wiper:
 								proxy = self.proxies.pop(0)
 							elif response["Error"] == -7:
 								print("Моча вычищает тред. КОНЧАЮ.")
-								tools.safe_quit(badproxies)
+								safe_quit(badproxies)
 							elif not response:
 								print("Ошибка сети, пробуем ещё раз...")
 								pass
@@ -400,7 +411,7 @@ class Wiper:
 		return True
 
 	def wipe(self, thread_count):
-		tools.Stats.setnumOfThreads(thread_count)
+		Stats.setnumOfThreads(thread_count)
 
 		class WiperThread(threading.Thread):
 
@@ -417,8 +428,8 @@ class Wiper:
 				threading.Thread.__init__(self)
 
 			def run(self):
-				tools.Stats.printStats(badproxies)
-				tools.eternal_input(badproxies)
+				Stats.printStats(badproxies)
+				eternal_input(badproxies)
 
 		threads = []
 		inthr = InputThread()
@@ -432,10 +443,10 @@ class Wiper:
 
 
 
-setup = setting.Setup(sys.argv)
+setup = Setup(sys.argv)
 WiperObj = Wiper(setup, setup.catalog, setup.threads)
-signal.signal(signal.SIGINT, tools.safe_quit)
+signal.signal(signal.SIGINT, safe_quit)
 WiperObj.wipe(setup.potocksCount)
 
-tools.safe_quit(badproxies)
+safe_quit(badproxies)
 

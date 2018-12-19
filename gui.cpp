@@ -18,7 +18,6 @@ GUI::GUI (QWidget * parent)
 
 GUI::~GUI () {
     delete ui;
-    system("exit");
 }
 
 
@@ -60,18 +59,50 @@ bool GUI::start () {
 
     setup.set_proxyRepeatsCount(ui->repeats->text().toStdString());
 
-    if (ui->noText->isChecked())
+    if (ui->noText->isChecked()) {
         setup.set_mode("2");
-    else if (ui->overload->isChecked())
-        setup.set_mode("5");
-    else if (ui->quoting->isChecked())
+        if (ui->chaining0->isChecked()) setup.set_triggerForm("1");
+        else if (ui->trigger0->isChecked()) setup.set_triggerForm("2");
+        else if (ui->loaf0->isChecked()) setup.set_triggerForm("3");
+        else if (ui->oppost0->isChecked()) setup.set_triggerForm("4");
+        else setup.set_triggerForm("0");
+    }
+    else if (ui->quoting->isChecked()) {
         setup.set_mode("3");
-    else if (ui->pastes->isChecked())
-        setup.set_mode("4");
-    else if (ui->copying->isChecked())
+        if (ui->chaining1->isChecked()) setup.set_triggerForm("1");
+        else if (ui->trigger1->isChecked()) setup.set_triggerForm("2");
+        else if (ui->loaf1->isChecked()) setup.set_triggerForm("3");
+        else if (ui->oppost1->isChecked()) setup.set_triggerForm("4");
+        else setup.set_triggerForm("0");
+    }
+    else if (ui->copying->isChecked()) {
         setup.set_mode("7");
-    else if (ui->random->isChecked())
+        if (ui->chaining2->isChecked()) setup.set_triggerForm("1");
+        else if (ui->trigger2->isChecked()) setup.set_triggerForm("2");
+        else if (ui->loaf2->isChecked()) setup.set_triggerForm("3");
+        else if (ui->oppost2->isChecked()) setup.set_triggerForm("4");
+        else setup.set_triggerForm("0");
+    }
+    else if (ui->overload->isChecked()) {
+        setup.set_mode("5");
+        if (ui->chaining3->isChecked()) setup.set_triggerForm("1");
+        else if (ui->trigger3->isChecked()) setup.set_triggerForm("2");
+        else if (ui->loaf3->isChecked()) setup.set_triggerForm("3");
+        else if (ui->oppost3->isChecked()) setup.set_triggerForm("4");
+        else setup.set_triggerForm("0");
+    }
+    else if (ui->pastes->isChecked()) {
+        setup.set_mode("4");
+        if (ui->chaining4->isChecked()) setup.set_triggerForm("1");
+        else if (ui->trigger4->isChecked()) setup.set_triggerForm("2");
+        else if (ui->loaf4->isChecked()) setup.set_triggerForm("3");
+        else if (ui->oppost4->isChecked()) setup.set_triggerForm("4");
+        else setup.set_triggerForm("0");
+    }
+    else if (ui->random->isChecked()) {
         setup.set_mode("0");
+        setup.set_triggerForm("0");
+    }
 
     if (ui->images->isChecked()) {
         setup.set_mediaKind('1');
@@ -105,8 +136,22 @@ bool GUI::stop () {
 
 
 
+void GUI::mouseMoveEvent (QMouseEvent * event) {
+    if (event->buttons() & Qt::LeftButton) {
+        QPoint diff = event->pos() - mpos;
+        QPoint newpos = this->pos() + diff;
+        this->move(newpos);
+    }
+}
+
+void GUI::mousePressEvent (QMouseEvent * event) {
+    mpos = event->pos();
+}
+
+
+
 void GUI::closeEvent (QCloseEvent * event) {
-    system("exit");
+    system("q\nexit");
 }
 
 void GUI::on_close_clicked () {
@@ -114,6 +159,6 @@ void GUI::on_close_clicked () {
 }
 
 void GUI::on_rollUp_clicked () {
-    hide();
+    showMinimized();
 }
 

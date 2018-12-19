@@ -1,26 +1,12 @@
 ## -*- coding: utf-8 -*-
 
-import base64
-import time
-import sys
-import threading
-import io
-import random
-import string
 import os
-import json
-import signal
-import socks
-# import asyncio
 import requests
-import PIL.Image
-from bs4 import BeautifulSoup
-# from python3_anticaptcha import NoCaptchaTaskProxyless
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-import scheme
-import tools
+from scheme import *
+from tools import *
 
 # ====== Запись логов ======
 def activate_debug(logMode):
@@ -34,20 +20,20 @@ def activate_debug(logMode):
 
 ## args:
 # 1 - доска
-# 2 - тред
-# 3 - число потоков
-# 4 - флаг отладки и номер вывода логов
+# 2 - тред (или "0", если доску)
+# 3 - число потоков (или 0, если 1 пост в 5 минут)
+# 4 - номер вывода логов (или 0, если без них)
 # 5 - номер решателя
 # 6 - ключ (или "0" для казенного)
 # 7 - число повторов прокси
 # 8 - режим вайпалки
-# 9 - минимальный номер разбана (или -1)
-# 10 - максимальный номер разбана (или -1)
-# 11 - номер режима триггера (или -1, если нулевая)
+# 9 - минимальный номер разбана (или -1, если не 8 режим)
+# 10 - максимальный номер разбана (или -1, если не 8 режим)
+# 11 - номер режима триггера (или 0, если доску или просто без него)
 # 12 - число тредов для шрапнели (или 0, если без неё)
 # 13 - минимальное число постов в тредах для шрапнели (или -1, если без неё или с указанием тредов)
-# 14 - номер вида прикреплений (или 0, если дэ)
-# 15 - подкаталог прикреплений (или 0, если из корня)
+# 14 - номер вида прикреплений (или 0, если дэ или просто без них)
+# 15 - подкаталог прикреплений (или "0", если из корня)
 # 16 - число прикреплений (или -1, если из постов)
 # 17 - номер режима сажи
 # 18 итд - треды для шрапнели при ручном указании
@@ -65,7 +51,7 @@ class Setup:
 		self.potocksCount = int(args[3])  # число потоков
 		self.TIMEOUT, self.PAUSE = self.set_consts(self.potocksCount)  # таймаут, пауза
 
-		self.solver, self.key = self.set_key(int(args[5]), args[6])  # солвер, ключ
+		self.solver, self.key, self.keyreq = self.set_key(int(args[5]), args[6])  # солвер, ключ, статус ключа
 		self.proxyRepeatsCount = int(args[7])  # число повторов прокси
 		self.mode, self.pastes, self.bigPaste = self.set_mode(int(args[8]))  # режим вайпалки, пасты
 
@@ -98,11 +84,11 @@ class Setup:
 	def set_consts(self, potocksCount):
 		if potocksCount == 0:
 			TIMEOUT = 60
-			PAUSE = 50
+			PAUSE = 60
 			self.potocksCount = 4
 		else:
 			TIMEOUT = 3
-			PAUSE = 10
+			PAUSE = 20
 		return TIMEOUT, PAUSE
 
 	# === получение казённого ключа ===
@@ -128,12 +114,12 @@ class Setup:
 			print("Получен неожиданный ответ от сервера:", keyreq, keyreq.text)
 			exit()
 		self.set_key(solver, key)
-		return key;
+		return key, keyreq
 
 	# === валидация ключа ===
 	def set_key(self, solver, key):
 		if key == "0":
-			key = self.get_key(solver)
+			key, keyreq = self.get_key(solver)
 		elif len(key) == 32:
 			print("Верифицируем ключ...")
 			if solver == 0:
@@ -166,10 +152,11 @@ class Setup:
 					else:
 						print(keyStatus["errorDescription"])
 						exit()
+			keyreq = 0
 		else:
 			print("Неправильно введен ключ!")
 			exit()
-		return solver, key
+		return solver, key, keyreq
 
 	# === установка режима вайпалки ===
 	def set_mode(self, mode):
@@ -198,21 +185,21 @@ class Setup:
 	# === установка триггера ===
 	def set_trigger(self, form, shrapnelCharge, minPostsCount, args):
 		if shrapnelCharge == 0: # and self.thread > 1
-			self.threads.append(scheme.Thread(self.board, self.thread, self.mode, form))
+			self.threads.append(Thread(self.board, self.thread, self.mode, form))
 		elif shrapnelCharge > 0: # and self.thread > 0
-			self.catalog = scheme.Catalog(self.board)
+			self.catalog = Catalog(self.board)
 			if minPostsCount == -1:
 				for i in range(shrapnelCharge):
-					self.threads.append(scheme.Thread(self.board, args[18+i], self.mode, form))
-				else:
-					i = 0
-					for thread in self.catalog.schema["threads"]:
-						if int(thread["posts_count"]) >= minPostsCount:
-							self.threads.append(scheme.Thread(self.board, str(thread["num"]), self.mode, form))
-							i += 1
-							if i == shrapnelCharge:
-								break
-					shrapnelCharge = i
+					self.threads.append(Thread(self.board, args[18+i], self.mode, form))
+			else:
+				i = 0
+				for thread in self.catalog.schema["threads"]:
+					if int(thread["posts_count"]) >= minPostsCount:
+						self.threads.append(Thread(self.board, str(thread["num"]), self.mode, form))
+						i += 1
+						if i == shrapnelCharge:
+							break
+				shrapnelCharge = i
 		return form, shrapnelCharge
 
 	# === установка прикреплений ===
@@ -237,11 +224,11 @@ class Setup:
 
 			elif self.shrapnelCharge == 0:
 				for post in self.threads[0].posts:
-					for media in range(len(post.medias)):
+					for media in post.medias:
 						print("Скачиваю ", media.name, "("+str(post.num)+"/"+str(self.threads[0].postsCount)+" пост)")
 						media.download()
 			else:
 				self.TIMEOUT += 60
 		else:
-			mediaKind = 0
+			mediasCount = 0
 		return mediaKind, mediaPaths, mediasCount

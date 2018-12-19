@@ -1,17 +1,18 @@
-QWidget {
+GUI {
 	background-image: url(gui/images/gui.png);
 }
 
-QPushButton {
+#button {
 	background-image: url(gui/images/button.png);
 	margin-top: -5;
 }
 
 #close, #rollUp {
-	background: none;
-	background-color: red;
+/*	background: linear-gradient(to top, #FF0000, #FF3030); */
+	background-image: url(gui/images/panel_button.png);
 	font-size: 20px;
 	font-weight: bold;
+	border-radius: 3px;
 }
 
 
@@ -77,3 +78,7 @@ QTextBrowser {
 	border-radius: 3px;
 }
 
+QLineEdit {
+	background-color: white;
+	color: black;
+}

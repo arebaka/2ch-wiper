@@ -1,21 +1,7 @@
 ## -*- coding: utf-8 -*-
 
-import base64
-import time
-import sys
 import threading
-import io
-import random
-import string
 import os
-import json
-import signal
-import socks
-# import asyncio
-import requests
-import PIL.Image
-from bs4 import BeautifulSoup
-# from python3_anticaptcha import NoCaptchaTaskProxyless
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -47,9 +33,9 @@ def eternal_input(badproxies):
 		choice = choice.rstrip()
 		try:
 			if choice.lower() == "s" or choice.lower() == "ы":
-				Stats.printStats()
+				Stats.printStats(badproxies)
 			elif choice.lower() == "q" or choice.lower() == "й":
-				safe_quit()
+				safe_quit(badproxies)
 				badproxies.clear()
 			elif choice.lower() == "c" or choice.lower() == "с":
 				badproxies.clear()
@@ -57,7 +43,7 @@ def eternal_input(badproxies):
 			else:
 				print("Ты пишешь хуйню")
 		except Exception as e:
-			pass
+			print(e);
 
 
 # ====== Стата ======

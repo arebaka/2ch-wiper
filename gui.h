@@ -35,6 +35,9 @@ private:
 
     void closeEvent (QCloseEvent * event);
 
+    QPoint mpos;
+    void mouseMoveEvent(QMouseEvent * event);
+    void mousePressEvent(QMouseEvent * event);
 };
 
 

@@ -1,21 +1,8 @@
 ## -*- coding: utf-8 -*-
 
-import base64
-import time
-import sys
-import threading
-import io
-import random
-import string
-import os
 import json
-import signal
-import socks
-# import asyncio
 import requests
-import PIL.Image
 from bs4 import BeautifulSoup
-# from python3_anticaptcha import NoCaptchaTaskProxyless
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -49,8 +36,8 @@ class Post:
 
 	def __init__(self, schema, mode, triggerForm):
 		self.ID = str(schema["num"])  # номер поста на доске
-		self.set_comment(schema["comment"], mode, triggerForm)
-		self.set_sage(schema)
+		self.comment = self.set_comment(schema["comment"], mode, triggerForm)  # текст поста
+		self.sage = self.set_sage(schema)  # флаг сажи
 		self.num = schema["number"]  # номер поста в треде (с 1)
 		self.medias = []  # прикрепления
 		for media in schema["files"]:
@@ -100,14 +87,11 @@ class Post:
 			s.replace_with("[s]"+s.get_text()+"[/s]")
 
 		# === сохранение ===
-		self.comment = str(soup.get_text()).lstrip('\n')  # текст поста
+		return str(soup.get_text()).lstrip('\n').rstrip('\n')
 
 	# === определение флага сажи ===
 	def set_sage(self, schema):
-		if schema["email"].find("mailto:sage") == -1:
-			self.sage = False  # флаг сажи
-		else:
-			self.sage = True  # флаг сажи
+		return True if schema["email"].find("mailto:sage") == -1 else False
 
 
 # ====== Модель треда ======
@@ -120,15 +104,16 @@ class Thread:
 		self.schema = json.loads(requests.get(''.join(["https://2ch.hk/", board, "/res/", ID, ".json"])).text)  # DOM треда
 		self.postsCount = self.schema["posts_count"] + 1  # число постов в треде
 		self.lastID = self.schema["max_num"]  # номер последнего поста треда
-		self.download_posts(mode, triggerForm)  # посты
+		self.posts = self.download_posts(mode, triggerForm)  # посты
 		self.loaf = "";  # "батон"
 		for postNum in range(min(len(self.posts), 30)):
 			self.loaf += (">>"+self.posts[postNum].ID+" ")
 
 	# === загрузка DOM постов ===
 	def download_posts(self, mode, triggerForm):
-		self.posts = []
+		posts = []
 		for post in self.schema["threads"][0]["posts"]:
-			self.posts.append(Post(post, mode, triggerForm))
+			posts.append(Post(post, mode, triggerForm))
+		return posts
 
 
