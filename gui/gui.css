@@ -2,6 +2,11 @@ GUI {
 	background-image: url(gui/images/gui.png);
 }
 
+QPushButton::hover {
+	color: white;
+	background-color: yellow;
+}
+
 #button {
 	background-image: url(gui/images/button.png);
 	margin-top: -5;

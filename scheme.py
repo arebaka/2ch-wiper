@@ -103,7 +103,7 @@ class Thread:
 		print("Скачиваю тред", self.ID)
 		self.schema = json.loads(requests.get(''.join(["https://2ch.hk/", board, "/res/", ID, ".json"])).text)  # DOM треда
 		self.postsCount = self.schema["posts_count"] + 1  # число постов в треде
-		self.lastID = self.schema["max_num"]  # номер последнего поста треда
+		self.lastID = str(self.schema["max_num"])  # номер последнего поста треда
 		self.posts = self.download_posts(mode, triggerForm)  # посты
 		self.loaf = "";  # "батон"
 		for postNum in range(min(len(self.posts), 30)):

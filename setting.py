@@ -64,6 +64,9 @@ class Setup:
 
 		if self.thread != "0":
 			self.triggerForm, self.shrapnelCharge = self.set_trigger(int(args[11]), int(args[12]), int(args[13]), args)  # режим триггера, число тредов шрапнели
+		else:
+			self.triggerForm = 0
+			self.shrapnelCharge = 0
 
 		self.mediaKind, self.mediaPaths, self.mediasCount = self.set_media(int(args[14]), args[15], int(args[16]))  # тип прикреплений, число прикреплений к треду
 		
@@ -81,13 +84,14 @@ class Setup:
 			self.fullFile = "parasha_unix.txt"
 		return self.cpFile, self.bansFile, self.fullFile
 
+	# === установка паузы между постами и таймаута ===
 	def set_consts(self, potocksCount):
 		if potocksCount == 0:
 			TIMEOUT = 60
 			PAUSE = 60
 			self.potocksCount = 4
 		else:
-			TIMEOUT = 3
+			TIMEOUT = 10
 			PAUSE = 20
 		return TIMEOUT, PAUSE
 

@@ -8,7 +8,7 @@ import io
 import random
 import string
 import os
-# import json
+#import json
 import signal
 #import socks
 # import asyncio
@@ -20,7 +20,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from scheme import Catalog, Thread
 from setting import Setup
-from solvers import *
+import solvers_2ch
+import solvers_re
 from tools import *
 
 # ====== Макросы макросики ======
@@ -34,29 +35,45 @@ badproxies = []
 def show_logo():
 	os.system('cls' if os.name == 'nt' else 'clear')
 	print("\n*************************************************")
-	print("*	2CH.HK WIPE MACHINE - ReCaptcha edition	*")
-	print("*	 Только для внутреннего использования	  *")
-	print("*		Оригинальный проект: glow_stick		*")
-	print("*	  Быдлокод: owodelta, kobato, arelive	  *")
-	print("*			cryptostimor, tsunamaru			*")
+	print("*    2CH.HK WIPE MACHINE - ReCaptcha edition    *")
+	print("*     Только для внутреннего использования      *")
+	print("*        Оригинальный проект: glow_stick        *")
+	print("*      Быдлокод: owodelta, kobato, arelive      *")
+	print("*            cryptostimor, tsunamaru            *")
 	print("*************************************************")
 
 
 # ====== API капчи сосача ======
 class Captcha:
 
-	def __init__(self, proxy, agent, board, thread, solver, TIMEOUT):
-		#self.api = "https://2ch.hk/api/captcha/2chaptcha/"
-		self.api = "https://2ch.hk/api/captcha/recaptcha/id"
+	def __init__(self, proxy, agent, board, thread, solver, TIMEOUT, captchaType):
+		if (captchaType) == "2ch":
+			self.api = "https://2ch.hk/api/captcha/2chaptcha/"
+		else:
+			self.api = "https://2ch.hk/api/captcha/recaptcha/id"
 		self.proxy = proxy
-		self.agent = agent
 		self.board = board
 		self.thread = thread
 		self.solver = solver
 		self.TIMEOUT = TIMEOUT
-		captcha = requests.get(self.api + "id?board=" + self.board + "&thread=" + self.thread, proxies=self.proxy, headers=self.agent, timeout=self.TIMEOUT, verify=False).json()
+		self.set_headers(agent)
+
+#		os.environ["https_proxy"] = self.proxy["https"]
+#		os.environ["http_proxy"] = self.proxy["http"]
+
+		captcha = requests.get(self.api + "id?board=" + self.board + "&thread=" + self.thread, proxies=self.proxy, headers=self.headers, timeout=self.TIMEOUT, verify=False).json()
 		self.id = captcha["id"]
-		self.image = requests.get(self.api + "image/" + self.id, proxies=self.proxy, headers=self.agent, timeout=self.TIMEOUT, verify=False).content
+		self.image = requests.get(self.api + "image/" + self.id, proxies=self.proxy, headers=self.headers, timeout=self.TIMEOUT, verify=False).content
+
+	def set_headers(self, agent):
+		self.headers = {}
+		self.headers["Host"] = "2ch.hk"
+		self.headers.update(agent)
+		self.headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+		self.headers["Accept-Language"] = "ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3"
+		self.headers["Accept-Encoding"] = "gzip, deflate, br"
+		self.headers["Connection"] = "keep-alive"
+		self.headers["Upgrade-Insecure-Requests"] = "1"
 
 	def solve(self):
 		print(self.proxy["http"], "solving captcha")
@@ -64,28 +81,19 @@ class Captcha:
 		return (None, self.id), (None, self.value)
 
 	def verify(self):
-		return requests.get(self.api + "check/" + self.id + '?value=' + self.value, proxies=self.proxy, headers=self.agent, verify=False, timeout=self.TIMEOUT).json()["result"] == 1
+		return requests.get(self.api + "check/" + self.id + '?value=' + self.value, proxies=self.proxy, headers=self.headers, verify=False, timeout=self.TIMEOUT).json()["result"] == 1
 
 
 # ====== Постинг ======
 class Post:
 
-	def __init__(self, proxy, agent, board, thread, solver):
-		if proxy.find("socks4://") != -1:
-			proxy = proxy[proxy.find("://")+3:len(proxy)]
-			self.proxy = {"socks4": proxy}
-		elif proxy.find("socks5://") != -1:
-			proxy = proxy[proxy.find("://")+3:len(proxy)]
-			self.proxy = {"socks5": proxy}
-		elif proxy.find("http://") != -1 or proxy.find("https://") != -1:
-			proxy = proxy[proxy.find("://")+3:len(proxy)]
-			self.proxy = {"http": proxy, "https": proxy}
-		else:
-			self.proxy = {"http": proxy}
+	def __init__(self, proxy, agent, board, thread, solver, captchaType):
+		self.proxy = {"http": proxy, "https": proxy}
 		self.agent = {"User-Agent": agent}
 		self.board = board
 		self.thread = thread
 		self.solver = solver
+		self.captchaType = captchaType
 		self.buffer = {}
 		self.params = []
 		self.params.append(("task", (None, "post")))
@@ -93,15 +101,17 @@ class Post:
 		self.params.append(("thread", (None, self.thread)))
 		self.params.append(("usercode", (None, "")))
 		self.params.append(("code", (None, "")))
-		#self.params["captcha_type"] = (None, "2chaptcha")
-		self.params.append(("captcha_type", (None, "recaptcha")))
+		if self.captchaType == "2ch":
+			self.params.append(("captcha_type", (None, "2chaptcha")))
+		else:
+			self.params.append(("captcha_type", (None, "recaptcha")))
 		self.params.append(("oekaki_image", (None, "")))
 		self.params.append(("oekaki_metadata", (None, "")))
 #		self.params["g-recaptcha-response"] = (None, "")
 #		self.params["formimages"] = []
 
 		self.set_headers()
-#		self.set_subject("test")
+#		self.set_subject("Ответ")
 
 	def set_headers(self):
 		self.headers = {}
@@ -112,22 +122,23 @@ class Post:
 		self.headers["Accept-Encoding"] = "gzip, deflate, br"
 		self.headers["Referer"] = str("https://2ch.hk/" + self.board + "/res/" + self.thread + ".html")
 		self.headers["X-Requested-With"] = "XMLHttpRequest"
-#		self.headers["Content-Type"] = str("multipart/form-data; boundary=--------------------------" + ''.join(str(random.randint(0, 9)) for _ in range(28)))
-#   с этой штукой макаба отвечает: {'Error': -2, 'Reason': 'Доска не существует.'}. надо выкопать алгоритм для boundary
-		self.headers["Content-Length"] = "15000000"
+		self.headers["Content-Length"] = str(15000000 + random.randint(0, 100))
 		self.headers["Cookie"] = ""
 		self.headers["Connection"] = "keep-alive"
 
 	def prepare(self, TIMEOUT):
 		try:
-			#self.params["2chaptcha_id"], self.params["2chaptcha_value"] = Captcha(self.proxy, self.agent, self.board, self.thread, self.solver).solve()
-			self.buffer["2chaptcha_id"], self.buffer["g-recaptcha-response"] = Captcha(self.proxy, self.agent, self.board, self.thread, self.solver, TIMEOUT).solve()
-			self.params.append(("g-recaptcha-response", self.buffer["g-recaptcha-response"]))
-			self.params.append(("2chaptcha_id", self.buffer["2chaptcha_id"]))
+			self.buffer["chaptcha_id"], self.buffer["chaptcha_value"] = Captcha(self.proxy, self.agent, self.board, self.thread, self.solver, TIMEOUT, self.captchaType).solve()
+			if self.captchaType == "2ch":
+				self.params.append(("2chaptcha_id", self.buffer["chaptcha_id"]))
+				self.params.append(("2chaptcha_value", self.buffer["chaptcha_value"]))
+			else:
+				self.params.append(("2chaptcha_id", self.buffer["chaptcha_id"]))
+				self.params.append(("g-recaptcha-response", self.buffer["chaptcha_value"]))
 			print(self.proxy["http"], "solved")
 			return True
 		except Exception as e:
-			print(e)
+			#print(e)
 			return False
 
 	def set_subject(self, text):
@@ -143,7 +154,7 @@ class Post:
 	def set_image(self, file_name):
 		image = PIL.Image.open(file_name).convert("RGB")
 		width, height = image.size
-		for x in range(random.randint(1, 10)): image.putpixel((random.randint(0, width-1), random.randint(0, height-1)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+		for x in range(random.randint(10, 20)): image.putpixel((random.randint(0, width-1), random.randint(0, height-1)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
 		image = image.crop((0 + random.randint(0, 10), 0 + random.randint(0, 10), width-1 - random.randint(0, 10), height-1 - random.randint(0, 10)))
 		image_bytes = io.BytesIO()
 		image.save(image_bytes, "JPEG", quality=60 + random.randint(10, 30), optimize=bool(random.getrandbits(1)), progressive=bool(random.getrandbits(1)))
@@ -171,7 +182,7 @@ class Post:
 		if mediaName.find(".jpg") != -1 or mediaName.find(".png") != -1 or mediaName.find(".gif") != -1:
 			image = PIL.Image.open(io.BytesIO(media)).convert("RGB")
 			width, height = image.size
-			for x in range(random.randint(1, 10)): image.putpixel((random.randint(0, width-1), random.randint(0, height-1)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+			for x in range(random.randint(10, 20)): image.putpixel((random.randint(0, width-1), random.randint(0, height-1)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
 			image = image.crop((0 + random.randint(0, 10), 0 + random.randint(0, 10), width-1 - random.randint(0, 10), height-1 - random.randint(0, 10)))
 			image_bytes = io.BytesIO()
 			image.save(image_bytes, "JPEG", quality=60 + random.randint(10, 30), optimize=bool(random.getrandbits(1)), progressive=bool(random.getrandbits(1)))
@@ -211,7 +222,7 @@ class Post:
 			Stats.printStats(badproxies)
 			return response['Status'] == 'OK', response
 		except Exception as e:
-			print(e)
+			#print(e)
 			return False, response
 
 
@@ -227,15 +238,34 @@ class Wiper:
 		self.agents = [agent[:-1] for agent in open("useragents").readlines()]
 		self.board = setup.board
 		self.thread = setup.thread
-		if setup.solver == 0:
-			self.solver = CaptchaSolver_XCaptcha(setup.key, setup.keyreq)
-		elif setup.solver == 1:
-			self.solver = CaptchaSolver_captchaguru(setup.key, setup.keyreq)
-		elif setup.solver == 2:
-			self.solver = CaptchaSolver_anticaptcha(setup.key, setup.keyreq)
 		self.setup = setup
 		self.catalog = catalog
 		self.threads = threads
+
+		self.set_solver(setup.solver)
+
+	def set_solver(self, solver):
+		captcha = requests.get("https://2ch.hk/api/captcha/2chaptcha/id?board=b&thread=0", headers={"User-Agent": self.agents[0]}, timeout=self.setup.TIMEOUT, verify=False).json()
+		captchaID = captcha["id"]
+		image = requests.get("https://2ch.hk/api/captcha/2chaptcha/image/" + captchaID, headers={"User-Agent": self.agents[0]}, timeout=self.setup.TIMEOUT, verify=False).content
+		error = open("error.gif","rb")
+
+		if True:#image == error.read():
+			self.captchaType = "re"
+			if solver == 0:
+				self.solver = solvers_re.CaptchaSolver_XCaptcha(self.setup.key, self.setup.keyreq)
+			elif solver == 1:
+				self.solver = solvers_re.CaptchaSolver_captchaguru(self.setup.key, self.setup.keyreq)
+			elif solver == 2:
+				self.solver = solvers_re.CaptchaSolver_anticaptcha(self.setup.key, self.setup.keyreq)
+		else:
+			self.captchaType = "2ch"
+			if solver == 0:
+				self.solver = solvers_2ch.CaptchaSolver_XCaptcha(self.setup.key, self.setup.keyreq)
+			elif solver == 1:
+				self.solver = solvers_2ch.CaptchaSolver_captchaguru(self.setup.key, self.setup.keyreq)
+			elif solver == 2:
+				self.solver = solvers_2ch.CaptchaSolver_anticaptcha(self.setup.key, self.setup.keyreq)
 
 	def trap_replace(self, text):
 		if bool(random.getrandbits(1)):
@@ -280,7 +310,7 @@ class Wiper:
 					threadNum = random.randint(0, self.setup.shrapnelCharge-1)
 					thread = self.threads[threadNum].ID
 
-				post = Post(proxy, agent, self.board, thread, self.solver)
+				post = Post(proxy, agent, self.board, thread, self.solver, self.captchaType)
 				if (post.prepare(self.setup.TIMEOUT)):
 					charnum = random.randint(1, 100)
 					if self.thread != "0":
@@ -293,7 +323,7 @@ class Wiper:
 					elif self.setup.triggerForm == 2:
 						trigger = ">>" + self.threads[threadNum].posts[black_anus].ID + '\n'
 					elif self.setup.triggerForm == 3:
-						trigger = ">>" + self.threads[threadNum].loaf + '\n'
+						trigger = self.threads[threadNum].loaf + '\n'
 					elif self.setup.triggerForm == 4:
 						trigger = ">>" + self.threads[threadNum].posts[0].ID + '\n'
 					elif self.setup.triggerForm == 0:
@@ -345,7 +375,7 @@ class Wiper:
 						except Exception as e:
 							print(e)
 							print("Не могу открыть файл, проверь имя.")
-							os._exit(-1)
+							exit()
 
 					# === и сажу туды ===
 					if self.setup.sageMode == 2:
@@ -369,8 +399,8 @@ class Wiper:
 						if self.setup.shrapnelCharge == 0:
 							print(proxy+" - success. Post id: "+str(post_id))
 						else:
-							print(proxy+" - success. Post id: "+str(post_id)+" ("+self.threads[threadNum].ID+" thread)")
-						if self.setup.thread != 0:
+							print(proxy+" - success. Post id: "+str(post_id)+" ("+thread+" thread)")
+						if self.setup.thread != "0":
 							self.threads[threadNum].lastID = str(post_id)
 
 						print(str(self.setup.proxyRepeatsCount-counter)+" LOOPS LEFT")
@@ -379,7 +409,7 @@ class Wiper:
 						print(proxy, "posting failed -", response)
 
 						try:
-							if response["Error"] == -6: #or response["Error"] == -4:
+							if response["Error"] == -6 or response["Error"] == -4:
 								print("Забанили, суки... "+proxy+" в плохой лист")
 								badproxies.append(proxy)
 								if self.proxies == 0:
@@ -441,12 +471,16 @@ class Wiper:
 		for i in range(len(threads)):
 			threads[i].join()
 
+show_logo()
 
+try:
+	setup = Setup(sys.argv)
+	WiperObj = Wiper(setup, setup.catalog, setup.threads)
+	signal.signal(signal.SIGINT, safe_quit)
+	WiperObj.wipe(setup.potocksCount)
 
-setup = Setup(sys.argv)
-WiperObj = Wiper(setup, setup.catalog, setup.threads)
-signal.signal(signal.SIGINT, safe_quit)
-WiperObj.wipe(setup.potocksCount)
+	safe_quit(badproxies)
 
-safe_quit(badproxies)
+except Exception as e:
+	print(e, "(arelive obosralsya)")
 
