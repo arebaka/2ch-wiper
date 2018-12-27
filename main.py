@@ -397,10 +397,6 @@ class Wiper:
 					elif self.setup.sageMode == 0:
 						post.params.append(("email", (None, "")))
 
-					print(self.threads[threadNum].posts[0].ID, "\n\n\n\n\n");
-					print(thread.posts[0].ID, "\n\n\n\n")
-					print(self.setup.targetThread.posts[0].ID, "\n\n\n")
-
 					success, response = post.send(self.setup.TIMEOUT, self.setup.PAUSE)
 					if success:
 						Stats.incPosts()
