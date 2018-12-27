@@ -2,14 +2,31 @@ GUI {
 	background-image: url(gui/images/gui.png);
 }
 
+
+QPushButton {
+	color: black;
+	background: #20272B;
+	border: none;
+	border-radius: 3px;
+}
 QPushButton::hover {
 	color: white;
-	background-color: yellow;
 }
 
+QLabel , QRadioButton, QCheckBox {
+	color: white;
+}
+
+
 #button {
+	color: #354457;
 	background-image: url(gui/images/button.png);
-	margin-top: -5;
+	border-radius: 10px 25px;
+	border: 1px solid #F5C942;
+}
+
+#button::hover {
+	color: #6A9ACD;
 }
 
 #close, #rollUp {
@@ -17,14 +34,27 @@ QPushButton::hover {
 	background-image: url(gui/images/panel_button.png);
 	font-size: 20px;
 	font-weight: bold;
-	border-radius: 3px;
 }
 
+#musicButton {
+	background-image: url(gui/images/music_off.png)
+}
+#musicButton::checked {
+	background-image: url(gui/images/music_on.png)
+}
+
+#peedorBarButton {
+	background-image: url(gui/images/mars.png)
+}
+#peedorBarButton::checked {
+	background-image: url(gui/images/venue.png)
+}
 
 
 QRadioButton::indicator {
 	width: 20;
 	height: 20;
+	background: none;
 }
 QRadioButton::indicator::unchecked {
 	image: url(gui/images/radio_out.png);
@@ -44,6 +74,10 @@ QRadioButton::indicator::checked::hover {
 }
 QRadioButton::indicator::checked::pressed {
 	image: url(gui/images/radio_pressed.png)
+}
+
+QRadioButton:disabled {
+	color: gray;
 }
 
 
@@ -71,11 +105,14 @@ QCheckBox::indicator::checked::pressed {
 	image: url(gui/images/check_pressed.png);
 }
 
+QCheckBox:disabled {
+	color: gray;
+}
+
 
 QTextBrowser {
-	background: none; 
-/*	background-color: #20272B; */
-	background-image: url(gui/images/pocik.jpg);
+	background: #20272B;
+/*	background-image: url(gui/images/pocik.jpg); */
 	margin-top: 10;
 	font: monospace;
 	color: white;
@@ -84,6 +121,11 @@ QTextBrowser {
 }
 
 QLineEdit {
-	background-color: white;
+	background: white;
 	color: black;
+	border: 1px solid black;
+	border-radius: 2px;
+}
+QLineEdit:disabled {
+	background: gray;
 }

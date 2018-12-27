@@ -21,56 +21,58 @@ def activate_debug(logMode):
 ## args:
 # 1 - доска
 # 2 - тред (или "0", если доску)
-# 3 - число потоков (или 0, если 1 пост в 5 минут)
-# 4 - номер вывода логов (или 0, если без них)
-# 5 - номер решателя
-# 6 - ключ (или "0" для казенного)
-# 7 - число повторов прокси
-# 8 - режим вайпалки
-# 9 - минимальный номер разбана (или -1, если не 8 режим)
-# 10 - максимальный номер разбана (или -1, если не 8 режим)
-# 11 - номер режима триггера (или 0, если доску или просто без него)
-# 12 - число тредов для шрапнели (или 0, если без неё)
-# 13 - минимальное число постов в тредах для шрапнели (или -1, если без неё или с указанием тредов)
-# 14 - номер вида прикреплений (или 0, если дэ или просто без них)
-# 15 - подкаталог прикреплений (или "0", если из корня)
-# 16 - число прикреплений (или -1, если из постов)
-# 17 - номер режима сажи
-# 18 итд - треды для шрапнели при ручном указании
+# 3 - флаг хаоса и тред для постинга (-1, если без хаоса, 0, если шрапнельный хаос)
+# 4 - число потоков (или 0, если 1 пост в 5 минут)
+# 5 - номер вывода логов (или 0, если без них)
+# 6 - номер решателя
+# 7 - ключ (или "0" для казенного)
+# 8 - число повторов прокси
+# 9 - режим вайпалки
+# 10 - минимальный номер разбана (или -1, если не 8 режим)
+# 11 - максимальный номер разбана (или -1, если не 8 режим)
+# 12 - номер режима триггера (или 0, если доску или просто без него)
+# 13 - число тредов для шрапнели (или 0, если без неё)
+# 14 - минимальное число постов в тредах для шрапнели (или -1, если без неё или с указанием тредов)
+# 15 - номер вида прикреплений (или 0, если дэ или просто без них)
+# 16 - подкаталог прикреплений (или "0", если из корня)
+# 17 - число прикреплений (или -1, если из постов)
+# 18 - номер режима сажи
+# 19 итд - треды для шрапнели при ручном указании
 
 # ====== Конфигурация ======
 class Setup:
 
 	def __init__(self, args):
-		if int(args[4]) != 0:
-			activate_debug(int(args[4]))
+		if int(args[5]) != 0:
+			activate_debug(int(args[5]))
 		self.cpFile, self.bansFile, self.fullFile = self.set_encoding()  # файлы с пастами
 
 		self.board = args[1]  # доска
 		self.thread = args[2]  # тред
-		self.potocksCount = int(args[3])  # число потоков
+		self.chaos = args[3]  # хаос / тред для постинга
+		self.potocksCount = int(args[4])  # число потоков
 		self.TIMEOUT, self.PAUSE = self.set_consts(self.potocksCount)  # таймаут, пауза
 
-		self.solver, self.key, self.keyreq = self.set_key(int(args[5]), args[6])  # солвер, ключ, статус ключа
-		self.proxyRepeatsCount = int(args[7])  # число повторов прокси
-		self.mode, self.pastes, self.bigPaste = self.set_mode(int(args[8]))  # режим вайпалки, пасты
+		self.solver, self.key, self.keyreq = self.set_key(int(args[6]), args[7])  # солвер, ключ, статус ключа
+		self.proxyRepeatsCount = int(args[8])  # число повторов прокси
+		self.mode, self.pastes, self.bigPaste = self.set_mode(int(args[9]))  # режим вайпалки, пасты
 
 		if self.mode == 8:
-			self.minBan = int(args[9])  # минимальный ID бана
-			self.maxBan = int(args[10])  # максимальный ID бана
+			self.minBan = int(args[10])  # минимальный ID бана
+			self.maxBan = int(args[11])  # максимальный ID бана
 
 		self.catalog = 0  # ¯\_(ツ)_/¯
 		self.threads = []
 
 		if self.thread != "0":
-			self.triggerForm, self.shrapnelCharge = self.set_trigger(int(args[11]), int(args[12]), int(args[13]), args)  # режим триггера, число тредов шрапнели
+			self.triggerForm, self.shrapnelCharge, self.targetThread = self.set_trigger(int(args[12]), int(args[13]), int(args[14]), args)  # режим триггера, число тредов шрапнели
 		else:
 			self.triggerForm = 0
 			self.shrapnelCharge = 0
 
-		self.mediaKind, self.mediaPaths, self.mediasCount = self.set_media(int(args[14]), args[15], int(args[16]))  # тип прикреплений, число прикреплений к треду
+		self.mediaKind, self.mediaPaths, self.mediasCount = self.set_media(int(args[15]), args[16], int(args[17]))  # тип прикреплений, число прикреплений к треду
 		
-		self.sageMode = int(args[17])  # режим сажи
+		self.sageMode = int(args[18])  # режим сажи
 
 	# === определение ОС и кодировки ===
 	def set_encoding(self):
@@ -194,7 +196,7 @@ class Setup:
 			self.catalog = Catalog(self.board)
 			if minPostsCount == -1:
 				for i in range(shrapnelCharge):
-					self.threads.append(Thread(self.board, args[18+i], self.mode, form))
+					self.threads.append(Thread(self.board, args[19+i], self.mode, form))
 			else:
 				i = 0
 				for thread in self.catalog.schema["threads"]:
@@ -204,7 +206,13 @@ class Setup:
 						if i == shrapnelCharge:
 							break
 				shrapnelCharge = i
-		return form, shrapnelCharge
+
+		if self.chaos != "-1" and self.chaos != "0":
+			targetThread = Thread(self.board, self.chaos, self.mode, form)
+		else:
+			targetThread = self.threads[0]
+
+		return form, shrapnelCharge, targetThread
 
 	# === установка прикреплений ===
 	def set_media(self, mediaKind, mediaGroup, mediasCount):

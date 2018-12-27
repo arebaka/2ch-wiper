@@ -6,7 +6,7 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # ====== Отключение ======
-def safe_quit(badproxies, sig=0, frame=0):
+def safe_quit(badproxies, forbiddenproxy, sig=0, frame=0):
 	print("\n\nЖду, пока обновится лист с проксичками...")
 
 	f = open("proxies", "r+")
@@ -20,13 +20,19 @@ def safe_quit(badproxies, sig=0, frame=0):
 	f.truncate()
 	f.close()
 
-	print(str(len(badproxies)), "плохих проксичек почищено!")
+	d = open("forbidden.csv", "a")
+	for proxy in forbiddenproxy:
+		d.write(proxy + '\n')
+		d.close()
+
+	print(str((len(badproxies) - len(forbiddenproxy))), "забаненых проксичек почищено!")
+	print(str(len(forbiddenproxy)), "запрещенных проксичек почищено!")
 	print("Выключаюсь...")
 
 	os._exit(0)
 
 # ====== Обработка клавиш ======
-def eternal_input(badproxies):
+def eternal_input(badproxies, forbiddenproxy):
 	while True:
 		print("Choose your option")
 		choice = input("[S]tatistics, [Q]uit, [C]lear parasha\n")
@@ -35,8 +41,9 @@ def eternal_input(badproxies):
 			if choice.lower() == "s" or choice.lower() == "ы":
 				Stats.printStats(badproxies)
 			elif choice.lower() == "q" or choice.lower() == "й":
-				safe_quit(badproxies)
+				safe_quit(badproxies, forbiddenproxy)
 				badproxies.clear()
+				forbiddenproxy.clear()
 			elif choice.lower() == "c" or choice.lower() == "с":
 				badproxies.clear()
 				print("Параша почищена")
@@ -66,12 +73,13 @@ class Stats:
 	def incPosts():
 		Stats.postsSent += 1
 
-	def printStats(badproxies):
+	def printStats(badproxies, forbiddenproxy):
 		print("=====================================")
 		print("Проксичек осталось:\t", str(Stats.numOfProxies - len(badproxies)))
 		print("Начальные потоки:\t", str(Stats.numOfThreads))
 		print("Каптч решено:\t\t", str(Stats.captchasSolved))
-		print("Плохие проксички:\t", str(len(badproxies)))
+		print("Забаненые проксички:\t", str((len(badproxies) - len(forbiddenproxy))))
+		print("Доступ запрещен:\t", str(len(forbiddenproxy)))
 		print("Текущие потоки:\t\t", str(threading.active_count()))
 		#print("Создано тредов/постов: ", posti, "\n")
 		if threading.active_count() <= 2:

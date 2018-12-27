@@ -29,6 +29,7 @@ CHARS = string.ascii_uppercase + string.digits
 TEXT_CHARS = string.ascii_uppercase + string.digits + string.ascii_lowercase + (string.whitespace * 10) + string.punctuation
 NAME_SIZE = 14
 badproxies = []
+forbiddenproxy = []
 
 
 # ====== Шапка ======
@@ -219,7 +220,7 @@ class Post:
 			time.sleep(PAUSE)
 			response = requests.post("https://2ch.hk/makaba/posting.fcgi?json=1", files=self.params, proxies=self.proxy, headers=self.headers, timeout=TIMEOUT, verify=False).json()
 			Stats.incPosts()
-			Stats.printStats(badproxies)
+			Stats.printStats(badproxies, forbiddenproxy)
 			return response['Status'] == 'OK', response
 		except Exception as e:
 			#print(e)
@@ -305,27 +306,35 @@ class Wiper:
 			while counter < self.setup.proxyRepeatsCount:
 				if self.setup.shrapnelCharge == 0:
 					threadNum = 0
-					thread = self.thread
+					if (self.setup.chaos == "-1"):
+						thread = self.threads[0]
+					else:
+						thread = self.setup.targetThread
 				else:
 					threadNum = random.randint(0, self.setup.shrapnelCharge-1)
-					thread = self.threads[threadNum].ID
+					if (self.setup.chaos == "-1"):
+						thread = self.threads[threadNum]
+					elif (self.setup.chaos == "0"):
+						thread = self.threads[random.randint(0, len(self.threads)-1)]
+					else:
+						thread = self.setup.targetThread
 
-				post = Post(proxy, agent, self.board, thread, self.solver, self.captchaType)
+				post = Post(proxy, agent, self.board, thread.ID, self.solver, self.captchaType)
 				if (post.prepare(self.setup.TIMEOUT)):
 					charnum = random.randint(1, 100)
 					if self.thread != "0":
-						black_anus = random.randint(1, len(self.threads[threadNum].posts)-1)  # номер поста для триггера
+						black_anus = random.randint(1, len(thread.posts)-1)  # номер поста для триггера
 						white_anus = random.randint(0, len(self.threads[threadNum].posts)-1)  # номер поста для дублирования
 
 					# === берём сначала триггер ===
 					if self.setup.triggerForm == 1:
-						trigger = ">>" + self.threads[threadNum].lastID + '\n'
+						trigger = ">>" + thread.lastID + '\n'
 					elif self.setup.triggerForm == 2:
-						trigger = ">>" + self.threads[threadNum].posts[black_anus].ID + '\n'
+						trigger = ">>" + thread.posts[black_anus].ID + '\n'
 					elif self.setup.triggerForm == 3:
-						trigger = self.threads[threadNum].loaf + '\n'
+						trigger = thread.loaf + '\n'
 					elif self.setup.triggerForm == 4:
-						trigger = ">>" + self.threads[threadNum].posts[0].ID + '\n'
+						trigger = ">>" + thread.posts[0].ID + '\n'
 					elif self.setup.triggerForm == 0:
 						trigger = ""
 
@@ -337,7 +346,7 @@ class Wiper:
 					elif self.setup.mode == 0:
 						post.set_text(trigger + ''.join(random.choice(TEXT_CHARS) for _ in range(charnum)))
 					elif self.setup.mode == 3:
-						post.set_text(trigger + ("> " + self.threads[threadNum].posts[black_anus].comment).replace("\n", "\n> ").replace("\n> \n", "\n\n"))
+						post.set_text(trigger + ("> " + thread.posts[black_anus].comment).replace("\n", "\n> ").replace("\n> \n", "\n\n"))
 					elif self.setup.mode == 4:
 						post.set_text(trigger + self.setup.pastes[random.randint(0, len(self.setup.pastes)-1)])
 					elif self.setup.mode == 5:
@@ -388,6 +397,10 @@ class Wiper:
 					elif self.setup.sageMode == 0:
 						post.params.append(("email", (None, "")))
 
+					print(self.threads[threadNum].posts[0].ID, "\n\n\n\n\n");
+					print(thread.posts[0].ID, "\n\n\n\n")
+					print(self.setup.targetThread.posts[0].ID, "\n\n\n")
+
 					success, response = post.send(self.setup.TIMEOUT, self.setup.PAUSE)
 					if success:
 						Stats.incPosts()
@@ -409,16 +422,22 @@ class Wiper:
 						print(proxy, "posting failed -", response)
 
 						try:
-							if response["Error"] == -6 or response["Error"] == -4:
+							if response["Error"] == -6:
 								print("Забанили, суки... "+proxy+" в плохой лист")
 								badproxies.append(proxy)
 								if self.proxies == 0:
 									print("Закончились проксички!")
 									#raise
 								proxy = self.proxies.pop(0)
+							elif response["Error"] == -4:
+								print("Заносим "+proxy+" в forbidden.csv")
+								badproxies.append(proxy)
+								forbiddenproxy.append(proxy)
+								if self.proxies == 0:
+									print("Закончились проксички!")
 							elif response["Error"] == -7:
 								print("Моча вычищает тред. КОНЧАЮ.")
-								safe_quit(badproxies)
+								safe_quit(badproxies, forbiddenproxy)
 							elif not response:
 								print("Ошибка сети, пробуем ещё раз...")
 								pass
@@ -458,8 +477,8 @@ class Wiper:
 				threading.Thread.__init__(self)
 
 			def run(self):
-				Stats.printStats(badproxies)
-				eternal_input(badproxies)
+				Stats.printStats(badproxies, forbiddenproxy)
+				eternal_input(badproxies, forbiddenproxy)
 
 		threads = []
 		inthr = InputThread()
@@ -479,7 +498,7 @@ try:
 	signal.signal(signal.SIGINT, safe_quit)
 	WiperObj.wipe(setup.potocksCount)
 
-	safe_quit(badproxies)
+	safe_quit(badproxies, forbiddenproxy)
 
 except Exception as e:
 	print(e, "(arelive obosralsya)")

@@ -3,7 +3,7 @@
 const string Setup::DIGITS = "0123456789";
 
 Setup::Setup ()
-    : hasBoard(false) , hasThread(false) , hasPotocksCount(false) , hasLogMode(false) , hasSolver(false) , hasKey(false) , \
+    : hasBoard(false) , hasThread(false) , hasChaos(false) , hasPotocksCount(false) , hasLogMode(false) , hasSolver(false) , hasKey(false) , \
       hasProxyRepeatsCount(false) , hasMode(false) , hasMinBan(false) , hasMaxBan(false) , hasTriggerForm(false) , \
       hasShrapnelCharge(false) , hasMinPostsCount(false) , hasMediaKind(false) , hasMediaGroup(false) , \
       hasMediasCount(false) , hasSageMode(false)
@@ -53,6 +53,13 @@ void Setup::set_thread (const string &thread) {
         hasThread = true;
     } else
         hasThread = false;
+}
+void Setup::set_chaos (const string &chaos) {
+    if (is_num(chaos)) {
+        this->chaos = chaos;
+        hasChaos = true;
+    } else
+        hasChaos = false;
 }
 void Setup::set_potocksCount (const string &potocksCount) {
     if (is_pos_num(potocksCount)) {
@@ -206,8 +213,15 @@ vector<string> Setup::validate () {
 
     if (thread == "0" && triggerForm != "0") errors.push_back("Триггер на нулевой!");
 
+    if (thread == "0" && chaos != "-1") errors.push_back("Нельзя устраивать хаос с нулевой!");
+
+    if (shrapnelCharge == "0" && chaos == "0") errors.push_back("Для полного хаоса требуется шрапнель!");
+
+    if (thread == "0" && sageMode == '2') errors.push_back("Нельзя копировать сажу с нулевой!");
+
     if (errors.size() == 0) errors.push_back("OK");
-    return errors; }
+    return errors;
+}
 
 unsigned char Setup::complete () {
     unsigned char autoCompCount(0);
@@ -221,6 +235,8 @@ unsigned char Setup::complete () {
     if (!hasProxyRepeatsCount) set_proxyRepeatsCount("50");
     else autoCompCount++;
     if (!hasTriggerForm) set_triggerForm("0");
+    else autoCompCount++;
+    if (!hasChaos) set_chaos("-1");
     else autoCompCount++;
     if (!hasShrapnelCharge) set_shrapnelCharge("0");
     else autoCompCount++;
@@ -247,12 +263,12 @@ vector<string> Setup::start () {
     return errors;
 }
 
-/// python3 main.py <доска> <тред> <потоки> <режим логов> <решатель> <ключ> <повторы прокси> <минимальный бан> <максимальный бан>
+/// python3 main.py <доска> <тред> <хаос> <потоки> <режим логов> <решатель> <ключ> <повторы прокси> <минимальный бан> <максимальный бан>
 /// <триггер> <заряд шрапнели> <минимальное число постов для шрапнели> <вид прикреплений> <подкаталог прикреплений>
 /// <число прикреплений> <сажа> <треды для шрапнели>
 string Setup::comline () {
     string command("python3 main.py ");
-    command += (board + " " + thread + " " + potocksCount + " ");
+    command += (board + " " + thread + " " + chaos + " " + potocksCount + " ");
     command += logMode;
 
     command += (" " + solver + " ");

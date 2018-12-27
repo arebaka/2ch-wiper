@@ -122,6 +122,7 @@ wipe
 wiper
 images
 videos
+*.csv
 
 *~
 *.autosave

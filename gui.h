@@ -4,6 +4,9 @@
 #include <QPlainTextEdit>
 #include <QFile>
 #include <QDir>
+#include <QSound>
+#include <QFileDialog>
+#include <fstream>
 #include "setup.h"
 
 namespace Ui {
@@ -26,18 +29,61 @@ private slots:
 
     void on_rollUp_clicked();
 
+    void on_peedorBarButton_clicked();
+
+    void on_noText_clicked();
+
+    void on_quoting_clicked();
+
+    void on_copying_clicked();
+
+    void on_overload_clicked();
+
+    void on_pastes_clicked();
+
+    void on_random_clicked();
+
+    void on_sage_clicked(bool checked);
+
+    void on_serverKey_clicked(bool checked);
+
+    void on_chaos_clicked(bool checked);
+
+    void on_randChaos_clicked(bool checked);
+
+    void on_musicButton_clicked();
+
+    void on_images_clicked();
+
+    void on_videos_clicked();
+
+    void on_medias_clicked();
+
+    void on_noMedia_clicked();
+
+    void on_openButton_clicked();
+
+    void on_saveButton_clicked();
+
 private:
     Ui::GUI * ui;
+    QFileDialog * fileDialog;
 
     bool started;  // start/stop
     bool start();
     bool stop();
 
     void closeEvent (QCloseEvent * event);
+    void exposeEvent(QExposeEvent * event);
+
+    QSound * music;
+    bool isPlaying;
+    bool isPidor;
 
     QPoint mpos;
     void mouseMoveEvent(QMouseEvent * event);
     void mousePressEvent(QMouseEvent * event);
+
 };
 
 

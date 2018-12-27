@@ -8,6 +8,7 @@ class Setup {
 private:
     string board;  // доска
     string thread;  // тред
+    string chaos;  // флаг хаоса и тред для постинга
     string potocksCount;  // число потоков
     char logMode;  // режим логов
     string solver, key;  // номер решателя и ключ
@@ -21,7 +22,7 @@ private:
     char sageMode;  // режим сажи
     vector<string> shrapnelThreads;  // треды для шрапнели при ручном указании
 
-    bool hasBoard, hasThread, hasPotocksCount, hasLogMode, hasSolver, hasKey, hasProxyRepeatsCount, hasMode, hasMinBan, hasMaxBan, \
+    bool hasBoard, hasThread, hasChaos, hasPotocksCount, hasLogMode, hasSolver, hasKey, hasProxyRepeatsCount, hasMode, hasMinBan, hasMaxBan, \
         hasTriggerForm, hasShrapnelCharge, hasMinPostsCount, hasMediaKind, hasMediaGroup, hasMediasCount, hasSageMode;
 
     static const string DIGITS;
@@ -39,6 +40,7 @@ public:
 
     void set_board(const string &board="b");
     void set_thread(const string &thread="0");
+    void set_chaos(const string &chaos="-1");
     void set_potocksCount(const string &potocksCount="0");
     void set_logMode(const char &logMode='0');
     void set_solver(const string &solver="0");
