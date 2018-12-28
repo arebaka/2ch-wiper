@@ -39,7 +39,7 @@ def eternal_input(badproxies, forbiddenproxy):
 		choice = choice.rstrip()
 		try:
 			if choice.lower() == "s" or choice.lower() == "ы":
-				Stats.printStats(badproxies)
+				Stats.printStats(badproxies, forbiddenproxy)
 			elif choice.lower() == "q" or choice.lower() == "й":
 				safe_quit(badproxies, forbiddenproxy)
 				badproxies.clear()

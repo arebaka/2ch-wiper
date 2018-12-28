@@ -19,14 +19,15 @@ QLabel , QRadioButton, QCheckBox {
 
 
 #button {
-	color: #354457;
 	background-image: url(gui/images/button.png);
 	border-radius: 10px 25px;
 	border: 1px solid #F5C942;
 }
-
 #button::hover {
 	color: #6A9ACD;
+}
+#button::pressed {
+	background: yellow;
 }
 
 #close, #rollUp {

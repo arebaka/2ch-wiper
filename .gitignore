@@ -123,6 +123,7 @@ wiper
 images
 videos
 *.csv
+save
 
 *~
 *.autosave

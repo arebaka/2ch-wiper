@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QSound>
 #include <QFileDialog>
+#include <QMovie>
 #include <fstream>
 #include "setup.h"
 
@@ -24,46 +25,28 @@ public:
 
 private slots:
     void on_button_clicked();
-
     void on_close_clicked();
-
     void on_rollUp_clicked();
-
     void on_peedorBarButton_clicked();
-
     void on_noText_clicked();
-
     void on_quoting_clicked();
-
     void on_copying_clicked();
-
     void on_overload_clicked();
-
     void on_pastes_clicked();
-
     void on_random_clicked();
-
     void on_sage_clicked(bool checked);
-
     void on_serverKey_clicked(bool checked);
-
     void on_chaos_clicked(bool checked);
-
     void on_randChaos_clicked(bool checked);
-
     void on_musicButton_clicked();
-
     void on_images_clicked();
-
     void on_videos_clicked();
-
     void on_medias_clicked();
-
     void on_noMedia_clicked();
-
     void on_openButton_clicked();
-
     void on_saveButton_clicked();
+    void on_mainMode_clicked();
+    void on_shrapnelMode_clicked();
 
 private:
     Ui::GUI * ui;
@@ -79,6 +62,7 @@ private:
     QSound * music;
     bool isPlaying;
     bool isPidor;
+    QMovie * anima;
 
     QPoint mpos;
     void mouseMoveEvent(QMouseEvent * event);

@@ -146,8 +146,11 @@ void Setup::set_mediaKind (const char &mediaKind) {
         hasMediaKind = false;
 }
 void Setup::set_mediaGroup (const string &mediaGroup) {
-    this->mediaGroup = mediaGroup;
-    hasMediaGroup = true;
+    if (!mediaGroup.empty()) {
+        this->mediaGroup = mediaGroup;
+        hasMediaGroup = true;
+    } else
+        hasMediaGroup = false;
 }
 void Setup::set_mediasCount (const string &mediasCount) {
     if (is_pos_num(mediasCount)) {
@@ -187,6 +190,7 @@ Setup Setup::parse (const int &argsCount, const char * args[]) {}
 
 vector<string> Setup::validate () {
     vector<string> errors;
+
     if (!hasBoard) errors.push_back("Доска не задана!");
     if (!hasThread) errors.push_back("Цель не задана!");
     if (!hasPotocksCount) errors.push_back("Число потоков не задано!");
@@ -195,31 +199,21 @@ vector<string> Setup::validate () {
     if (!hasMode) errors.push_back("Режим вайпалки не задан!");
     if (!hasSageMode) errors.push_back("Режим сажи не задан!");
     if (!hasTriggerForm) errors.push_back("Режим триггера не задан!");
-
     if (!hasKey) errors.push_back("Неправильно введён ключ!");
-
     if (mode == "8") {
         if (!hasMinBan) errors.push_back("Не задан нижний номер банов!");
         if (!hasMaxBan) errors.push_back("Не задан верхний номер банов!");
     }
-
     if (thread == "1" && shrapnelCharge == "0" && shrapnelThreads.size() == 0) errors.push_back("Не заданы треды для шрапнели!");
-
     if ((mediaKind == '1' || mediaKind == '2') && !hasMediaKind) errors.push_back("Не задано число прикреплений!");
-
     if (board == "d" && mediasCount != "0") errors.push_back("Прикрепления в /d/!");
-
     if (thread == "0" && (mode == "3" || mode == "7")) errors.push_back("Этим режимом нельзя вайпать нулевую!");
-
     if (thread == "0" && triggerForm != "0") errors.push_back("Триггер на нулевой!");
-
     if (thread == "0" && chaos != "-1") errors.push_back("Нельзя устраивать хаос с нулевой!");
-
     if (shrapnelCharge == "0" && chaos == "0") errors.push_back("Для полного хаоса требуется шрапнель!");
-
     if (thread == "0" && sageMode == '2') errors.push_back("Нельзя копировать сажу с нулевой!");
-
     if (errors.size() == 0) errors.push_back("OK");
+
     return errors;
 }
 

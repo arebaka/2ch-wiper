@@ -14,12 +14,16 @@ GUI::GUI (QWidget * parent)
     setStyleSheet(QSS);
 
     music = new QSound(QDir::currentPath()+"/gui/gachi.wav");
+    anima = new QMovie(QDir::currentPath()+"/gui/desu.gif");
+    ui->anima->setMovie(anima);
     ui->musicButton->setChecked(false);
     ui->peedorBarButton->setChecked(false);
     isPidor = false;
     isPlaying = false;
     ui->rollUp->hide();
     ui->close->hide();
+
+    ui->key->setEchoMode(QLineEdit::Password);
 
     ui->triggerSet->hide();
     ui->sageSet->hide();
@@ -28,6 +32,16 @@ GUI::GUI (QWidget * parent)
     ui->key->setDisabled(true);
     ui->imagesCount->setDisabled(true);
     ui->videosCount->setDisabled(true);
+    ui->imagesFolder->setDisabled(true);
+    ui->videosFolder->setDisabled(true);
+
+    ui->board->setDisabled(true);
+    ui->thread->setDisabled(true);
+    ui->potocks->setDisabled(true);
+    ui->shrapnelBoard->setDisabled(true);
+    ui->threads->setDisabled(true);
+    ui->minPosts->setDisabled(true);
+    ui->shrapnelPotocks->setDisabled(true);
 }
 
 GUI::~GUI () {
@@ -48,12 +62,14 @@ bool GUI::start () {
     ui->textBrowser->clear();
 
     if (ui->mainMode->isChecked()) {
-        setup.set_board(ui->board->text().toStdString());
+        setup.set_board(ui->board->currentText().toStdString());
         setup.set_potocksCount(ui->potocks->text().toStdString());
         setup.set_thread(ui->thread->text().toStdString());
+
     } else if (ui->shrapnelMode->isChecked()) {
-        setup.set_board(ui->board->text().toStdString());
-        setup.set_potocksCount(ui->potocks->text().toStdString());
+        setup.set_board(ui->shrapnelBoard->currentText().toStdString());
+        setup.set_minPostsCount(ui->minPosts->text().toStdString());
+        setup.set_potocksCount(ui->shrapnelPotocks->text().toStdString());
         setup.set_thread("1");
         setup.set_shrapnelCharge(ui->threads->text().toStdString());
     }
@@ -105,9 +121,11 @@ bool GUI::start () {
     if (ui->images->isChecked()) {
         setup.set_mediaKind('1');
         setup.set_mediasCount(ui->imagesCount->text().toStdString());
+        setup.set_mediaGroup(ui->imagesFolder->text().toStdString());
     } else if (ui->videos->isChecked()) {
         setup.set_mediaKind('2');
         setup.set_mediasCount(ui->videosCount->text().toStdString());
+        setup.set_mediaGroup(ui->videosFolder->text().toStdString());
     } else if (ui->medias->isChecked())
         setup.set_mediaKind('3');
     else if (ui->noMedia->isChecked())
@@ -120,14 +138,17 @@ bool GUI::start () {
             setup.set_sageMode('1');
     else setup.set_sageMode('0');
 
+    anima->start();
     vector<string> response(setup.start());
     if (!(response[0] == "OK")) {
+        anima->stop();  ui->anima->clear();
         string errors("");
         for (unsigned char i(0); i < response.size(); i++)
             errors += (response[i] + "\n");
         ui->textBrowser->setText(errors.c_str());
         return false;
-    } else return true;
+    } else
+        return true;
 }
 
 bool GUI::stop () {
@@ -174,11 +195,14 @@ void GUI::on_rollUp_clicked () {
 void GUI::on_musicButton_clicked () {
     if (!isPlaying) {
         music->play();
+        anima->start();
         ui->musicButton->setChecked(true);
         isPlaying = true;
         ui->musicButton->repaint();
     } else {
         music->stop();
+        anima->stop();
+        ui->anima->clear();
         ui->musicButton->setChecked(false);
         isPlaying = false;
         ui->musicButton->repaint();
@@ -265,21 +289,29 @@ void GUI::on_randChaos_clicked (bool checked) {
 void GUI::on_images_clicked () {
     ui->imagesCount->setDisabled(false);
     ui->videosCount->setDisabled(true);
+    ui->imagesFolder->setDisabled(false);
+    ui->videosFolder->setDisabled(true);
 }
 
 void GUI::on_videos_clicked () {
     ui->imagesCount->setDisabled(true);
     ui->videosCount->setDisabled(false);
+    ui->imagesFolder->setDisabled(true);
+    ui->videosFolder->setDisabled(false);
 }
 
 void GUI::on_medias_clicked () {
     ui->imagesCount->setDisabled(true);
     ui->videosCount->setDisabled(true);
+    ui->imagesFolder->setDisabled(true);
+    ui->videosFolder->setDisabled(true);
 }
 
 void GUI::on_noMedia_clicked () {
     ui->imagesCount->setDisabled(true);
     ui->videosCount->setDisabled(true);
+    ui->imagesFolder->setDisabled(true);
+    ui->videosFolder->setDisabled(true);
 }
 
 
@@ -292,17 +324,34 @@ void GUI::on_openButton_clicked () {
     std::string value;
 
     getline(config, value);
-    if (value == "main") ui->mainMode->setChecked(true);
-    else if (value == "shrapnel") ui->shrapnelMode->setChecked(true);
+    if (value == "main") {
+        ui->mainMode->setChecked(true);
+        ui->board->setDisabled(false);
+        ui->thread->setDisabled(false);
+        ui->potocks->setDisabled(false);
+        ui->shrapnelBoard->setDisabled(true);
+        ui->threads->setDisabled(true);
+        ui->minPosts->setDisabled(true);
+        ui->shrapnelPotocks->setDisabled(true);
+    } else if (value == "shrapnel") {
+        ui->shrapnelMode->setChecked(true);
+        ui->board->setDisabled(true);
+        ui->thread->setDisabled(true);
+        ui->potocks->setDisabled(true);
+        ui->shrapnelBoard->setDisabled(false);
+        ui->threads->setDisabled(false);
+        ui->minPosts->setDisabled(false);
+        ui->shrapnelPotocks->setDisabled(false);
+    }
 
     getline(config, value);
-    ui->board->setText(value.c_str());
+    ui->board->setCurrentText(value.c_str());
     getline(config, value);
     ui->thread->setText(value.c_str());
     getline(config, value);
     ui->potocks->setText(value.c_str());
     getline(config, value);
-    ui->shrapnelBoard->setText(value.c_str());
+    ui->shrapnelBoard->setCurrentText(value.c_str());
     getline(config, value);
     ui->threads->setText(value.c_str());
     getline(config, value);
@@ -317,18 +366,38 @@ void GUI::on_openButton_clicked () {
     getline(config, value);
     ui->key->setText(value.c_str());
     getline(config, value);
-    if (value == "from server") ui->serverKey->setChecked(true);
+    if (value == "from server") {
+        ui->serverKey->setChecked(true);
+        ui->key->setDisabled(true);
+    } else {
+        ui->serverKey->setChecked(false);
+        ui->key->setDisabled(false);
+    }
 
     getline(config, value);
     ui->repeats->setText(value.c_str());
 
     getline(config, value);
-    if (value == "no text") ui->noText->setChecked(true);
-    else if (value == "quoting") ui->quoting->setChecked(true);
-    else if (value == "copying") ui->copying->setChecked(true);
-    else if (value == "overload") ui->overload->setChecked(true);
-    else if (value == "pastes") ui->pastes->setChecked(true);
-    else if (value == "random") ui->random->setChecked(true);
+    if (value == "no text") {
+        ui->noText->setChecked(true);
+        ui->triggerSet->show();
+    } else if (value == "quoting") {
+        ui->quoting->setChecked(true);
+        ui->triggerSet->show();
+    } else if (value == "copying") {
+        ui->copying->setChecked(true);
+        ui->triggerSet->show();
+    } else if (value == "overload") {
+        ui->overload->setChecked(true);
+        ui->triggerSet->show();
+    } else if (value == "pastes") {
+        ui->pastes->setChecked(true);
+        ui->triggerSet->show();
+    } else if (value == "random") {
+        ui->random->setChecked(true);
+        ui->triggerSet->hide();
+    } else
+        ui->triggerSet->hide();
 
     getline(config, value);
     if (value == "chaining") ui->chaining->setChecked(true);
@@ -338,25 +407,63 @@ void GUI::on_openButton_clicked () {
     else if (value == "no trigger") ui->notrigger->setChecked(true);
 
     getline(config, value);
-    if (value == "chaos") ui->chaos->setChecked(true);
+    if (value == "chaos") {
+        ui->chaos->setChecked(true);
+        ui->randChaos->setDisabled(false);
+        ui->toThread->setDisabled(false);
+    } else {
+        ui->chaos->setChecked(false);
+        ui->randChaos->setDisabled(true);
+        ui->toThread->setDisabled(true);
+    }
     getline(config, value);
-    if (value == "random") ui->randChaos->setChecked(true);
+    if (value == "random") {
+        ui->randChaos->setChecked(true);
+        ui->toThread->setDisabled(true);
+    } else
+        ui->randChaos->setChecked(false);
     getline(config, value);
     ui->toThread->setText(value.c_str());
 
     getline(config, value);
-    if (value == "images") ui->images->setChecked(true);
-    else if (value == "videos") ui->videos->setChecked(true);
-    else if (value == "medias") ui->medias->setChecked(true);
-    else if (value == "nothing") ui->noMedia->setChecked(true);
-
+    if (value == "images") {
+        ui->images->setChecked(true);
+        ui->imagesCount->setDisabled(false);
+        ui->videosCount->setDisabled(true);
+        ui->imagesFolder->setDisabled(false);
+        ui->videosFolder->setDisabled(true);
+    } else if (value == "videos") {
+        ui->videos->setChecked(true);
+        ui->imagesCount->setDisabled(true);
+        ui->videosCount->setDisabled(false);
+        ui->imagesFolder->setDisabled(true);
+        ui->videosFolder->setDisabled(false);
+    } else if (value == "medias") {
+        ui->medias->setChecked(true);
+        ui->imagesCount->setDisabled(true);
+        ui->videosCount->setDisabled(true);
+        ui->imagesFolder->setDisabled(true);
+        ui->videosFolder->setDisabled(true);
+    } else if (value == "nothing") {
+        ui->noMedia->setChecked(true);
+        ui->imagesCount->setDisabled(true);
+        ui->videosCount->setDisabled(false);
+        ui->imagesFolder->setDisabled(true);
+        ui->videosFolder->setDisabled(true);
+    }
     getline(config, value);
     ui->imagesCount->setText(value.c_str());
     getline(config, value);
     ui->videosCount->setText(value.c_str());
 
     getline(config, value);
-    if (value == "sage") ui->sage->setChecked(true);
+    if (value == "sage") {
+        ui->sage->setChecked(true);
+        ui->sageSet->show();
+    } else {
+        ui->sage->setChecked(false);
+        ui->sageSet->hide();
+    }
     getline(config, value);
     if (value == "always") ui->sageAlways->setChecked(true);
     else if (value == "from posts") ui->sageFromPosts->setChecked(true);
@@ -370,7 +477,7 @@ void GUI::on_saveButton_clicked () {
     else if (ui->shrapnelMode->isChecked()) config << "shrapnel";
     config << std::endl;
 
-    config << ui->board->text().toStdString() << std::endl << ui->thread->text().toStdString() << std::endl << ui->potocks->text().toStdString() << std::endl << ui->shrapnelBoard->text().toStdString() << std::endl << ui->threads->text().toStdString() << std::endl << ui->minPosts->text().toStdString() << std::endl;
+    config << ui->board->currentText().toStdString() << std::endl << ui->thread->text().toStdString() << std::endl << ui->potocks->text().toStdString() << std::endl << ui->shrapnelBoard->currentText().toStdString() << std::endl << ui->threads->text().toStdString() << std::endl << ui->minPosts->text().toStdString() << std::endl;
 
     if (ui->anticaptcha->isChecked()) config << "anticaptcha";
     else if (ui->gurocaptcha->isChecked()) config << "guro-captcha";
@@ -420,4 +527,28 @@ void GUI::on_saveButton_clicked () {
     else if (ui->sageFromPosts->isChecked()) config << "from posts";
     config<< std::endl;
 
+}
+
+
+
+
+
+void GUI::on_mainMode_clicked () {
+    ui->board->setDisabled(false);
+    ui->thread->setDisabled(false);
+    ui->potocks->setDisabled(false);
+    ui->shrapnelBoard->setDisabled(true);
+    ui->threads->setDisabled(true);
+    ui->minPosts->setDisabled(true);
+    ui->shrapnelPotocks->setDisabled(true);
+}
+
+void GUI::on_shrapnelMode_clicked () {
+    ui->board->setDisabled(true);
+    ui->thread->setDisabled(true);
+    ui->potocks->setDisabled(true);
+    ui->shrapnelBoard->setDisabled(false);
+    ui->threads->setDisabled(false);
+    ui->minPosts->setDisabled(false);
+    ui->shrapnelPotocks->setDisabled(false);
 }
