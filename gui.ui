@@ -583,7 +583,7 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="header">
+   <widget class="QLabel" name="topBanner">
     <property name="geometry">
      <rect>
       <x>130</x>
@@ -1276,7 +1276,7 @@
      <bool>true</bool>
     </property>
     <property name="currentText">
-     <string/>
+     <string>b</string>
     </property>
     <item>
      <property name="text">
@@ -1697,7 +1697,7 @@
      <bool>true</bool>
     </property>
     <property name="currentText">
-     <string/>
+     <string>b</string>
     </property>
     <item>
      <property name="text">
@@ -2105,6 +2105,33 @@
      </property>
     </item>
    </widget>
+   <widget class="QLabel" name="banner">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>270</y>
+      <width>340</width>
+      <height>210</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="backBanner">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>270</y>
+      <width>340</width>
+      <height>210</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <zorder>backBanner</zorder>
    <zorder>anima</zorder>
    <zorder>button</zorder>
    <zorder>thread</zorder>
@@ -2134,7 +2161,7 @@
    <zorder>textBrowser</zorder>
    <zorder>close</zorder>
    <zorder>rollUp</zorder>
-   <zorder>header</zorder>
+   <zorder>topBanner</zorder>
    <zorder>openButton</zorder>
    <zorder>saveButton</zorder>
    <zorder>peedorBarButton</zorder>
@@ -2165,17 +2192,18 @@
    <zorder>label_15</zorder>
    <zorder>board</zorder>
    <zorder>shrapnelBoard</zorder>
+   <zorder>banner</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup_5"/>
+  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_4"/>
-  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup_9"/>
-  <buttongroup name="buttonGroup_5"/>
  </buttongroups>
 </ui>

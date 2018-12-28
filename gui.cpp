@@ -138,10 +138,8 @@ bool GUI::start () {
             setup.set_sageMode('1');
     else setup.set_sageMode('0');
 
-    anima->start();
     vector<string> response(setup.start());
     if (!(response[0] == "OK")) {
-        anima->stop();  ui->anima->clear();
         string errors("");
         for (unsigned char i(0); i < response.size(); i++)
             errors += (response[i] + "\n");
@@ -202,7 +200,6 @@ void GUI::on_musicButton_clicked () {
     } else {
         music->stop();
         anima->stop();
-        ui->anima->clear();
         ui->musicButton->setChecked(false);
         isPlaying = false;
         ui->musicButton->repaint();
@@ -356,6 +353,8 @@ void GUI::on_openButton_clicked () {
     ui->threads->setText(value.c_str());
     getline(config, value);
     ui->minPosts->setText(value.c_str());
+    getline(config, value);
+    ui->shrapnelPotocks->setText(value.c_str());
 
     getline(config, value);
     if (value == "anticaptcha") ui->anticaptcha->setChecked(true);
@@ -426,6 +425,18 @@ void GUI::on_openButton_clicked () {
     ui->toThread->setText(value.c_str());
 
     getline(config, value);
+    if (value == "sage") {
+        ui->sage->setChecked(true);
+        ui->sageSet->show();
+    } else {
+        ui->sage->setChecked(false);
+        ui->sageSet->hide();
+    }
+    getline(config, value);
+    if (value == "always") ui->sageAlways->setChecked(true);
+    else if (value == "from posts") ui->sageFromPosts->setChecked(true);
+
+    getline(config, value);
     if (value == "images") {
         ui->images->setChecked(true);
         ui->imagesCount->setDisabled(false);
@@ -455,18 +466,10 @@ void GUI::on_openButton_clicked () {
     ui->imagesCount->setText(value.c_str());
     getline(config, value);
     ui->videosCount->setText(value.c_str());
-
     getline(config, value);
-    if (value == "sage") {
-        ui->sage->setChecked(true);
-        ui->sageSet->show();
-    } else {
-        ui->sage->setChecked(false);
-        ui->sageSet->hide();
-    }
+    ui->imagesFolder->setText(value.c_str());
     getline(config, value);
-    if (value == "always") ui->sageAlways->setChecked(true);
-    else if (value == "from posts") ui->sageFromPosts->setChecked(true);
+    ui->videosFolder->setText(value.c_str());
 }
 
 void GUI::on_saveButton_clicked () {
@@ -477,7 +480,7 @@ void GUI::on_saveButton_clicked () {
     else if (ui->shrapnelMode->isChecked()) config << "shrapnel";
     config << std::endl;
 
-    config << ui->board->currentText().toStdString() << std::endl << ui->thread->text().toStdString() << std::endl << ui->potocks->text().toStdString() << std::endl << ui->shrapnelBoard->currentText().toStdString() << std::endl << ui->threads->text().toStdString() << std::endl << ui->minPosts->text().toStdString() << std::endl;
+    config << ui->board->currentText().toStdString() << std::endl << ui->thread->text().toStdString() << std::endl << ui->potocks->text().toStdString() << std::endl << ui->shrapnelBoard->currentText().toStdString() << std::endl << ui->threads->text().toStdString() << std::endl << ui->minPosts->text().toStdString() << std::endl << ui->shrapnelPotocks->text().toStdString() << std::endl;
 
     if (ui->anticaptcha->isChecked()) config << "anticaptcha";
     else if (ui->gurocaptcha->isChecked()) config << "guro-captcha";
@@ -512,6 +515,12 @@ void GUI::on_saveButton_clicked () {
     config << std::endl;
     config << ui->toThread->text().toStdString() << std::endl;
 
+    if (ui->sage->isChecked()) config << "sage";
+    config << std::endl;
+    if (ui->sageAlways->isChecked()) config << "always";
+    else if (ui->sageFromPosts->isChecked()) config << "from posts";
+    config<< std::endl;
+
     if (ui->images->isChecked()) config << "images";
     else if (ui->videos->isChecked()) config << "videos";
     else if (ui->medias->isChecked()) config << "medias";
@@ -520,13 +529,8 @@ void GUI::on_saveButton_clicked () {
 
     config << ui->imagesCount->text().toStdString() << std::endl;
     config << ui->videosCount->text().toStdString() << std::endl;
-
-    if (ui->sage->isChecked()) config << "sage";
-    config << std::endl;
-    if (ui->sageAlways->isChecked()) config << "always";
-    else if (ui->sageFromPosts->isChecked()) config << "from posts";
-    config<< std::endl;
-
+    config << ui->imagesFolder->text().toStdString() << std::endl;
+    config << ui->videosFolder->text().toStdString() << std::endl;
 }
 
 

@@ -1,3 +1,6 @@
+QWidget {
+	font-size: 10pt; /* размер шрифта */
+}
 GUI {
 	background-image: url(gui/images/gui.png);
 }
@@ -18,7 +21,29 @@ QLabel , QRadioButton, QCheckBox {
 }
 
 
+#banner, #backBanner {
+	border-radius: 3px;
+}
+
+#banner {
+/* 340x210 */
+
+}
+
+#backBanner {
+/* 340x210 */
+
+}
+
+#topBanner {
+/* 1030x50 */
+
+}
+
+
 #button {
+	font-size: 25pt;
+	font-weight: bold;
 	background-image: url(gui/images/button.png);
 	border-radius: 10px 25px;
 	border: 1px solid #F5C942;
