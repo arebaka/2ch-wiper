@@ -105,7 +105,7 @@ class Thread:
 		self.postsCount = self.schema["posts_count"] + 1  # число постов в треде
 		self.lastID = str(self.schema["max_num"])  # номер последнего поста треда
 		self.posts = self.download_posts(mode, triggerForm)  # посты
-		self.loaf = "";  # "батон"
+		self.loaf = ""  # "батон"
 		for postNum in range(min(len(self.posts), 30)):
 			self.loaf += (">>"+self.posts[postNum].ID+" ")
 

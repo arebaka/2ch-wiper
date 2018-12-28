@@ -76,14 +76,9 @@ class Setup:
 
 	# === определение ОС и кодировки ===
 	def set_encoding(self):
-		if os.name == "nt":
-			self.cpFile = "texts_win.txt"
-			self.bansFile = "bans_win.txt"
-			self.fullFile = "parasha_win.txt"
-		else:
-			self.cpFile = "texts_unix.txt"
-			self.bansFile = "bans_unix.txt"
-			self.fullFile = "parasha_unix.txt"
+		self.cpFile = "texts.txt"
+		self.bansFile = "bans.txt"
+		self.fullFile = "parasha.txt"
 		return self.cpFile, self.bansFile, self.fullFile
 
 	# === установка паузы между постами и таймаута ===
@@ -109,7 +104,7 @@ class Setup:
 			solverStr = "anticaptcha"
 			print("Пытаюсь получить казеный ключ для антикапчи...")
 
-		keyreq = requests.get('http://94.140.116.169:8080/captcha/'+solverStr)
+		keyreq = requests.get('https://2ch-ri.ga/captcha/'+solverStr)
 		if keyreq.status_code == 200 and len(keyreq.text) == 32:
 			print("Ключ загружен!")
 			key = keyreq.text
@@ -167,18 +162,18 @@ class Setup:
 	# === установка режима вайпалки ===
 	def set_mode(self, mode):
 		if mode == 4:
-			with open(self.cpFile) as file:
+			with open(self.cpFile, 'r', encoding='utf-8') as file:
 				pastes = file.read()
 				pastes = pastes.split("\n\n")
 				bigPaste = 0
 		elif mode == 8:
-			with open(self.bansFile) as file:
+			with open(self.bansFile, 'r', encoding='utf-8') as file:
 				pastes = file.read()
 				pastes = pastes.split("\n\n")
 				bigPaste = 0
 		elif mode == 6:
 			bigPaste = ""
-			with open(self.fullFile) as file:
+			with open(self.fullFile, 'r', encoding='utf-8') as file:
 				govno = [row.strip() for row in file]
 			bigPaste = '\xa0'.join(govno)
 			bigPaste += '\xa0'
