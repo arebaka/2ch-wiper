@@ -50,7 +50,7 @@ def eternal_input(badproxies, forbiddenproxy):
 			else:
 				print("Ты пишешь хуйню")
 		except Exception as e:
-			print(e);
+			print(e)
 
 
 # ====== Стата ======
