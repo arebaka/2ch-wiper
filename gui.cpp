@@ -1,5 +1,6 @@
 #include "gui.h"
 #include "ui_gui.h"
+#include <stdlib.h>
 
 GUI::GUI (QWidget * parent)
     : QMainWindow(parent) , ui(new Ui::GUI) , started(false)
@@ -27,6 +28,7 @@ GUI::GUI (QWidget * parent)
 
     ui->triggerSet->hide();
     ui->sageSet->hide();
+    ui->shaskalSet->hide();
     ui->randChaos->setDisabled(true);
     ui->toThread->setDisabled(true);
     ui->key->setDisabled(true);
@@ -47,6 +49,11 @@ GUI::GUI (QWidget * parent)
 GUI::~GUI () {
     delete ui;
 }
+
+void GUI::debug (const char &mode) {
+    setup.set_logMode(mode);
+}
+
 
 
 
@@ -137,6 +144,11 @@ bool GUI::start () {
         else
             setup.set_sageMode('1');
     else setup.set_sageMode('0');
+
+    setup.set_shackal_power(ui->shakalPower->value());
+    setup.set_shackal_color(ui->shakalColor->isChecked());
+    setup.set_shackal_affine(ui->shakalAffine->isChecked());
+    setup.set_2PNG(ui->toPNG->isChecked());
 
     vector<string> response(setup.start());
     if (!(response[0] == "OK")) {
@@ -288,6 +300,7 @@ void GUI::on_images_clicked () {
     ui->videosCount->setDisabled(true);
     ui->imagesFolder->setDisabled(false);
     ui->videosFolder->setDisabled(true);
+    ui->shaskalSet->show();
 }
 
 void GUI::on_videos_clicked () {
@@ -295,6 +308,7 @@ void GUI::on_videos_clicked () {
     ui->videosCount->setDisabled(false);
     ui->imagesFolder->setDisabled(true);
     ui->videosFolder->setDisabled(false);
+    ui->shaskalSet->hide();
 }
 
 void GUI::on_medias_clicked () {
@@ -302,6 +316,7 @@ void GUI::on_medias_clicked () {
     ui->videosCount->setDisabled(true);
     ui->imagesFolder->setDisabled(true);
     ui->videosFolder->setDisabled(true);
+    ui->shaskalSet->show();
 }
 
 void GUI::on_noMedia_clicked () {
@@ -309,6 +324,7 @@ void GUI::on_noMedia_clicked () {
     ui->videosCount->setDisabled(true);
     ui->imagesFolder->setDisabled(true);
     ui->videosFolder->setDisabled(true);
+    ui->shaskalSet->hide();
 }
 
 
@@ -443,24 +459,28 @@ void GUI::on_openButton_clicked () {
         ui->videosCount->setDisabled(true);
         ui->imagesFolder->setDisabled(false);
         ui->videosFolder->setDisabled(true);
+        ui->shaskalSet->show();
     } else if (value == "videos") {
         ui->videos->setChecked(true);
         ui->imagesCount->setDisabled(true);
         ui->videosCount->setDisabled(false);
         ui->imagesFolder->setDisabled(true);
         ui->videosFolder->setDisabled(false);
+        ui->shaskalSet->hide();
     } else if (value == "medias") {
         ui->medias->setChecked(true);
         ui->imagesCount->setDisabled(true);
         ui->videosCount->setDisabled(true);
         ui->imagesFolder->setDisabled(true);
         ui->videosFolder->setDisabled(true);
+        ui->shaskalSet->show();
     } else if (value == "nothing") {
         ui->noMedia->setChecked(true);
         ui->imagesCount->setDisabled(true);
         ui->videosCount->setDisabled(false);
         ui->imagesFolder->setDisabled(true);
         ui->videosFolder->setDisabled(true);
+        ui->shaskalSet->hide();
     }
     getline(config, value);
     ui->imagesCount->setText(value.c_str());
@@ -470,6 +490,13 @@ void GUI::on_openButton_clicked () {
     ui->imagesFolder->setText(value.c_str());
     getline(config, value);
     ui->videosFolder->setText(value.c_str());
+
+    getline(config, value);
+    ui->shakalPower->setValue(atoi(value.c_str()));
+    getline(config, value);
+    if (value == "color") ui->shakalColor->setChecked(true);
+    getline(config, value);
+    if (value == "affine") ui->shakalAffine->setChecked(true);
 }
 
 void GUI::on_saveButton_clicked () {
@@ -531,6 +558,12 @@ void GUI::on_saveButton_clicked () {
     config << ui->videosCount->text().toStdString() << std::endl;
     config << ui->imagesFolder->text().toStdString() << std::endl;
     config << ui->videosFolder->text().toStdString() << std::endl;
+
+    config << ui->shakalPower->value() << std::endl;
+    if (ui->shakalColor->isChecked()) config << "color";
+    config << std::endl;
+    if (ui->shakalAffine->isChecked()) config << "affine";
+    config << std::endl;
 }
 
 

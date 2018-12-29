@@ -21,6 +21,8 @@ public:
     explicit GUI(QWidget * parent = nullptr);
     ~GUI();
 
+    void debug(const char &mode);
+
     Setup setup;
 
 private slots:

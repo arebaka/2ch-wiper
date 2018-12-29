@@ -152,20 +152,12 @@ class Post:
 		self.params.append(("email", (None, "sage")))
 		self.params.append(("sage", (None, "on")))
 
-	def set_image(self, file_name):
-		image = PIL.Image.open(file_name).convert("RGB")
-		width, height = image.size
-		for x in range(10): image.putpixel((random.randint(0, width-1), random.randint(0, height-1)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
-		shakal = (1 + random.randint(0, 100)/1000 - 0.05, 0 + random.randint(0, 100)/1000 - 0.05, 1 + random.randint(0, 100)/1000 - 0.05, 0 + random.randint(0, 100)/1000 - 0.05, 1 + random.randint(0, 100)/1000 - 0.05, 0 + random.randint(0, 100)/1000 - 0.05)
-		image = image.transform(image.size, PIL.Image.AFFINE, shakal, resample=PIL.Image.BICUBIC)
-		image = image.crop((0, 0, width-1 - 2 * random.randint(0, int(image.width/10)), height-1 - 2 * random.randint(0, int(image.width/10))))
-		image_bytes = io.BytesIO()
-		image.save(image_bytes, "JPEG", quality=60 + random.randint(10, 30), optimize=bool(random.getrandbits(1)), progressive=bool(random.getrandbits(1)))
-		image.close()
-
+	def set_image(self, file_name, shakalPower=0, shakalColor=False, shakalAffine=False, toPNG=False):
+		image = self.shakal(file_name, shakalPower, shakalColor, shakalAffine, toPNG)
 		file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
-		file_name_displayed += ".jpg"
-		self.params.append(("formimages[]", (file_name_displayed, image_bytes.getvalue(), "image/jpeg")))
+		if toPNG: file_name_displayed += ".png"
+		else: file_name_displayed += ".jpg"
+		self.params.append(("formimages[]", (file_name_displayed, image, "image/jpeg")))
 
 	def set_video(self, file_name):
 		if file_name.find(".mp4") != -1: ext = "mp4"
@@ -179,30 +171,18 @@ class Post:
 		file_name_displayed += str("." + ext)
 		self.params.append(("formimages[]", (file_name_displayed, video_bytes, str("video/" + ext))))
 
-	def set_media(self, mediaName, media):
+	def set_media(self, mediaName, media, shakalPower=0, shakalColor=False, shakalAffine=False, toPNG=False):
 		file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
 
-		if mediaName.find(".jpg") != -1 or mediaName.find(".png") != -1 or mediaName.find(".gif") != -1:
-			image = PIL.Image.open(io.BytesIO(media)).convert("RGB")
-			width, height = image.size
-			for x in range(10): image.putpixel((random.randint(0, width-1), random.randint(0, height-1)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
-			shakal = (1 + random.randint(0, 100)/1000 - 0.05, 0 + random.randint(0, 100)/1000 - 0.05, 1 + random.randint(0, 100)/1000 - 0.05, 0 + random.randint(0, 100)/1000 - 0.05, 1 + random.randint(0, 100)/1000 - 0.05, 0 + random.randint(0, 100)/1000 - 0.05)
-			image = image.transform(image.size, PIL.Image.AFFINE, shakal, resample=PIL.Image.BICUBIC)
-			image = image.crop((0, 0, width-1 - 2 * random.randint(0, int(image.width/10)), height-1 - 2 * random.randint(0, int(image.width/10))))
-			image_bytes = io.BytesIO()
-			image.save(image_bytes, "JPEG", quality=60 + random.randint(10, 30), optimize=bool(random.getrandbits(1)), progressive=bool(random.getrandbits(1)))
-			image.close()
-			media = image_bytes.getvalue()
+		if mediaName.find(".jpg") != -1 or mediaName.find(".png") != -1 or mediaName.find(".gif") != -1 or mediaName.find(".bmp") != -1:
+			media = self.shakal(io.BytesIO(media), shakalPower, shakalColor, shakalAffine, toPNG)
 
-			if mediaName.find(".jpg") != -1:
-				mediaType = "image/jpeg"
-				file_name_displayed += ".jpg"
-			elif mediaName.find(".png") != -1:
+			if toPNG:
 				mediaType = "image/png"
 				file_name_displayed += ".png"
-			elif mediaName.find(".gif") != -1:
-				mediaType = "image/gif"
-				file_name_displayed += ".gif"
+			else:
+				mediaType = "image/jpeg"
+				file_name_displayed += ".jpg"
 
 		elif mediaName.find(".mp4") != -1:
 			mediaType = "video/mp4"
@@ -215,6 +195,32 @@ class Post:
 			file_name_displayed += ".jpg"
 
 		self.params.append(("formimages[]", (file_name_displayed, media, mediaType)))
+
+	def shakal(self, image, power, color=False, affine=False, toPNG=False):
+		image = PIL.Image.open(image).convert("RGBA")
+		width, height = image.size
+		for x in range(power): image.putpixel((random.randint(0, width-1), random.randint(0, height-1)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
+
+		if color:
+			red = random.randint(0, 255);
+			green = random.randint(0, 255 - red)
+			blue = 255 - red - green
+			layer = PIL.Image.new("RGBA", image.size, (red, green, blue, 255))
+			image = PIL.Image.blend(image, layer, 0.3)
+		if affine:
+			shakal = (1 + random.randint(0, 100)/1000 - 0.05, 0 + random.randint(0, 100)/1000 - 0.05, 1 + random.randint(0, 100)/1000 - 0.05, 0 + random.randint(0, 100)/1000 - 0.05, 1 + random.randint(0, 100)/1000 - 0.05, 0 + random.randint(0, 100)/1000 - 0.05)
+			image = image.transform(image.size, PIL.Image.AFFINE, shakal, resample=PIL.Image.BICUBIC)
+
+		image = image.crop((random.randint(0, power), random.randint(0, power), width-1 - random.randint(0, power), height-1 - random.randint(0, power)))
+		if toPNG:
+			image_bytes = io.BytesIO()
+			image.save(image_bytes, "PNG", quality=60 + random.randint(10, 30), optimize=bool(random.getrandbits(1)), progressive=bool(random.getrandbits(1)))
+		else:
+			image = image.convert("RGB")
+			image_bytes = io.BytesIO()
+			image.save(image_bytes, "JPEG", quality=60 + random.randint(10, 30), optimize=bool(random.getrandbits(1)), progressive=bool(random.getrandbits(1)))
+		image.close()
+		return image_bytes.getvalue()
 
 	def send(self, TIMEOUT, PAUSE):
 		response = {}
@@ -380,15 +386,13 @@ class Wiper:
 								if self.setup.mediaKind != 3:
 									blue_anus = random.randint(0, len(self.setup.mediaPaths)-1)  # номер пикчи или видео с диска
 								if self.setup.mediaKind == 1:
-									post.set_image(self.setup.mediaPaths[blue_anus])
+									post.set_image(self.setup.mediaPaths[blue_anus], self.setup.shakalPower, self.setup.shakalColor, self.setup.shakalAffine, self.setup.toPNG)
 								elif self.setup.mediaKind == 2:
 									post.set_video(self.setup.mediaPaths[blue_anus])
 								elif self.setup.mediaKind == 3:
-									post.set_media(self.threads[threadNum].posts[white_anus].medias[mediaNum].name, self.threads[threadNum].posts[white_anus].medias[mediaNum].file)
+									post.set_media(self.threads[threadNum].posts[white_anus].medias[mediaNum].name, self.threads[threadNum].posts[white_anus].medias[mediaNum].file, self.setup.shakalPower, self.setup.shakalColor, self.setup.shakalAffine, self.setup.toPNG)
 						except Exception as e:
-							print(e)
-							print("Не могу открыть файл, проверь имя.")
-							exit()
+							print("Не могу скачать / прикрепить файл.")
 
 					# === и сажу туды ===
 					if self.setup.sageMode == 2:
@@ -436,8 +440,15 @@ class Wiper:
 								if self.proxies == 0:
 									print("Закончились проксички!")
 							elif response["Error"] == -7:
-								print("Моча вычищает тред. КОНЧАЮ.")
-								safe_quit(badproxies, forbiddenproxy)
+								if self.setup.shrapnelCharge == 0:
+									print("Моча вычищает тред. КОНЧАЮ.")
+									safe_quit(badproxies, forbiddenproxy)
+								else:
+									print("Тред "+self.threads[threadNum].ID+" закрылся.")
+									del self.threads[threadNum]
+									if len(self.threads) == 0:
+										print("Все треды закрыты. Це перемога.")
+										safe_quit(badproxies, forbiddenproxy)
 							elif not response:
 								print("Ошибка сети, пробуем ещё раз...")
 								pass

@@ -1,4 +1,5 @@
 #include "setup.h"
+#include <stdlib.h>
 
 const string Setup::DIGITS = "0123456789";
 
@@ -6,7 +7,8 @@ Setup::Setup ()
     : hasBoard(false) , hasThread(false) , hasChaos(false) , hasPotocksCount(false) , hasLogMode(false) , hasSolver(false) , hasKey(false) , \
       hasProxyRepeatsCount(false) , hasMode(false) , hasMinBan(false) , hasMaxBan(false) , hasTriggerForm(false) , \
       hasShrapnelCharge(false) , hasMinPostsCount(false) , hasMediaKind(false) , hasMediaGroup(false) , \
-      hasMediasCount(false) , hasSageMode(false)
+      hasMediasCount(false) , hasSageMode(false) , hasShackalPower(false) , shackalColor(false) , shackalAffine(false) , \
+      toPNG(false)
 {}
 
 Setup::Setup (const int &argsCount, const char * args[]) {
@@ -165,6 +167,18 @@ void Setup::set_sageMode (const char &sageMode) {
     } else
         hasSageMode = false;
 }
+void Setup::set_shackal_power (const unsigned char &value) {
+    shackalPower = value;
+}
+void Setup::set_shackal_color (const bool &status) {
+    shackalColor = status;
+}
+void Setup::set_shackal_affine (const bool &status) {
+    shackalAffine = status;
+}
+void Setup::set_2PNG (const bool &status) {
+    toPNG = status;
+}
 void Setup::set_shrapnelThreads (const vector<string> &shrapnelThreads) {
     if (!this->shrapnelThreads.empty()) this->shrapnelThreads.clear();
     this->shrapnelThreads.reserve(shrapnelThreads.size());
@@ -286,16 +300,25 @@ string Setup::comline () {
     if (!hasMediaKind) command += "0";
     else command += mediaKind;
     command += " ";
-    if (!hasMediaGroup) command += "0 ";
+    if (!hasMediaGroup) command += ". ";
     else command += (mediaGroup + " ");
     if (!hasMediasCount) command += "-1 ";
     else command += (mediasCount + " ");
 
     command += sageMode;
 
+    command += (to_string(shackalPower) + " ");
+    if (shackalColor) command += "1 ";
+    else command += "0 ";
+    if (shackalAffine) command += "1 ";
+    else command += "0 ";
+    if (toPNG) command += "1 ";
+    else command += "0 ";
+
     if (hasShrapnelCharge && !hasMinPostsCount)
         for (unsigned int i(0); i < shrapnelThreads.size(); i++)
             command += (" " + shrapnelThreads[i]);
-cout << command << endl;
+
+    cout << command << endl;
     return command;
 }

@@ -37,7 +37,11 @@ def activate_debug(logMode):
 # 16 - подкаталог прикреплений (или "0", если из корня)
 # 17 - число прикреплений (или -1, если из постов)
 # 18 - номер режима сажи
-# 19 итд - треды для шрапнели при ручном указании
+# 19 - уровень шакала от 0 до 100
+# 20 - флаг цветного шакала
+# 21 - флаг аффинного шакала
+# 22 - флаг конвертации в PNG с альфа-каналом
+# 23 итд - треды для шрапнели при ручном указании
 
 # ====== Конфигурация ======
 class Setup:
@@ -73,6 +77,11 @@ class Setup:
 		self.mediaKind, self.mediaPaths, self.mediasCount = self.set_media(int(args[15]), args[16], int(args[17]))  # тип прикреплений, число прикреплений к треду
 		
 		self.sageMode = int(args[18])  # режим сажи
+		
+		self.shakalPower = int(args[19])  # уровень шакала
+		if args[20] == "1": self.shakalColor = True  # флаг цветного шакала
+		if args[21] == "1": self.shakalAffine = True  # флаг аффинного шакала
+		if args[22] == "1": self.toPNG = True  # флаг конвертации в PNG
 
 	# === определение ОС и кодировки ===
 	def set_encoding(self):
@@ -191,7 +200,7 @@ class Setup:
 			self.catalog = Catalog(self.board)
 			if minPostsCount == -1:
 				for i in range(shrapnelCharge):
-					self.threads.append(Thread(self.board, args[19+i], self.mode, form))
+					self.threads.append(Thread(self.board, args[23+i], self.mode, form))
 			else:
 				i = 0
 				for thread in self.catalog.schema["threads"]:

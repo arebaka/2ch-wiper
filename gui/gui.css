@@ -1,8 +1,11 @@
 QWidget {
-	font-size: 10pt; /* размер шрифта */
+	font-size: 14px !important; /* размер шрифта */
 }
 GUI {
 	background-image: url(gui/images/gui.png);
+}
+QScrollBar {
+	border-radius: 3px;
 }
 
 
@@ -27,7 +30,7 @@ QLabel , QRadioButton, QCheckBox {
 
 #banner {
 /* 340x210 */
-
+/*	background-image: url(gui/logo.png) */
 }
 
 #backBanner {
@@ -42,7 +45,7 @@ QLabel , QRadioButton, QCheckBox {
 
 
 #button {
-	font-size: 25pt;
+	font-size: 35px !important;
 	font-weight: bold;
 	background-image: url(gui/images/button.png);
 	border-radius: 10px 25px;
@@ -154,4 +157,10 @@ QLineEdit {
 }
 QLineEdit:disabled {
 	background: gray;
+}
+
+
+Line {
+	color: green;
+	#17191B;
 }

@@ -20,10 +20,13 @@ private:
     char mediaKind;  // тип прикреплений
     string mediaGroup, mediasCount;  // подкаталог прикреплений и их число на пост
     char sageMode;  // режим сажи
+    unsigned char shackalPower; // уровень шакала
+    bool shackalColor, shackalAffine;  // опции шакала
+    bool toPNG;  // преобразование пикч в PNG
     vector<string> shrapnelThreads;  // треды для шрапнели при ручном указании
 
     bool hasBoard, hasThread, hasChaos, hasPotocksCount, hasLogMode, hasSolver, hasKey, hasProxyRepeatsCount, hasMode, hasMinBan, hasMaxBan, \
-        hasTriggerForm, hasShrapnelCharge, hasMinPostsCount, hasMediaKind, hasMediaGroup, hasMediasCount, hasSageMode;
+        hasTriggerForm, hasShrapnelCharge, hasMinPostsCount, hasMediaKind, hasMediaGroup, hasMediasCount, hasSageMode, hasShackalPower;
 
     static const string DIGITS;
     bool is_digit(const char &c);
@@ -56,6 +59,10 @@ public:
     void set_mediaGroup(const string &mediaGroup="");
     void set_mediasCount(const string &mediasCount="1");
     void set_sageMode(const char &sageMode='0');
+    void set_shackal_power(const unsigned char &value);
+    void set_shackal_color(const bool &status);
+    void set_shackal_affine(const bool &status);
+    void set_2PNG(const bool &status);
     void set_shrapnelThreads(const vector<string> &shrapnelThreads);
 
     void clear();
