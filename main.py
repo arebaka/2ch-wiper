@@ -32,7 +32,6 @@ badproxies = []
 forbiddenproxy = []
 
 
-
 # ====== Шапка ======
 def show_logo():
 	os.system('cls' if os.name == 'nt' else 'clear')
@@ -43,7 +42,6 @@ def show_logo():
 	print("*      Быдлокод: owodelta, kobato, arelive      *")
 	print("*            cryptostimor, tsunamaru            *")
 	print("*************************************************")
-    
 
 
 # ====== API капчи сосача ======
@@ -204,11 +202,16 @@ class Post:
 		for x in range(power): image.putpixel((random.randint(0, width-1), random.randint(0, height-1)), (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
 
 		if color:
-			red = random.randint(0, 255);
-			green = random.randint(0, 255 - red)
-			blue = 255 - red - green
-			layer = PIL.Image.new("RGBA", image.size, (red, green, blue, 255))
-			image = PIL.Image.blend(image, layer, 0.3)
+			red = random.randint(0, 255)
+			dif = abs(red - 127)
+			green = random.randint(0, dif)
+			if random.randint(0, 1): green = 255 - green
+			blue = random.randint(max(0, 255-red-green), min(255, 510-red-green))
+			if random.randint(0, 1): red, green = green, red
+			if random.randint(0, 1): red, blue = blue, red
+			if random.randint(0, 1): blue, green = green, blue
+			layer = PIL.Image.new("RGBA", image.size, (red, green, blue, 65))
+			image.paste(layer, (0, 0), layer)
 		if affine:
 			shakal = (1 + random.randint(0, 100)/1000 - 0.05, 0 + random.randint(0, 100)/1000 - 0.05, 1 + random.randint(0, 100)/1000 - 0.05, 0 + random.randint(0, 100)/1000 - 0.05, 1 + random.randint(0, 100)/1000 - 0.05, 0 + random.randint(0, 100)/1000 - 0.05)
 			image = image.transform(image.size, PIL.Image.AFFINE, shakal, resample=PIL.Image.BICUBIC)
@@ -216,7 +219,7 @@ class Post:
 		image = image.crop((random.randint(0, power), random.randint(0, power), width-1 - random.randint(0, power), height-1 - random.randint(0, power)))
 		if toPNG:
 			image_bytes = io.BytesIO()
-			image.save(image_bytes, "PNG", quality=60 + random.randint(10, 30), optimize=bool(random.getrandbits(1)), progressive=bool(random.getrandbits(1)))
+			image.save(image_bytes, "PNG", quality=20 + random.randint(10, 30), optimize=bool(random.getrandbits(1)), progressive=bool(random.getrandbits(1)))
 		else:
 			image = image.convert("RGB")
 			image_bytes = io.BytesIO()
@@ -394,6 +397,7 @@ class Wiper:
 								elif self.setup.mediaKind == 3:
 									post.set_media(self.threads[threadNum].posts[white_anus].medias[mediaNum].name, self.threads[threadNum].posts[white_anus].medias[mediaNum].file, self.setup.shakalPower, self.setup.shakalColor, self.setup.shakalAffine, self.setup.toPNG)
 						except Exception as e:
+							print(e)
 							print("Не могу скачать / прикрепить файл.")
 
 					# === и сажу туды ===
@@ -441,6 +445,7 @@ class Wiper:
 								forbiddenproxy.append(proxy)
 								if self.proxies == 0:
 									print("Закончились проксички!")
+								proxy = self.proxies.pop(0)
 							elif response["Error"] == -7:
 								if self.setup.shrapnelCharge == 0:
 									print("Моча вычищает тред. КОНЧАЮ.")

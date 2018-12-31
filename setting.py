@@ -80,8 +80,11 @@ class Setup:
 		
 		self.shakalPower = int(args[19])  # уровень шакала
 		if args[20] == "1": self.shakalColor = True  # флаг цветного шакала
+		else: self.shakalColor = False
 		if args[21] == "1": self.shakalAffine = True  # флаг аффинного шакала
+		else: self.shakalAffine = False
 		if args[22] == "1": self.toPNG = True  # флаг конвертации в PNG
+		else: self.toPNG = False
 
 	# === определение ОС и кодировки ===
 	def set_encoding(self):
