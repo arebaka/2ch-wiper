@@ -1,28 +1,658 @@
 ## -*- coding: utf-8 -*-
 
-# import base64
-import time
-import sys
-import threading
-import io
-import random
-import string
-import os
-#import json
-import signal
-#import socks
-# import asyncio
-import requests
-import PIL.Image
-# from python3_anticaptcha import NoCaptchaTaskProxyless
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+try:
+	# import base64
+	import time
+	import sys
+	import threading
+	import io
+	import random
+	import string
+	import os
+	import json
+	import signal
+	#import socks
+	# import asyncio
+	import requests
+	import PIL.Image
+	# from python3_anticaptcha import NoCaptchaTaskProxyless
+	from bs4 import BeautifulSoup
+	import urllib3
+	urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+except Exception:
+	print("Нет необходимых модулей, братишка, иди ставь.")
+	exit()
 
-from scheme import Catalog, Thread
-from setting import Setup
-import solvers_2ch
-import solvers_re
-from tools import *
+
+
+
+
+# ====== Отключение ======
+def safe_quit(badproxies, forbiddenproxy, sig=0, frame=0):
+	print("\n\nЖду, пока обновится лист с проксичками...")
+
+	f = open("proxies", "r+")
+	d = f.readlines()
+	f.seek(0)
+
+	for i in d:
+		if i.rstrip() not in badproxies:
+			f.write(i)
+
+	f.truncate()
+	f.close()
+
+	d = open("forbidden.csv", "a")
+	for proxy in forbiddenproxy:
+		d.write(proxy + '\n')
+	d.close()
+
+	print(str((len(badproxies) - len(forbiddenproxy))), "забаненых проксичек почищено!")
+	print(str(len(forbiddenproxy)), "запрещенных проксичек почищено!")
+	print("Выключаюсь...")
+
+	os._exit(0)
+
+# ====== Обработка клавиш ======
+def eternal_input(badproxies, forbiddenproxy):
+	while True:
+		print("Choose your option")
+		choice = input("[S]tatistics, [Q]uit, [C]lear parasha\n")
+		choice = choice.rstrip()
+		try:
+			if choice.lower() == "s" or choice.lower() == "ы":
+				Stats.printStats(badproxies, forbiddenproxy)
+			elif choice.lower() == "q" or choice.lower() == "й":
+				safe_quit(badproxies, forbiddenproxy)
+				badproxies.clear()
+				forbiddenproxy.clear()
+			elif choice.lower() == "c" or choice.lower() == "с":
+				badproxies.clear()
+				print("Параша почищена")
+			else:
+				print("Ты пишешь хуйню")
+		except Exception as e:
+			print(e)
+
+
+# ====== Стата ======
+class Stats:
+
+	numOfProxies = 0
+	numOfThreads = 0
+	postsSent = 0
+	captchasSolved = 0
+
+	def setProxies(amount):
+		Stats.numOfProxies = amount
+
+	def setnumOfThreads(amount):
+		Stats.numOfThreads = amount
+
+	def incCaptchas():
+		Stats.captchasSolved += 1
+
+	def incPosts():
+		Stats.postsSent += 1
+
+	def printStats(badproxies, forbiddenproxy):
+		print("=====================================")
+		print("Проксичек осталось:\t", str(Stats.numOfProxies - len(badproxies)))
+		print("Начальные потоки:\t", str(Stats.numOfThreads))
+		print("Каптч решено:\t\t", str(Stats.captchasSolved))
+		print("Забаненые проксички:\t", str((len(badproxies) - len(forbiddenproxy))))
+		print("Доступ запрещен:\t", str(len(forbiddenproxy)))
+		print("Текущие потоки:\t\t", str(threading.active_count()))
+		#print("Создано тредов/постов: ", posti, "\n")
+		if threading.active_count() <= 2:
+			print("ALL THREADS FINISHED, PRESS \"Q\"")
+		print("=====================================\n")
+
+
+
+
+
+# ====== Модель доски ======
+class Catalog:
+
+	def __init__(self, board):
+		self.board = board  # доска
+		print("Скачиваю доску", self.board)
+		self.schema = json.loads(requests.get(''.join(["https://2ch.hk/", board, "/catalog.json"])).text)  # DOM доски
+		self.threadsCount = len(self.schema["threads"])  # число активных тредов на доске
+
+
+# ====== Прикрепление к посту ======
+class Media:
+
+	def __init__(self, name, path):
+		self.name = name  # имя прикрепления
+		self.path = path  # путь на сервере к прикреплению
+		self.cached = False  # флаг загрузки прикрепления на комп с вайпалкой
+
+	# === загрузка прикрепления с сосача ===
+	def download(self):
+		if self.cached == False:
+			self.file = requests.get("https://2ch.hk"+self.path).content  # сам файл прикрепления
+			self.cached = True
+
+
+# ====== Существующий пост ======
+class Post:
+
+	def __init__(self, schema, mode, triggerForm):
+		self.ID = str(schema["num"])  # номер поста на доске
+		self.comment = self.set_comment(schema["comment"], mode, triggerForm)  # текст поста
+		self.sage = self.set_sage(schema)  # флаг сажи
+		self.num = schema["number"]  # номер поста в треде (с 1)
+		self.medias = []  # прикрепления
+		for media in schema["files"]:
+			self.medias.append(Media(media["name"], media["path"]))
+		print("Триггернулась на", ">>"+self.ID)
+
+	# === форматирование текста поста ===
+	def set_comment(self, text, mode, triggerForm):
+		# === замена <br> на \n ===
+		text = text.replace("<br>", "\n")
+		# === разметка жирного ===
+		text = text.replace("<strong>", "[b]")
+		text = text.replace("</strong>", "[/b]")
+		# === разметка курсива ===
+		text = text.replace("<em>", "[i]")
+		text = text.replace("</em>", "[/i]")
+		# === разметка надстрочного ===
+		text = text.replace("<sup>", "[sup]")
+		text = text.replace("</sup>", "[/sup]")
+		# === разметка подстрочного ===
+		text = text.replace("<sub>", "[sub]")
+		text = text.replace("</sub>", "[/sub]")
+		# === разметка моноширинного ===
+		text = text.replace("<code>", "[code]")
+		text = text.replace("</code>", "[/code]")
+
+		# === удаление ссылок на посты, либо метки (OP) ===
+		if mode == 7 and triggerForm == 0:
+			text = text.replace(" (OP)", "")
+			soup = BeautifulSoup(text, features="html.parser")
+		else:
+			soup = BeautifulSoup(text, features="html.parser")
+			for a in soup.find_all("a", {"class": "post-reply-link"}):
+				a.decompose()
+
+		# === разметка подчёркиваний ===
+		for u in soup.find_all("span", {"class": "u"}):
+			u.replace_with("[u]"+u.get_text()+"[/u]")
+		# === разметка надчёркиваний ===
+		for o in soup.find_all("span", {"class": "o"}):
+			o.replace_with("[o]"+o.get_text()+"[/o]")
+		# === разметка спойлеров ===
+		for spoiler in soup.find_all("span", {"class": "spoiler"}):
+			spoiler.replace_with("[spoiler]"+spoiler.get_text()+"[/spoiler]")
+		# === разметка зачёркнутого ===
+		for s in soup.find_all("span", {"class": "s"}):
+			s.replace_with("[s]"+s.get_text()+"[/s]")
+
+		# === сохранение ===
+		return str(soup.get_text()).lstrip('\n').rstrip('\n')
+
+	# === определение флага сажи ===
+	def set_sage(self, schema):
+		return True if schema["email"].find("mailto:sage") == -1 else False
+
+
+# ====== Модель треда ======
+class Thread:
+
+	def __init__(self, board, ID, mode, triggerForm):
+		self.board = board  # доска
+		self.ID = ID  # номер треда на доске
+		print("Скачиваю тред", self.ID)
+		self.schema = json.loads(requests.get(''.join(["https://2ch.hk/", board, "/res/", ID, ".json"])).text)  # DOM треда
+		self.postsCount = self.schema["posts_count"] + 1  # число постов в треде
+		self.lastID = str(self.schema["max_num"])  # номер последнего поста треда
+		self.posts = self.download_posts(mode, triggerForm)  # посты
+		self.loaf = ""  # "батон"
+		for postNum in range(min(len(self.posts), 30)):
+			self.loaf += (">>"+self.posts[postNum].ID+" ")
+
+	# === загрузка DOM постов ===
+	def download_posts(self, mode, triggerForm):
+		posts = []
+		for post in self.schema["threads"][0]["posts"]:
+			posts.append(Post(post, mode, triggerForm))
+		return posts
+
+
+
+
+
+
+# ====== Запись логов ======
+def activate_debug(logMode):
+	import logging
+	print("\n*** DEBUG MODE ACTIVATED ***")
+	if logMode == 1:
+		logging.basicConfig(filename='LOG.txt', level=logging.DEBUG)
+	elif logMode == 2:
+		logging.basicConfig(level=logging.DEBUG)
+
+
+# ====== Конфигурация ======
+class Setup:
+
+	def __init__(self, args):
+		if int(args[5]) != 0:
+			activate_debug(int(args[5]))
+		self.cpFile, self.bansFile, self.fullFile = self.set_encoding()  # файлы с пастами
+
+		self.board = args[1]  # доска
+		self.thread = args[2]  # тред
+		self.chaos = args[3]  # хаос / тред для постинга
+		self.potocksCount = int(args[4])  # число потоков
+		self.TIMEOUT, self.PAUSE = self.set_consts(self.potocksCount)  # таймаут, пауза
+
+		self.solver, self.key, self.keyreq = self.set_key(int(args[6]), args[7])  # солвер, ключ, статус ключа
+		self.proxyRepeatsCount = int(args[8])  # число повторов прокси
+		self.mode, self.pastes, self.bigPaste = self.set_mode(int(args[9]))  # режим вайпалки, пасты
+
+		if self.mode == 8:
+			self.minBan = int(args[10])  # минимальный ID бана
+			self.maxBan = int(args[11])  # максимальный ID бана
+
+		self.catalog = 0  # ¯\_(ツ)_/¯
+		self.threads = []
+
+		if self.thread != "0":
+			self.triggerForm, self.shrapnelCharge, self.targetThread = self.set_trigger(int(args[12]), int(args[13]), int(args[14]), args)  # режим триггера, число тредов шрапнели
+		else:
+			self.triggerForm = 0
+			self.shrapnelCharge = 0
+
+		self.mediaKind, self.mediaPaths, self.mediasCount = self.set_media(int(args[15]), args[16], int(args[17]))  # тип прикреплений, число прикреплений к треду
+		
+		self.sageMode = int(args[18])  # режим сажи
+		
+		self.shakalPower = int(args[19])  # уровень шакала
+		if args[20] == "1": self.shakalColor = True  # флаг цветного шакала
+		else: self.shakalColor = False
+		if args[21] == "1": self.shakalAffine = True  # флаг аффинного шакала
+		else: self.shakalAffine = False
+		if args[22] == "1": self.toPNG = True  # флаг конвертации в PNG
+		else: self.toPNG = False
+
+	# === определение ОС и кодировки ===
+	def set_encoding(self):
+		self.cpFile = "texts.txt"
+		self.bansFile = "bans.txt"
+		self.fullFile = "parasha.txt"
+		return self.cpFile, self.bansFile, self.fullFile
+
+	# === установка паузы между постами и таймаута ===
+	def set_consts(self, potocksCount):
+		if potocksCount == 0:
+			TIMEOUT = 60
+			PAUSE = 60
+			self.potocksCount = 4
+		else:
+			TIMEOUT = 10
+			PAUSE = 20
+		return TIMEOUT, PAUSE
+
+	# === получение казённого ключа ===
+	def get_key(self, solver):
+		if solver == 0:
+			solverStr = "xcaptcha"
+			print("Пытаюсь получить казеный ключ для икскаптчи...")
+		elif solver == 1:
+			solverStr = "gurocaptcha"
+			print("Пытаюсь получить казеный ключ для гурокаптчи...")
+		elif solver == 2:
+			solverStr = "anticaptcha"
+			print("Пытаюсь получить казеный ключ для антикапчи...")
+
+		keyreq = requests.get('https://2ch-ri.ga/captcha/'+solverStr)
+		if keyreq.status_code == 200 and len(keyreq.text) == 32:
+			print("Ключ загружен!")
+			key = keyreq.text
+		elif keyreq.status_code == 404 or len(keyreq.text) == 0:
+			print("Ключ недоступен!")
+			exit()
+		else:
+			print("Получен неожиданный ответ от сервера:", keyreq, keyreq.text)
+			exit()
+		self.set_key(solver, key)
+		return key, keyreq
+
+	# === валидация ключа ===
+	def set_key(self, solver, key):
+		if key == "0":
+			key, keyreq = self.get_key(solver)
+		elif len(key) == 32:
+			print("Верифицируем ключ...")
+			if solver == 0:
+				keyStatus = requests.get("http://x-captcha2.ru/res.php?key=" + key + "&action=getbalance")
+				if keyStatus.status_code == 200:
+					if keyStatus.text == "ERROR_KEY_USER":
+						print("Ключ не существует!")
+						exit()
+					elif keyStatus.text == "ERROR_PAUSE_SERVICE":
+						print("Сервер на профилактике, используй другой солвер.")
+						exit()
+					keyxc = keyStatus.text
+					keyxc = keyxc.split("|")
+					print("Ключ подтверждён, ваш баланс:", keyxc[1])
+				elif keyStatus.status_code == 500:
+					print("Икскапча заблокировала твой IP, перезагрузи роутер!")
+					exit()
+
+			elif solver == 1 or solver == 2:
+				if solver == 1:
+					keyStatus = requests.post("https://api.captcha.guru/getBalance", json={"clientKey": key}, verify=False).json()
+				else:
+					keyStatus = requests.post("https://api.anti-captcha.com/getBalance", json={"clientKey": key}, verify=False).json()
+				if (keyStatus["errorId"] == 0):
+					print("Ключ подтверждён, ваш баланс:", (keyStatus["balance"]))
+				elif (keyStatus["errorId"] == 1):
+					if (keyStatus["errorDescription"] == "ERROR_KEY_DOES_NOT_EXIST"):
+						print("Ключ не существует!")
+						exit()
+					else:
+						print(keyStatus["errorDescription"])
+						exit()
+			keyreq = 0
+		else:
+			print("Неправильно введен ключ!")
+			exit()
+		return solver, key, keyreq
+
+	# === установка режима вайпалки ===
+	def set_mode(self, mode):
+		if mode == 4:
+			with open(self.cpFile, 'r', encoding='utf-8') as file:
+				pastes = file.read()
+				pastes = pastes.split("\n\n")
+				bigPaste = 0
+		elif mode == 8:
+			with open(self.bansFile, 'r', encoding='utf-8') as file:
+				pastes = file.read()
+				pastes = pastes.split("\n\n")
+				bigPaste = 0
+		elif mode == 6:
+			bigPaste = ""
+			with open(self.fullFile, 'r', encoding='utf-8') as file:
+				govno = [row.strip() for row in file]
+			bigPaste = '\xa0'.join(govno)
+			bigPaste += '\xa0'
+			pastes = 0
+		else:
+			pastes = 0
+			bigPaste = 0
+		return mode, pastes, bigPaste
+
+	# === установка триггера ===
+	def set_trigger(self, form, shrapnelCharge, minPostsCount, args):
+		if shrapnelCharge == 0: # and self.thread > 1
+			self.threads.append(Thread(self.board, self.thread, self.mode, form))
+		elif shrapnelCharge > 0: # and self.thread > 0
+			self.catalog = Catalog(self.board)
+			if minPostsCount == -1:
+				for i in range(shrapnelCharge):
+					self.threads.append(Thread(self.board, args[23+i], self.mode, form))
+			else:
+				i = 0
+				for thread in self.catalog.schema["threads"]:
+					if int(thread["posts_count"]) >= minPostsCount:
+						self.threads.append(Thread(self.board, str(thread["num"]), self.mode, form))
+						i += 1
+						if i == shrapnelCharge:
+							break
+				shrapnelCharge = i
+
+		if self.chaos != "-1" and self.chaos != "0":
+			targetThread = Thread(self.board, self.chaos, self.mode, form)
+		else:
+			targetThread = self.threads[0]
+
+		return form, shrapnelCharge, targetThread
+
+	# === установка прикреплений ===
+	def set_media(self, mediaKind, mediaGroup, mediasCount):
+		mediaPaths = []
+		if mediaKind != 0:
+			if mediaKind > 1:
+				self.TIMEOUT += 30
+			if mediaKind < 3:
+				if mediaKind == 1:
+					mediaDir = "images"
+				elif mediaKind == 2:
+					mediaDir = "videos"
+				if len(mediaGroup) > 0 and mediaGroup != "0":
+					mediaDir += "/"
+					mediaDir += mediaGroup
+				for media in os.listdir("./"+mediaDir):
+					if media.endswith(".jpg") or media.endswith(".png") or media.endswith(".gif") or media.endswith(".bmp") or media.endswith(".mp4") or media.endswith(".webm"):
+						mediaPaths.append("./"+mediaDir+"/"+media)
+				if mediasCount == 0:
+					mediaKind = 0
+
+			elif self.shrapnelCharge == 0:
+				for post in self.threads[0].posts:
+					for media in post.medias:
+						print("Скачиваю ", media.name, "("+str(post.num)+"/"+str(self.threads[0].postsCount)+" пост)")
+						media.download()
+			else:
+				self.TIMEOUT += 60
+		else:
+			mediasCount = 0
+		return mediaKind, mediaPaths, mediasCount
+
+
+
+
+
+
+
+class CaptchaSolver_XCaptcha_2ch:
+
+	def __init__(self, key, keyreq):
+		self.api = "http://x-captcha2.ru/in.php"
+		self.key = key
+		print("Solver 'X-Captcha' initialized with key: " + self.key)
+
+	def solve(self, image, badproxies):
+
+		while True:
+			task = (('key', self.key), ('method', 'userrecaptcha'), ('googlekey', '6LeQYz4UAAAAAL8JCk35wHSv6cuEV5PyLhI6IxsM'), ('pageurl', 'https://2ch.hk/b/'))
+			data = requests.post(self.api, data=task, verify=False)
+
+			response = data.text
+			response = response.split("|")
+
+			if (response[0] == "OK"):
+
+				while True:
+					solveData = requests.get("http://x-captcha2.ru/res.php?key=" + self.key + "&id=" + response[1])
+					solveResponse = solveData.text 
+					solveResponse = solveResponse.split("|")
+
+					if (solveResponse[0] == "OK"):
+						Stats.incCaptchas()
+						return solveResponse[1]
+
+					time.sleep(3)
+			time.sleep(3)
+
+class CaptchaSolver_captchaguru_2ch:
+
+	def __init__(self, key, keyreq):
+		self.api = "https://api.captcha.guru/"
+		self.key = key
+		print("Solver 'captcha.guru' initialized with key: " + self.key)
+
+	def solve(self, image, badproxies):
+		task = {}
+		task["type"] = "NoCaptchaTask"
+		task["websiteURL"] = "https://2ch.hk/b/"
+		task["websiteKey"] = "6LeQYz4UAAAAAL8JCk35wHSv6cuEV5PyLhI6IxsM"
+		data = requests.post(self.api + "createTask", json={"clientKey": self.key, "task": task}, verify=False).json()
+		if (data["errorId"] == 0):
+			while True:
+				response = requests.post(self.api + "getTaskResult", json={"clientKey" : self.key, "taskId" : str(data["taskId"])}, verify=False).json()
+				if (response["status"] == "ready"):
+					return response["solution"]["gRecaptchaResponse"]
+				time.sleep(3)
+		time.sleep(3)
+
+class CaptchaSolver_anticaptcha_2ch:
+
+	def __init__(self, key, keyreq):
+		self.api = "http://api.anti-captcha.com/"
+		self.key = key
+		print("Solver 'anti-captcha' initialized with key: " + self.key)
+
+	def solve(self, image, badproxies):
+		task = {}
+		task["type"] = "ImageToTextTask"
+		task["body"] = base64.b64encode(image).decode("utf-8")
+		task["phrase"] = False
+		task["case"] = False
+		task["numeric"] = 1
+		task["math"] = False
+		task["minLength"] = 6
+		task["maxLength"] = 6
+		data = requests.post(self.api + "createTask", json={"clientKey": self.key, "task": task}, verify=False).json()
+		if (data["errorId"] == 0):
+			while True:
+				response = requests.post(self.api + "getTaskResult", json={"clientKey" : self.key, "taskId" : str(data["taskId"])}, verify=False).json()
+				if (response["status"] == "ready"):
+					return response["solution"]["text"]
+				time.sleep(3)
+
+
+
+
+
+
+# ====== X-капча ======
+class CaptchaSolver_XCaptcha_re:
+
+	def __init__(self, key, keyreq):
+		self.api = "http://x-captcha2.ru/in.php"
+		self.key = key
+		try:
+			if keyreq.status_code == 200:
+				print("Solver 'X-Captcha' initialized with key: [ДАННЫЕ УДАЛЕНЫ]")
+		except Exception:
+			print("Solver 'X-Captcha' initialized with key: " + self.key)
+
+	def solve(self, image, badproxies, forbiddenproxy):
+
+		while True:
+			task = (('key', self.key), ('method', 'userrecaptcha'), ('googlekey', '6LeQYz4UAAAAAL8JCk35wHSv6cuEV5PyLhI6IxsM'), ('pageurl', 'https://2ch.hk/b/'))
+			data = requests.post(self.api, data=task, verify=False)
+
+			response = data.text
+			response = response.split("|")
+
+			if (response[0] == "OK"):
+
+				while True:
+					solveData = requests.get("http://x-captcha2.ru/res.php?key=" + self.key + "&id=" + response[1])
+					solveResponse = solveData.text 
+					solveResponse = solveResponse.split("|")
+
+					if (solveResponse[0] == "OK"):
+						Stats.incCaptchas()
+						return solveResponse[1]
+
+					time.sleep(3)
+			elif data.text == "ERROR_KEY_USER":
+				print("\nОшибка ключа, не могу продолжать работу...")
+				safe_quit(badproxies, forbiddenproxy)
+			time.sleep(3)
+
+
+# ====== Гуру-капча ======
+class CaptchaSolver_captchaguru_re:
+
+	def __init__(self, key, keyreq):
+		self.api = "https://api.captcha.guru/"
+		self.key = key
+		try:
+			if keyreq.status_code == 200:
+				print("Solver 'captcha.guru' initialized with key: [ДАННЫЕ УДАЛЕНЫ]")
+		except Exception:
+			print("Solver 'captcha.guru' initialized with key: " + self.key)
+
+	def solve(self, image, badproxies, forbiddenproxy):
+		task = {}
+		task["type"] = "NoCaptchaTask"
+		task["websiteURL"] = "https://2ch.hk/b/"
+		task["websiteKey"] = "6LeQYz4UAAAAAL8JCk35wHSv6cuEV5PyLhI6IxsM"
+		data = requests.post(self.api + "createTask", json={"clientKey": self.key, "task": task}, verify=False).json()
+		if (data["errorId"] == 0):
+			while True:
+				response = requests.post(self.api + "getTaskResult", json={"clientKey" : self.key, "taskId" : str(data["taskId"])}, verify=False).json()
+				if (response["status"] == "ready"):
+					return response["solution"]["gRecaptchaResponse"]
+				time.sleep(3)
+		elif (data["errorId"] == 1):
+			if (data["errorDescription"] == "ERROR_KEY_DOES_NOT_EXIST"):
+				print("\nКлюч отозван, не могу продолжать работу...")
+				safe_quit(badproxies, forbiddenproxy)
+			elif (data["errorDescription"] == "ERROR_ZERO_BALANCE"):
+				print("\nЗакончились деньги на капче, не могу продолжать работу...")
+				safe_quit(badproxies, forbiddenproxy)
+			elif (data["errorDescription"] == "ERROR_NO_SLOT_AVAILABLE"):
+				print("\nНет свободных индуссов на сервере, таймаут 10 секунд...")
+				time.sleep(7)
+			else:
+				print("\nПроизошла неведомая ебаная хуйня, сорян. Вот ответ от сервера:", (data["errorDescription"]))
+				safe_quit(badproxies, forbiddenproxy)
+		time.sleep(3)
+
+
+# ====== Антикапча ======
+class CaptchaSolver_anticaptcha_re:
+
+	def __init__(self, key, keyreq):
+		self.api = "http://api.anti-captcha.com/"
+		self.key = key
+		try:
+			if keyreq.status_code == 200:
+				print("Solver 'anti-captcha' initialized with key: [ДАННЫЕ УДАЛЕНЫ]")
+		except Exception:
+			print("Solver 'anti-captcha' initialized with key: " + self.key)
+
+	def solve(self, image, badproxies, forbiddenproxy):
+		task = {}
+		task["type"] = "NoCaptchaTaskProxyless"
+		# пока так, позже прикручу передачу наших проксичек
+		task["websiteURL"] = "https://2ch.hk/b/"
+		task["websiteKey"] = "6LeQYz4UAAAAAL8JCk35wHSv6cuEV5PyLhI6IxsM"
+		data = requests.post(self.api + "createTask", json={"clientKey": self.key, "task": task}, verify=False).json()
+		if (data["errorId"] == 0):
+			while True:
+				response = requests.post(self.api + "getTaskResult", json={"clientKey" : self.key, "taskId" : str(data["taskId"])}, verify=False).json()
+				if (response["status"] == "ready"):
+					return response["solution"]["gRecaptchaResponse"]
+				time.sleep(3)
+		elif (data["errorId"] == 1):
+			if (data["errorDescription"] == "ERROR_KEY_DOES_NOT_EXIST"):
+				print("\nКлюч отозван, не могу продолжать работу...")
+				safe_quit(badproxies, forbiddenproxy)
+			elif (data["errorDescription"] == "ERROR_ZERO_BALANCE"):
+				print("\nЗакончились деньги на капче, не могу продолжать работу...")
+				safe_quit(badproxies, forbiddenproxy)
+			else:
+				print("\nПроизошла неведомая ебаная хуйня, сорян. Вот ответ от сервера:", (data["errorDescription"]))
+				safe_quit(badproxies, forbiddenproxy)
+		time.sleep(3)
+
+
+
+
+
 
 # ====== Макросы макросики ======
 CHARS = string.ascii_uppercase + string.digits
@@ -86,7 +716,7 @@ class Captcha:
 
 
 # ====== Постинг ======
-class Post:
+class NewPost:
 
 	def __init__(self, proxy, agent, board, thread, solver, captchaType):
 		self.proxy = {"http": proxy, "https": proxy}
@@ -269,19 +899,19 @@ class Wiper:
 		if True:#image == error.read():
 			self.captchaType = "re"
 			if solver == 0:
-				self.solver = solvers_re.CaptchaSolver_XCaptcha(self.setup.key, self.setup.keyreq)
+				self.solver = CaptchaSolver_XCaptcha_re(self.setup.key, self.setup.keyreq)
 			elif solver == 1:
-				self.solver = solvers_re.CaptchaSolver_captchaguru(self.setup.key, self.setup.keyreq)
+				self.solver = CaptchaSolver_captchaguru_re(self.setup.key, self.setup.keyreq)
 			elif solver == 2:
-				self.solver = solvers_re.CaptchaSolver_anticaptcha(self.setup.key, self.setup.keyreq)
+				self.solver = CaptchaSolver_anticaptcha_re(self.setup.key, self.setup.keyreq)
 		else:
 			self.captchaType = "2ch"
 			if solver == 0:
-				self.solver = solvers_2ch.CaptchaSolver_XCaptcha(self.setup.key, self.setup.keyreq)
+				self.solver = CaptchaSolver_XCaptcha_2ch(self.setup.key, self.setup.keyreq)
 			elif solver == 1:
-				self.solver = solvers_2ch.CaptchaSolver_captchaguru(self.setup.key, self.setup.keyreq)
+				self.solver = CaptchaSolver_captchaguru_2ch(self.setup.key, self.setup.keyreq)
 			elif solver == 2:
-				self.solver = solvers_2ch.CaptchaSolver_anticaptcha(self.setup.key, self.setup.keyreq)
+				self.solver = CaptchaSolver_anticaptcha_2ch(self.setup.key, self.setup.keyreq)
 
 	def trap_replace(self, text):
 		if bool(random.getrandbits(1)):
@@ -334,7 +964,7 @@ class Wiper:
 					else:
 						thread = self.setup.targetThread
 
-				post = Post(proxy, agent, self.board, thread.ID, self.solver, self.captchaType)
+				post = NewPost(proxy, agent, self.board, thread.ID, self.solver, self.captchaType)
 				if (post.prepare(self.setup.TIMEOUT)):
 					charnum = random.randint(1, 100)
 					if self.thread != "0":
@@ -514,9 +1144,9 @@ class Wiper:
 		for i in range(len(threads)):
 			threads[i].join()
 
-show_logo()
-
 try:
+	show_logo()
+
 	setup = Setup(sys.argv)
 	WiperObj = Wiper(setup, setup.catalog, setup.threads)
 	signal.signal(signal.SIGINT, safe_quit)
@@ -525,6 +1155,7 @@ try:
 	safe_quit(badproxies, forbiddenproxy)
 
 except Exception as e:
-	print(e, "(arelive obosralsya)")
+	print(e)
+	print("arelive obosralsya")
 	input()
 

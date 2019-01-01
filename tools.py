@@ -23,7 +23,7 @@ def safe_quit(badproxies, forbiddenproxy, sig=0, frame=0):
 	d = open("forbidden.csv", "a")
 	for proxy in forbiddenproxy:
 		d.write(proxy + '\n')
-		d.close()
+	d.close()
 
 	print(str((len(badproxies) - len(forbiddenproxy))), "забаненых проксичек почищено!")
 	print(str(len(forbiddenproxy)), "запрещенных проксичек почищено!")

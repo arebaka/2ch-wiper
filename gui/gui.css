@@ -140,6 +140,7 @@ QCheckBox:disabled {
 
 
 QTextBrowser {
+	font-size: 12px !important;
 	background: #20272B;
 /*	background-image: url(gui/images/pocik.jpg); */
 	margin-top: 10;
@@ -157,10 +158,4 @@ QLineEdit {
 }
 QLineEdit:disabled {
 	background: gray;
-}
-
-
-Line {
-	color: green;
-	#17191B;
 }

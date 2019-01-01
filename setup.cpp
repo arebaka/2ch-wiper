@@ -307,7 +307,7 @@ string Setup::comline () {
 
     command += sageMode;
 
-    command += (to_string(shackalPower) + " ");
+    command += (" " + to_string(shackalPower) + " ");
     if (shackalColor) command += "1 ";
     else command += "0 ";
     if (shackalAffine) command += "1 ";

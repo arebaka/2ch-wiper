@@ -9,7 +9,7 @@ GUI::GUI (QWidget * parent)
     fileDialog = new QFileDialog;
 
     QFile style;
-    style.setFileName(QDir::currentPath() + "/gui/gui.css");
+    style.setFileName(QDir::currentPath()+"/gui/gui.css");
     style.open(QFile::ReadOnly);
     QString QSS = style.readAll();
     setStyleSheet(QSS);
