@@ -21,6 +21,7 @@ try:
 	urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 except Exception:
 	print("Нет необходимых модулей, братишка, иди ставь.")
+	input()
 	exit()
 
 
@@ -1027,7 +1028,7 @@ class Wiper:
 								elif self.setup.mediaKind == 3:
 									post.set_media(self.threads[threadNum].posts[white_anus].medias[mediaNum].name, self.threads[threadNum].posts[white_anus].medias[mediaNum].file, self.setup.shakalPower, self.setup.shakalColor, self.setup.shakalAffine, self.setup.toPNG)
 						except Exception as e:
-							print(e)
+							#print(e)
 							print("Не могу скачать / прикрепить файл.")
 
 					# === и сажу туды ===
@@ -1155,7 +1156,6 @@ try:
 	safe_quit(badproxies, forbiddenproxy)
 
 except Exception as e:
-	print(e)
 	print("arelive obosralsya")
 	input()
 
