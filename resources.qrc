@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>../wiper-min/gui/b.ico</file>
+        <file>../wiper-min/gui/desu.gif</file>
+        <file>../wiper-min/gui/gachi.wav</file>
+        <file>../wiper-min/gui/gui.css</file>
+        <file>../wiper-min/gui/logo.png</file>
+    </qresource>
+</RCC>

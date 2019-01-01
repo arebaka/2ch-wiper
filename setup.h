@@ -6,6 +6,8 @@ using namespace std;
 
 class Setup {
 private:
+    static const vector<string> source;
+
     string board;  // доска
     string thread;  // тред
     string chaos;  // флаг хаоса и тред для постинга

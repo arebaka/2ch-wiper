@@ -35,11 +35,11 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string notr="true" comment="test" extracomment="test">GUI</string>
+   <string notr="true">GUI</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>../build-wipe-Desktop_Qt_5_11_1_GCC_64bit-Debug/gui/b.ico</normaloff>../build-wipe-Desktop_Qt_5_11_1_GCC_64bit-Debug/gui/b.ico</iconset>
+   <iconset resource="icon.qrc">
+    <normaloff>:/b.ico</normaloff>:/b.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="button">
@@ -742,6 +742,9 @@
     <property name="text">
      <string>Board index:</string>
     </property>
+    <property name="buddy">
+     <cstring>board</cstring>
+    </property>
    </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
@@ -759,6 +762,9 @@
     </property>
     <property name="text">
      <string>Thread №:</string>
+    </property>
+    <property name="buddy">
+     <cstring>thread</cstring>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
@@ -778,6 +784,9 @@
     <property name="text">
      <string>Potocks count:</string>
     </property>
+    <property name="buddy">
+     <cstring>potocks</cstring>
+    </property>
    </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
@@ -795,6 +804,9 @@
     </property>
     <property name="text">
      <string>Board index:</string>
+    </property>
+    <property name="buddy">
+     <cstring>shrapnelBoard</cstring>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
@@ -814,6 +826,9 @@
     <property name="text">
      <string>Threads count:</string>
     </property>
+    <property name="buddy">
+     <cstring>threads</cstring>
+    </property>
    </widget>
    <widget class="QLabel" name="label_6">
     <property name="geometry">
@@ -831,6 +846,9 @@
     </property>
     <property name="text">
      <string>Posts count &gt;</string>
+    </property>
+    <property name="buddy">
+     <cstring>minPosts</cstring>
     </property>
    </widget>
    <widget class="QLabel" name="label_7">
@@ -850,6 +868,9 @@
     <property name="text">
      <string>Solver key:</string>
     </property>
+    <property name="buddy">
+     <cstring>key</cstring>
+    </property>
    </widget>
    <widget class="QLabel" name="label_8">
     <property name="geometry">
@@ -867,6 +888,9 @@
     </property>
     <property name="text">
      <string>Proxy list loops:</string>
+    </property>
+    <property name="buddy">
+     <cstring>repeats</cstring>
     </property>
    </widget>
    <widget class="QFrame" name="triggerSet">
@@ -1064,6 +1088,9 @@
     <property name="text">
      <string>Paste to thread:</string>
     </property>
+    <property name="buddy">
+     <cstring>toThread</cstring>
+    </property>
    </widget>
    <widget class="QLabel" name="label_11">
     <property name="geometry">
@@ -1082,6 +1109,9 @@
     <property name="text">
      <string>Per post:</string>
     </property>
+    <property name="buddy">
+     <cstring>imagesCount</cstring>
+    </property>
    </widget>
    <widget class="QLabel" name="label_12">
     <property name="geometry">
@@ -1099,6 +1129,9 @@
     </property>
     <property name="text">
      <string>Per post:</string>
+    </property>
+    <property name="buddy">
+     <cstring>videosCount</cstring>
     </property>
    </widget>
    <widget class="QFrame" name="sageSet">
@@ -1273,6 +1306,9 @@
     <property name="text">
      <string>From folder:</string>
     </property>
+    <property name="buddy">
+     <cstring>videosFolder</cstring>
+    </property>
    </widget>
    <widget class="QLineEdit" name="imagesFolder">
     <property name="geometry">
@@ -1308,6 +1344,9 @@
     </property>
     <property name="text">
      <string>From folder:</string>
+    </property>
+    <property name="buddy">
+     <cstring>imagesFolder</cstring>
     </property>
    </widget>
    <widget class="QLineEdit" name="shrapnelPotocks">
@@ -1347,6 +1386,9 @@
     </property>
     <property name="text">
      <string>Potocks count:</string>
+    </property>
+    <property name="buddy">
+     <cstring>shrapnelPotocks</cstring>
     </property>
    </widget>
    <widget class="QComboBox" name="board">
@@ -2286,6 +2328,9 @@
      <property name="text">
       <string>Shackal degree:</string>
      </property>
+     <property name="buddy">
+      <cstring>shakalPower</cstring>
+     </property>
     </widget>
     <widget class="QCheckBox" name="shakalColor">
      <property name="geometry">
@@ -2489,14 +2534,16 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="icon.qrc"/>
+ </resources>
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup_9"/>
   <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup_4"/>
   <buttongroup name="buttonGroup_5"/>
+  <buttongroup name="buttonGroup_3"/>
  </buttongroups>
 </ui>
