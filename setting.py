@@ -46,7 +46,8 @@ def activate_debug(logMode):
 # ====== Конфигурация ======
 class Setup:
 
-	def __init__(self, args):
+	def __init__(self, username, args):
+		self.username = username
 		if int(args[5]) != 0:
 			activate_debug(int(args[5]))
 		self.cpFile, self.bansFile, self.fullFile = self.set_encoding()  # файлы с пастами
