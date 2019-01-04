@@ -50,6 +50,10 @@ private slots:
     void on_mainMode_clicked();
     void on_shrapnelMode_clicked();
 
+    void on_complain_clicked();
+
+    void on_username_editingFinished();
+
 private:
     Ui::GUI * ui;
     QFileDialog * fileDialog;
@@ -64,6 +68,7 @@ private:
     QSound * music;
     bool isPlaying;
     bool isPidor;
+    std::string username;
     QMovie * anima;
 
     QPoint mpos;

@@ -27,6 +27,7 @@ GUI::GUI (QWidget * parent)
     ui->key->setEchoMode(QLineEdit::Password);
 
     ui->triggerSet->hide();
+    ui->complainSet->hide();
     ui->sageSet->hide();
     ui->shaskalSet->hide();
     ui->randChaos->setDisabled(true);
@@ -44,6 +45,9 @@ GUI::GUI (QWidget * parent)
     ui->threads->setDisabled(true);
     ui->minPosts->setDisabled(true);
     ui->shrapnelPotocks->setDisabled(true);
+
+    username = "Аноним";
+    ui->withPosts->setDisabled(true);
 }
 
 GUI::~GUI () {
@@ -67,11 +71,13 @@ void GUI::on_button_clicked () {
 bool GUI::start () {
     setup.clear();
     ui->textBrowser->clear();
+    setup.set_username(username);
 
     if (ui->mainMode->isChecked()) {
         setup.set_board(ui->board->currentText().toStdString());
         setup.set_potocksCount(ui->potocks->text().toStdString());
         setup.set_thread(ui->thread->text().toStdString());
+        setup.set_shrapnelCharge("0");
 
     } else if (ui->shrapnelMode->isChecked()) {
         setup.set_board(ui->shrapnelBoard->currentText().toStdString());
@@ -105,17 +111,25 @@ bool GUI::start () {
         setup.set_mode("5");
     else if (ui->pastes->isChecked())
         setup.set_mode("4");
-    else if (ui->random->isChecked()) {
+    else if (ui->complain->isChecked()) {
+        setup.set_mode("1");
+        setup.set_triggerForm("0");
+    } else if (ui->random->isChecked()) {
         setup.set_mode("0");
         setup.set_triggerForm("0");
     }
 
-    if (!ui->random->isChecked()) {
+    if (!ui->random->isChecked() && !ui->complain->isChecked()) {
         if (ui->chaining->isChecked()) setup.set_triggerForm("1");
         else if (ui->randTrigger->isChecked()) setup.set_triggerForm("2");
         else if (ui->shashlik->isChecked()) setup.set_triggerForm("3");
         else if (ui->oppost->isChecked()) setup.set_triggerForm("4");
         else setup.set_triggerForm("0");
+
+    } else if (ui->complain->isChecked()) {
+        setup.set_complain_board(ui->complainBoard->currentText().toStdString());
+        setup.set_complains_count(ui->linksCount->value());
+        setup.set_complains_with_posts(ui->withPosts->isChecked());
     }
 
     if (ui->chaos->isChecked()) {
@@ -242,26 +256,37 @@ void GUI::on_peedorBarButton_clicked () {
 
 
 void GUI::on_noText_clicked () {
+    ui->complainSet->hide();
     ui->triggerSet->show();
 }
 
 void GUI::on_quoting_clicked () {
+    ui->complainSet->hide();
     ui->triggerSet->show();
 }
 
 void GUI::on_copying_clicked () {
+    ui->complainSet->hide();
     ui->triggerSet->show();
 }
 
 void GUI::on_overload_clicked () {
+    ui->complainSet->hide();
     ui->triggerSet->show();
 }
 
 void GUI::on_pastes_clicked () {
+    ui->complainSet->hide();
     ui->triggerSet->show();
 }
 
+void GUI::on_complain_clicked () {
+    ui->triggerSet->hide();
+    ui->complainSet->show();
+}
+
 void GUI::on_random_clicked () {
+    ui->complainSet->hide();
     ui->triggerSet->hide();
 }
 
@@ -337,6 +362,10 @@ void GUI::on_openButton_clicked () {
     std::string value;
 
     getline(config, value);
+    ui->username->setText(value.c_str());
+    username = value.c_str();
+
+    getline(config, value);
     if (value == "main") {
         ui->mainMode->setChecked(true);
         ui->board->setDisabled(false);
@@ -395,23 +424,34 @@ void GUI::on_openButton_clicked () {
     getline(config, value);
     if (value == "no text") {
         ui->noText->setChecked(true);
+        ui->complainSet->hide();
         ui->triggerSet->show();
     } else if (value == "quoting") {
         ui->quoting->setChecked(true);
+        ui->complainSet->hide();
         ui->triggerSet->show();
     } else if (value == "copying") {
         ui->copying->setChecked(true);
+        ui->complainSet->hide();
         ui->triggerSet->show();
     } else if (value == "overload") {
         ui->overload->setChecked(true);
+        ui->complainSet->hide();
         ui->triggerSet->show();
     } else if (value == "pastes") {
         ui->pastes->setChecked(true);
+        ui->complainSet->hide();
         ui->triggerSet->show();
+    } else if (value == "complain") {
+        ui->complain->setChecked(true);
+        ui->triggerSet->hide();
+        ui->complainSet->show();
     } else if (value == "random") {
         ui->random->setChecked(true);
+        ui->complainSet->hide();
         ui->triggerSet->hide();
     } else
+        ui->complainSet->hide();
         ui->triggerSet->hide();
 
     getline(config, value);
@@ -420,6 +460,14 @@ void GUI::on_openButton_clicked () {
     else if (value == "shashlik") ui->shashlik->setChecked(true);
     else if (value == "op post") ui->oppost->setChecked(true);
     else if (value == "no trigger") ui->notrigger->setChecked(true);
+
+    getline(config, value);
+    ui->complainBoard->setCurrentText(value.c_str());
+    getline(config, value);
+    ui->linksCount->setValue(atoi(value.c_str()));
+    getline(config, value);
+    if (value == "with posts") ui->withPosts->setChecked(true);
+    else ui->withPosts->setChecked(false);
 
     getline(config, value);
     if (value == "chaos") {
@@ -536,6 +584,11 @@ void GUI::on_saveButton_clicked () {
     else if (ui->notrigger->isChecked()) config << "no trigger";
     config << std::endl;
 
+    config << ui->complainBoard->currentText().toStdString() << std::endl;
+    config << to_string(ui->linksCount->value()) << std::endl;
+    if (ui->withPosts->isChecked()) config << "with posts";
+    config << std::endl;
+
     if (ui->chaos->isChecked()) config << "chaos";
     config << std::endl;
     if (ui->randChaos->isChecked()) config << "random";
@@ -588,4 +641,11 @@ void GUI::on_shrapnelMode_clicked () {
     ui->threads->setDisabled(false);
     ui->minPosts->setDisabled(false);
     ui->shrapnelPotocks->setDisabled(false);
+}
+
+
+
+
+void GUI::on_username_editingFinished () {
+    username = ui->username->text().toStdString();
 }
