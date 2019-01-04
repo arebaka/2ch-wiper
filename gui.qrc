@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>gui/gui.css</file>
-    </qresource>
-</RCC>

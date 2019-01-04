@@ -36,6 +36,7 @@ private:
     bool is_pos_num(const string &str);
     bool is_zero(const string &str);
 
+    string decode(const string &base64DKOTI);
     string comline();
 
 public:

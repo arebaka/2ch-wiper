@@ -39,8 +39,10 @@ QLabel , QRadioButton, QCheckBox {
 }
 
 #topBanner {
-/* 1030x50 */
-
+/* 1300x54 */
+	font-size: 50px !important;
+	text-align: center;
+	vertical-align: center;
 }
 
 
@@ -66,17 +68,21 @@ QLabel , QRadioButton, QCheckBox {
 }
 
 #musicButton {
-	background-image: url(gui/images/music_off.png)
+	background-image: url(gui/images/music_off.png);
 }
 #musicButton::checked {
-	background-image: url(gui/images/music_on.png)
+	background-image: url(gui/images/music_on.png);
 }
 
 #peedorBarButton {
-	background-image: url(gui/images/mars.png)
+	background-image: url(gui/images/mars.png);
 }
 #peedorBarButton::checked {
-	background-image: url(gui/images/venue.png)
+	background-image: url(gui/images/venue.png);
+}
+
+#helpButton {
+	background-image: url(gui/images/help_button.png);
 }
 
 
@@ -153,7 +159,7 @@ QTextBrowser {
 QLineEdit {
 	background: white;
 	color: black;
-	border: 1px solid black;
+	border: 1px solid #374457;
 	border-radius: 2px;
 }
 QLineEdit:disabled {

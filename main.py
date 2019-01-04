@@ -355,7 +355,10 @@ class Wiper:
 
 					# === потом текст поста ===
 					if self.setup.mode == 1:
-						post.set_text(trigger + self.setup.pastes[random.randint(0, 9)])
+						text = self.setup.pastes[random.randint(0, len(self.setup.pastes)-1)] + '\n'
+						for i in range(random.randint(1, self.setup.linksCount)):
+							text += ("https://2ch.hk/" + self.setup.complainBoard + "/res/" + self.setup.complainCatalog.schema["threads"][random.randint(0, len(self.setup.complainCatalog.schema["threads"]))]["num"] + '\n')
+						post.set_text(trigger + text)
 					elif self.setup.mode == 2:
 						post.set_text(trigger)
 					elif self.setup.mode == 0:

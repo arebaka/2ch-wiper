@@ -28,8 +28,8 @@ def activate_debug(logMode):
 # 7 - ключ (или "0" для казенного)
 # 8 - число повторов прокси
 # 9 - режим вайпалки
-# 10 - минимальный номер разбана (или -1, если не 8 режим)
-# 11 - максимальный номер разбана (или -1, если не 8 режим)
+# 10 - минимальный номер разбана / доска для жалоб (или -1, если не 1 и не 8 режим)
+# 11 - максимальный номер разбана / максимальное число ссылок в жалобах (или -1, если не 1 и не 8 режим)
 # 12 - номер режима триггера (или 0, если доску или просто без него)
 # 13 - число тредов для шрапнели (или 0, если без неё)
 # 14 - минимальное число постов в тредах для шрапнели (или -1, если без неё или с указанием тредов)
@@ -64,6 +64,10 @@ class Setup:
 		if self.mode == 8:
 			self.minBan = int(args[10])  # минимальный ID бана
 			self.maxBan = int(args[11])  # максимальный ID бана
+		elif self.mode == 1:
+			self.complainBoard = args[10]
+			self.linksCount = int(args[11])
+			self.complainCatalog = Catalog(self.complainBoard)
 
 		self.catalog = 0  # ¯\_(ツ)_/¯
 		self.threads = []
@@ -88,6 +92,7 @@ class Setup:
 
 	# === определение ОС и кодировки ===
 	def set_encoding(self):
+		self.complainFile = "complaints.txt"
 		self.cpFile = "texts.txt"
 		self.bansFile = "bans.txt"
 		self.fullFile = "parasha.txt"
@@ -173,7 +178,12 @@ class Setup:
 
 	# === установка режима вайпалки ===
 	def set_mode(self, mode):
-		if mode == 4:
+		if mode == 1:
+			with open(self.complainFile, 'r', encoding='utf-8') as file:
+				pastes = file.read()
+				pastes = pastes.split("\n\n")
+				bigPaste = 0
+		elif mode == 4:
 			with open(self.cpFile, 'r', encoding='utf-8') as file:
 				pastes = file.read()
 				pastes = pastes.split("\n\n")
