@@ -124,6 +124,8 @@ images
 videos
 *.csv
 save
+*.exe
+!gui/images
 
 *~
 *.autosave

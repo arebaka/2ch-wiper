@@ -210,10 +210,9 @@ void Setup::set_complains_with_posts (const bool &status) {
 
 
 void Setup::clear () {
-    hasBoard = false; hasThread = false; hasPotocksCount= false; hasLogMode= false; hasSolver= false; hasKey= false;
-    hasProxyRepeatsCount= false; hasMode= false; hasMinBan= false; hasMaxBan= false; hasTriggerForm= false;
-    hasShrapnelCharge= false; hasMinPostsCount= false; hasMediaKind= false; hasMediaGroup= false;
-    hasMediasCount= false; hasSageMode = false;
+    hasBoard = hasThread = hasChaos = hasPotocksCount = hasLogMode = hasSolver = hasKey = hasProxyRepeatsCount = hasMode = hasMinBan =
+    hasMaxBan = hasTriggerForm = hasShrapnelCharge = hasMinPostsCount = hasMediaKind = hasMediaGroup = hasMediasCount =
+    hasSageMode =  hasShackalPower = shackalColor = shackalAffine = toPNG = hasComplainBoard = hasComplainsCount = complainWithPosts = false;
 }
 
 
@@ -306,59 +305,59 @@ string Setup::comline () {
 //    command += "\'); exec(code.decode('utf-8'))\" ";
     string command("python3 main.py ");
 
-    command += ("\"" + username + "\" ");
+    command += ("-u \"" + username + "\" ");
 
-    command += (board + " " + thread + " " + chaos + " " + potocksCount + " ");
+    command += ("-b " + board + " -t " + thread + " -c " + chaos + " -p " + potocksCount + " -d ");
     command += logMode;
 
-    command += (" " + solver + " ");
+    command += (" -s " + solver + " -k ");
     if (!hasKey || key == "") command += "0 ";
-    else command += (key + " ");
-    command += (proxyRepeatsCount + " " + mode + " ");
+    else command += (key + " -r ");
+    command += (proxyRepeatsCount + " -m " + mode + " ");
 
-    if (hasComplainBoard) command += (complainBoard + " ");
-    else if (hasMinBan) command += (minBan + " ");
-    else command += "-1 ";
-    if (hasComplainsCount) command += (to_string(complainsCount) + " ");
-    else if (hasMaxBan) command += (maxBan + " ");
-    else command += "-1 ";
+    if (hasComplainBoard) command += ("-cb " + complainBoard + " ");
+    else if (hasMinBan) command += ("--minBan " + minBan + " ");
+    else command += "--minBan -1 ";
+    if (hasComplainsCount) command += ("-l " + to_string(complainsCount) + " ");
+    else if (hasMaxBan) command += ("--maxBan " + maxBan + " ");
+    else command += "--maxBan -1 ";
 
     if (mode == "1") {
-        if (complainWithPosts) command += "1 ";
-        else command += "0 ";
+        if (complainWithPosts) command += "-w 1 ";
+        else command += "-w 0 ";
     } else {
-        if (!hasTriggerForm) command += "-1 ";
-        else command += (triggerForm + " ");
+        if (!hasTriggerForm) command += "-T -1 ";
+        else command += ("-T " + triggerForm + " ");
     }
 
-    if (!hasShrapnelCharge) command += "0 ";
-    else command += (shrapnelCharge + " ");
-    if (!hasMinPostsCount) command += "-1 ";
-    else command += (minPostsCount + " ");
+    if (!hasShrapnelCharge) command += "-sh 0 ";
+    else command += ("-sh " + shrapnelCharge + " ");
+    if (!hasMinPostsCount) command += "-mp -1 -M ";
+    else command += ("-mp " + minPostsCount + " -M ");
 
     if (!hasMediaKind) command += "0";
     else command += mediaKind;
     command += " ";
-    if (!hasMediaGroup) command += ". ";
-    else command += (mediaGroup + " ");
-    if (!hasMediasCount) command += "-1 ";
-    else command += (mediasCount + " ");
+    if (!hasMediaGroup) command += "-g . ";
+    else command += ("-g " + mediaGroup + " ");
+    if (!hasMediasCount) command += "-mc 1 ";
+    else command += ("-mc " + mediasCount + " -S ");
 
     command += sageMode;
 
-    command += (" " + to_string(shackalPower) + " ");
-    if (shackalColor) command += "1 ";
-    else command += "0 ";
-    if (shackalAffine) command += "1 ";
-    else command += "0 ";
-    if (toPNG) command += "1 ";
-    else command += "0 ";
+    command += (" -SH " + to_string(shackalPower) + " ");
+    if (shackalColor) command += "-C 1 ";
+    else command += "-C 0 ";
+    if (shackalAffine) command += "-a 1 ";
+    else command += "-a 0 ";
+    if (toPNG) command += "-P 1 ";
+    else command += "-P 0 ";
 
     if (hasShrapnelCharge && !hasMinPostsCount)
         for (unsigned int i(0); i < shrapnelThreads.size(); i++)
             command += (" " + shrapnelThreads[i]);
 
-//    cout << command << endl << endl << endl << endl;
+    cout << command << endl << endl << endl << endl;
     return command;
 }
 

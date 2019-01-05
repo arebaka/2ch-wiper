@@ -11,12 +11,13 @@ QScrollBar {
 
 QPushButton {
 	color: black;
-	background: #20272B;
+	background: #70272B;
 	border: none;
-	border-radius: 3px;
+	border-radius: 5px;
 }
 QPushButton::hover {
 	color: white;
+	background:	#20272B;
 }
 
 QLabel , QRadioButton, QCheckBox {

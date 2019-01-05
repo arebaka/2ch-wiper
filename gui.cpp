@@ -47,7 +47,6 @@ GUI::GUI (QWidget * parent)
     ui->shrapnelPotocks->setDisabled(true);
 
     username = "Аноним";
-    ui->withPosts->setDisabled(true);
 }
 
 GUI::~GUI () {

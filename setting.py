@@ -2,6 +2,7 @@
 
 import os
 import requests
+import argparse
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -34,7 +35,7 @@ def activate_debug(logMode):
 # 13 - число тредов для шрапнели (или 0, если без неё)
 # 14 - минимальное число постов в тредах для шрапнели (или -1, если без неё или с указанием тредов)
 # 15 - номер вида прикреплений (или 0, если дэ или просто без них)
-# 16 - подкаталог прикреплений (или "0", если из корня)
+# 16 - подкаталог прикреплений (или ".", если из корня)
 # 17 - число прикреплений (или -1, если из постов)
 # 18 - номер режима сажи
 # 19 - уровень шакала от 0 до 100
@@ -46,50 +47,79 @@ def activate_debug(logMode):
 # ====== Конфигурация ======
 class Setup:
 
-	def __init__(self, username, args):
-		self.username = username
-		if int(args[5]) != 0:
-			activate_debug(int(args[5]))
+	def __init__(self, args):
+		parser = argparse.ArgumentParser()
+		parser.add_argument("-u", "--username", dest="username")
+		parser.add_argument("-b", "--board", dest="board")
+		parser.add_argument("-t", "--thread", dest="thread")
+		parser.add_argument("-c", "--chaos", dest="chaos")
+		parser.add_argument("-p", "--potocks", dest="potocksCount")
+		parser.add_argument("-d", "--debug", dest="debug")
+		parser.add_argument("-s", "--solver", dest="solver")
+		parser.add_argument("-k", "--key", dest="key")
+		parser.add_argument("-r", "--repeats", dest="proxyRepeatsCount")
+		parser.add_argument("-m", "--mode", dest="mode")
+		parser.add_argument("--minBan", dest="minBan")
+		parser.add_argument("--maxBan", dest="maxBan")
+		parser.add_argument("-cb", "--complainBoard", dest="complainBoard")
+		parser.add_argument("-l", "--links", dest="linksCount")
+		parser.add_argument("-w", "--withPosts", dest="withPosts")
+		parser.add_argument("-T", "--trigger", dest="triggerForm")
+		parser.add_argument("-sh", "--shrapnel", dest="shrapnelCharge")
+		parser.add_argument("-mp", "--min", dest="minPostsCount")
+		parser.add_argument("-M", "--media", dest="mediaKind")
+		parser.add_argument("-g", "--group", dest="mediaGroup")
+		parser.add_argument("-mc", "--medias", dest="mediasCount")
+		parser.add_argument("-S", "--sage", dest="sageMode")
+		parser.add_argument("-SH", "--shakal", dest="shakalPower")
+		parser.add_argument("-C", "--color", dest="shakalColor")
+		parser.add_argument("-a", "--affine", dest="shakalAffine")
+		parser.add_argument("-P", "--png", dest="toPNG")
+
+		args = parser.parse_args(args)
+
+		self.username = args.username
+		if int(args.debug) != 0:
+			activate_debug(int(args.debug))
 		self.cpFile, self.bansFile, self.fullFile = self.set_encoding()  # файлы с пастами
 
-		self.board = args[1]  # доска
-		self.thread = args[2]  # тред
-		self.chaos = args[3]  # хаос / тред для постинга
-		self.potocksCount = int(args[4])  # число потоков
+		self.board = args.board  # доска
+		self.thread = args.thread  # тред
+		self.chaos = args.chaos  # хаос / тред для постинга
+		self.potocksCount = int(args.potocksCount)  # число потоков
 		self.TIMEOUT, self.PAUSE = self.set_consts(self.potocksCount)  # таймаут, пауза
 
-		self.solver, self.key, self.keyreq = self.set_key(int(args[6]), args[7])  # солвер, ключ, статус ключа
-		self.proxyRepeatsCount = int(args[8])  # число повторов прокси
-		self.mode, self.pastes, self.bigPaste = self.set_mode(int(args[9]))  # режим вайпалки, пасты
+		self.solver, self.key, self.keyreq = self.set_key(int(args.solver), args.key)  # солвер, ключ, статус ключа
+		self.proxyRepeatsCount = int(args.proxyRepeatsCount)  # число повторов прокси
+		self.mode, self.pastes, self.bigPaste = self.set_mode(int(args.mode))  # режим вайпалки, пасты
 
 		if self.mode == 8:
-			self.minBan = int(args[10])  # минимальный ID бана
-			self.maxBan = int(args[11])  # максимальный ID бана
+			self.minBan = int(args.minBan) # минимальный ID бана
+			self.maxBan = int(args.maxBan)  # максимальный ID бана
 		elif self.mode == 1:
-			self.complainBoard = args[10]
-			self.linksCount = int(args[11])
+			self.complainBoard = args.complainBoard
+			self.linksCount = int(args.linksCount)
 			self.complainCatalog = Catalog(self.complainBoard)
 
 		self.catalog = 0  # ¯\_(ツ)_/¯
 		self.threads = []
 
 		if self.thread != "0":
-			self.triggerForm, self.shrapnelCharge, self.targetThread = self.set_trigger(int(args[12]), int(args[13]), int(args[14]), args)  # режим триггера, число тредов шрапнели
+			self.triggerForm, self.shrapnelCharge, self.targetThread = self.set_trigger(int(args.triggerForm), int(args.shrapnelCharge), int(args.minPostsCount), args)  # режим триггера, число тредов шрапнели
 		else:
 			self.triggerForm = 0
 			self.shrapnelCharge = 0
 
-		self.mediaKind, self.mediaPaths, self.mediasCount = self.set_media(int(args[15]), args[16], int(args[17]))  # тип прикреплений, число прикреплений к треду
+		self.mediaKind, self.mediaPaths, self.mediasCount = self.set_media(int(args.mediaKind), args.mediaGroup, int(args.mediasCount))  # тип прикреплений, подкаталог, число прикреплений к треду
 		
-		self.sageMode = int(args[18])  # режим сажи
+		self.sageMode = int(args.sageMode) # режим сажи
 		
-		self.shakalPower = int(args[19])  # уровень шакала
-		if args[20] == "1": self.shakalColor = True  # флаг цветного шакала
+		self.shakalPower = int(args.shakalPower)  # уровень шакала
+		if args.shakalColor == "1": self.shakalColor = True  # флаг цветного шакала
 		else: self.shakalColor = False
-		if args[21] == "1": self.shakalAffine = True  # флаг аффинного шакала
+		if args.shakalAffine == "1": self.shakalAffine = True  # флаг аффинного шакала
 		else: self.shakalAffine = False
-		if args[22] == "1": self.toPNG = True  # флаг конвертации в PNG
-		else: self.toPNG = False
+		if args.toPNG == "1": self.toPNG = True  # флаг конвертации в PNG
 
 	# === определение ОС и кодировки ===
 	def set_encoding(self):
@@ -243,7 +273,7 @@ class Setup:
 					mediaDir = "images"
 				elif mediaKind == 2:
 					mediaDir = "videos"
-				if len(mediaGroup) > 0 and mediaGroup != "0":
+				if len(mediaGroup) > 0 and mediaGroup != ".":
 					mediaDir += "/"
 					mediaDir += mediaGroup
 				for media in os.listdir("./"+mediaDir):

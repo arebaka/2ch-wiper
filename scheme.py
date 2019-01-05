@@ -91,7 +91,7 @@ class Post:
 
 	# === определение флага сажи ===
 	def set_sage(self, schema):
-		return True if schema["email"].find("mailto:sage") == -1 else False
+		return False if schema["email"].find("mailto:sage") == -1 else True
 
 
 # ====== Модель треда ======

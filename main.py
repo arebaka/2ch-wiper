@@ -520,7 +520,7 @@ class Wiper:
 show_logo()
 
 try:
-	setup = Setup(sys.argv[1], sys.argv[1:])
+	setup = Setup(sys.argv[1:])
 	WiperObj = Wiper(setup, setup.catalog, setup.threads)
 	signal.signal(signal.SIGINT, safe_quit)
 	WiperObj.wipe(setup.potocksCount)
