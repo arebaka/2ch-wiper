@@ -35,7 +35,7 @@ forbiddenproxy = []
 # ====== Шапка ======
 def show_logo():
 	os.system('cls' if os.name == 'nt' else 'clear')
-	print("\n*************************************************")
+	print("\n******************************************v2.1***")
 	print("*    2CH.HK WIPE MACHINE - ReCaptcha edition    *")
 	print("*     Только для внутреннего использования      *")
 	print("*        Оригинальный проект: glow_stick        *")
