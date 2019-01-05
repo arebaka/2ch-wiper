@@ -9,6 +9,7 @@
 #include <QMovie>
 #include <fstream>
 #include "setup.h"
+#include "wipechan.h"
 
 namespace Ui {
 class GUI;
@@ -54,6 +55,8 @@ private slots:
 
     void on_username_editingFinished();
 
+    void on_helpButton_clicked();
+
 private:
     Ui::GUI * ui;
     QFileDialog * fileDialog;
@@ -61,6 +64,8 @@ private:
     bool started;  // start/stop
     bool start();
     bool stop();
+    void updateData();
+    void updateConfig();
 
     void closeEvent (QCloseEvent * event);
     void exposeEvent(QExposeEvent * event);
@@ -69,6 +74,8 @@ private:
     bool isPlaying;
     bool isPidor;
     std::string username;
+    std::string totalPosts;
+    std::string postsCount;
     QMovie * anima;
 
     QPoint mpos;

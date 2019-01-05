@@ -228,7 +228,7 @@
      <rect>
       <x>20</x>
       <y>260</y>
-      <width>130</width>
+      <width>150</width>
       <height>20</height>
      </rect>
     </property>
@@ -651,7 +651,7 @@
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;BUND SCRIPT GUI &lt;span style=&quot; vertical-align:super;&quot;&gt;v2.1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;BUND SCRIPT GUI &lt;span style=&quot; vertical-align:super;&quot;&gt;v2.2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="textFormat">
      <enum>Qt::AutoText</enum>
@@ -2269,26 +2269,13 @@
      </property>
     </item>
    </widget>
-   <widget class="QLabel" name="banner">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>270</y>
-      <width>340</width>
-      <height>210</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QLabel" name="backBanner">
     <property name="geometry">
      <rect>
       <x>320</x>
       <y>270</y>
       <width>340</width>
-      <height>210</height>
+      <height>230</height>
      </rect>
     </property>
     <property name="text">
@@ -3102,6 +3089,12 @@
       <pointsize>10</pointsize>
      </font>
     </property>
+    <property name="maxLength">
+     <number>64</number>
+    </property>
+    <property name="frame">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="label_21">
     <property name="geometry">
@@ -3120,6 +3113,89 @@
     <property name="text">
      <string>Username:</string>
     </property>
+   </widget>
+   <widget class="QLCDNumber" name="totalPosts">
+    <property name="geometry">
+     <rect>
+      <x>940</x>
+      <y>27</y>
+      <width>100</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
+    <property name="smallDecimalPoint">
+     <bool>false</bool>
+    </property>
+    <property name="digitCount">
+     <number>7</number>
+    </property>
+    <property name="segmentStyle">
+     <enum>QLCDNumber::Filled</enum>
+    </property>
+    <property name="intValue" stdset="0">
+     <number>0</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_17">
+    <property name="geometry">
+     <rect>
+      <x>940</x>
+      <y>0</y>
+      <width>140</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Total posts:</string>
+    </property>
+   </widget>
+   <widget class="Wipechan" name="wipechan">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>270</y>
+      <width>340</width>
+      <height>230</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::NoFrame</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="blockquote">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>320</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
    <zorder>topBanner</zorder>
    <zorder>backBanner</zorder>
@@ -3182,7 +3258,6 @@
    <zorder>label_15</zorder>
    <zorder>board</zorder>
    <zorder>shrapnelBoard</zorder>
-   <zorder>banner</zorder>
    <zorder>shaskalSet</zorder>
    <zorder>line</zorder>
    <zorder>line_2</zorder>
@@ -3192,9 +3267,20 @@
    <zorder>complainSet</zorder>
    <zorder>username</zorder>
    <zorder>label_21</zorder>
+   <zorder>totalPosts</zorder>
+   <zorder>label_17</zorder>
+   <zorder>wipechan</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>Wipechan</class>
+   <extends>QFrame</extends>
+   <header location="global">wipechan.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="icon.qrc"/>
  </resources>

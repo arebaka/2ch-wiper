@@ -3,10 +3,11 @@
 #include <stdlib.h>
 
 GUI::GUI (QWidget * parent)
-    : QMainWindow(parent) , ui(new Ui::GUI) , started(false)
+    : QMainWindow(parent) , ui(new Ui::GUI) , started(false) , postsCount("0")
 {
     ui->setupUi(this);
     fileDialog = new QFileDialog;
+    ui->wipechan->set_blockquote(ui->blockquote);
 
     QFile style;
     style.setFileName(QDir::currentPath()+"/gui/gui.css");
@@ -21,8 +22,10 @@ GUI::GUI (QWidget * parent)
     ui->peedorBarButton->setChecked(false);
     isPidor = false;
     isPlaying = false;
+    ui->wipechan->uncall();
     ui->rollUp->hide();
     ui->close->hide();
+    ui->backBanner->hide();
 
     ui->key->setEchoMode(QLineEdit::Password);
 
@@ -46,7 +49,7 @@ GUI::GUI (QWidget * parent)
     ui->minPosts->setDisabled(true);
     ui->shrapnelPotocks->setDisabled(true);
 
-    username = "Аноним";
+    updateData();
 }
 
 GUI::~GUI () {
@@ -57,13 +60,55 @@ void GUI::debug (const char &mode) {
     setup.set_logMode(mode);
 }
 
+void GUI::updateData () {
+    std::string datum, key, value;
+    std::ifstream config(".config");
+    if (config.is_open()) {
+        while(!config.eof()) {
+            getline(config, datum);
+            key = datum.substr(0, datum.find(' '));
+            value = datum.substr(datum.find(' ')+1, datum.length()-1);
+            if (key == "total_posts") {
+                ui->totalPosts->display(atoi(value.c_str()));
+                totalPosts = value;
+            } else if (key == "posts")
+                postsCount = value;
+            else if (key == "username") {
+                ui->username->setText(value.c_str());
+                username = value;
+            }
+        }
+
+    } else {
+        ui->totalPosts->display(0);
+        ui->username->setText("Аноним");
+        totalPosts = "0";
+        username = "Аноним";
+
+        updateConfig();
+    }
+
+    ui->totalPosts->repaint();
+}
+
+void GUI::updateConfig () {
+    std::ofstream config(".config");
+    config << "total_posts " << totalPosts << std::endl;
+    config << "username " << username << std::endl;
+}
+
+
 
 
 
 void GUI::on_button_clicked () {
     if (started == false) {
+        ui->wipechan->call("start", {username});
         //if (start()) started = true;
-        start();
+        if (start()) {
+            updateData();
+            ui->wipechan->call("finish", {postsCount});
+        }
     } else stop();
 }
 
@@ -165,10 +210,7 @@ bool GUI::start () {
 
     vector<string> response(setup.start());
     if (!(response[0] == "OK")) {
-        string errors("");
-        for (unsigned char i(0); i < response.size(); i++)
-            errors += (response[i] + "\n");
-        ui->textBrowser->setText(errors.c_str());
+        ui->wipechan->call("error", response);
         return false;
     } else
         return true;
@@ -198,6 +240,7 @@ void GUI::mousePressEvent (QMouseEvent * event) {
 
 
 void GUI::closeEvent (QCloseEvent * event) {
+    updateConfig();
     system("exit");
 }
 
@@ -359,10 +402,6 @@ void GUI::on_openButton_clicked () {
     std::string fileName = fileDialog->getOpenFileName().toStdString();
     std::ifstream config(fileName);
     std::string value;
-
-    getline(config, value);
-    ui->username->setText(value.c_str());
-    username = value.c_str();
 
     getline(config, value);
     if (value == "main") {
@@ -647,4 +686,13 @@ void GUI::on_shrapnelMode_clicked () {
 
 void GUI::on_username_editingFinished () {
     username = ui->username->text().toStdString();
+}
+
+
+
+
+
+void GUI::on_helpButton_clicked () {
+    if (ui->wipechan->is_called()) ui->wipechan->uncall();
+    else ui->wipechan->call("hello", {username});
 }

@@ -126,6 +126,8 @@ videos
 save
 *.exe
 !gui/images
+!gui/Wipe-chan/images
+.config
 
 *~
 *.autosave

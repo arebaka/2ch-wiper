@@ -30,12 +30,13 @@ TEXT_CHARS = string.ascii_uppercase + string.digits + string.ascii_lowercase + (
 NAME_SIZE = 14
 badproxies = []
 forbiddenproxy = []
+postsCounter = 0
 
 
 # ====== Шапка ======
 def show_logo():
 	os.system('cls' if os.name == 'nt' else 'clear')
-	print("\n******************************************v2.1***")
+	print("\n***************************************** v2.1 **")
 	print("*    2CH.HK WIPE MACHINE - ReCaptcha edition    *")
 	print("*     Только для внутреннего использования      *")
 	print("*        Оригинальный проект: glow_stick        *")
@@ -78,7 +79,7 @@ class Captcha:
 
 	def solve(self):
 		print(self.proxy["http"], "solving captcha")
-		self.value = self.solver.solve(self.image, badproxies, forbiddenproxy)
+		self.value = self.solver.solve(self.image, badproxies, forbiddenproxy, postsCounter)
 		return (None, self.id), (None, self.value)
 
 	def verify(self):
@@ -266,7 +267,7 @@ class Wiper:
 		image = requests.get("https://2ch.hk/api/captcha/2chaptcha/image/" + captchaID, headers={"User-Agent": self.agents[0]}, timeout=self.setup.TIMEOUT, verify=False).content
 		error = open("error.gif","rb")
 
-		if True:#image == error.read():
+		if image == error.read():
 			self.captchaType = "re"
 			if solver == 0:
 				self.solver = solvers_re.CaptchaSolver_XCaptcha(self.setup.key, self.setup.keyreq)
@@ -418,6 +419,7 @@ class Wiper:
 					if success:
 						Stats.incPosts()
 						post_id = 0
+						postsCounter += 1
 						try:
 							post_id = response["Target"]
 						except:
@@ -457,13 +459,13 @@ class Wiper:
 							elif response["Error"] == -7:
 								if self.setup.shrapnelCharge == 0:
 									print("Моча вычищает тред. КОНЧАЮ.")
-									safe_quit(badproxies, forbiddenproxy)
+									safe_quit(badproxies, forbiddenproxy, postsCounter)
 								else:
 									print("Тред "+self.threads[threadNum].ID+" закрылся.")
 									del self.threads[threadNum]
 									if len(self.threads) == 0:
 										print("Все треды закрыты. Це перемога.")
-										safe_quit(badproxies, forbiddenproxy)
+										safe_quit(badproxies, forbiddenproxy, postsCounter)
 							elif not response:
 								print("Ошибка сети, пробуем ещё раз...")
 
@@ -505,7 +507,7 @@ class Wiper:
 
 			def run(self):
 				Stats.printStats(badproxies, forbiddenproxy)
-				eternal_input(badproxies, forbiddenproxy)
+				eternal_input(badproxies, forbiddenproxy, postsCounter)
 
 		threads = []
 		inthr = InputThread()
@@ -525,7 +527,7 @@ try:
 	signal.signal(signal.SIGINT, safe_quit)
 	WiperObj.wipe(setup.potocksCount)
 
-	safe_quit(badproxies, forbiddenproxy)
+	safe_quit(badproxies, forbiddenproxy, postsCounter)
 
 except Exception as e:
 	print(e, "(arelive obosralsya)")

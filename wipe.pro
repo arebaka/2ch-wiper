@@ -28,11 +28,13 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         gui.cpp \
-    setup.cpp
+    setup.cpp \
+    wipechan.cpp
 
 HEADERS += \
         gui.h \
-    setup.h
+    setup.h \
+    wipechan.h
 
 FORMS += \
         gui.ui

@@ -2,7 +2,7 @@ QWidget {
 	font-size: 14px !important; /* размер шрифта */
 }
 GUI {
-	background-image: url(gui/images/gui.png);
+	background: url(gui/images/gui.png);
 }
 QScrollBar {
 	border-radius: 3px;
@@ -11,7 +11,7 @@ QScrollBar {
 
 QPushButton {
 	color: black;
-	background: #70272B;
+	background: maroon;
 	border: none;
 	border-radius: 5px;
 }
@@ -25,22 +25,12 @@ QLabel , QRadioButton, QCheckBox {
 }
 
 
-#banner, #backBanner {
-	border-radius: 3px;
-}
-
-#banner {
-/* 340x210 */
-/*	background-image: url(gui/logo.png) */
-}
-
 #backBanner {
-/* 340x210 */
-
+	border-radius: 3px;
+	background: url(gui/images/patch.png);
 }
 
 #topBanner {
-/* 1300x54 */
 	font-size: 50px !important;
 	text-align: center;
 	vertical-align: center;
@@ -50,7 +40,7 @@ QLabel , QRadioButton, QCheckBox {
 #button {
 	font-size: 35px !important;
 	font-weight: bold;
-	background-image: url(gui/images/button.png);
+	background: url(gui/images/button.png);
 	border-radius: 10px 25px;
 	border: 1px solid #F5C942;
 }
@@ -63,7 +53,7 @@ QLabel , QRadioButton, QCheckBox {
 
 #close, #rollUp {
 /*	background: linear-gradient(to top, #FF0000, #FF3030); */
-	background-image: url(gui/images/panel_button.png);
+	background: url(gui/images/panel_button.png);
 	font-size: 20px;
 	font-weight: bold;
 }
@@ -149,7 +139,7 @@ QCheckBox:disabled {
 QTextBrowser {
 	font-size: 12px !important;
 	background: #20272B;
-/*	background-image: url(gui/images/pocik.jpg); */
+/*	background: url(gui/images/pocik.jpg); */
 	margin-top: 10;
 	font: monospace;
 	color: white;
@@ -165,4 +155,27 @@ QLineEdit {
 }
 QLineEdit:disabled {
 	background: gray;
+}
+
+
+#totalPosts {
+	color: lime;
+}
+
+
+
+
+#wipechan {
+
+}
+
+#blockquote {
+	font-family: monospace;
+	font-size: 12px !important;
+	font-style: italic;
+	color: red;
+	padding: 5px 5px 5px 5px;
+	background-color: white !important;
+	border: 2px solid black;
+	border-radius: 10px;
 }

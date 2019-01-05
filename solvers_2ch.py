@@ -8,14 +8,19 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from tools import *
 
+# ====== X-капча ======
 class CaptchaSolver_XCaptcha:
 
     def __init__(self, key, keyreq):
         self.api = "http://x-captcha2.ru/in.php"
         self.key = key
-        print("Solver 'X-Captcha' initialized with key: " + self.key)
+        try:
+            if keyreq.status_code == 200:
+                print("Solver 'X-Captcha' initialized with key: [ДАННЫЕ УДАЛЕНЫ]")
+        except Exception:
+            print("Solver 'X-Captcha' initialized with key: " + self.key)
 
-    def solve(self, image, badproxies):
+    def solve(self, image, badproxies, forbiddenproxy, postsCounter):
 
         while True:
             task = (('key', self.key), ('method', 'userrecaptcha'), ('googlekey', '6LeQYz4UAAAAAL8JCk35wHSv6cuEV5PyLhI6IxsM'), ('pageurl', 'https://2ch.hk/b/'))
@@ -36,16 +41,25 @@ class CaptchaSolver_XCaptcha:
                         return solveResponse[1]
                     
                     time.sleep(3)
+            elif data.text == "ERROR_KEY_USER":
+                print("\nОшибка ключа, не могу продолжать работу...")
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
             time.sleep(3)
 
+
+# ====== Гуру-капча ======
 class CaptchaSolver_captchaguru:
 
     def __init__(self, key, keyreq):
         self.api = "https://api.captcha.guru/"
         self.key = key
-        print("Solver 'captcha.guru' initialized with key: " + self.key)
+        try:
+            if keyreq.status_code == 200:
+                print("Solver 'captcha.guru' initialized with key: [ДАННЫЕ УДАЛЕНЫ]")
+        except Exception:
+            print("Solver 'captcha.guru' initialized with key: " + self.key)
 
-    def solve(self, image, badproxies):
+    def solve(self, image, badproxies, forbiddenproxy, postsCounter):
         task = {}
         task["type"] = "NoCaptchaTask"
         task["websiteURL"] = "https://2ch.hk/b/"
@@ -57,16 +71,35 @@ class CaptchaSolver_captchaguru:
                 if (response["status"] == "ready"):
                     return response["solution"]["gRecaptchaResponse"]
                 time.sleep(3)
+        elif (data["errorId"] == 1):
+            if (data["errorDescription"] == "ERROR_KEY_DOES_NOT_EXIST"):
+                print("\nКлюч отозван, не могу продолжать работу...")
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
+            elif (data["errorDescription"] == "ERROR_ZERO_BALANCE"):
+                print("\nЗакончились деньги на капче, не могу продолжать работу...")
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
+            elif (data["errorDescription"] == "ERROR_NO_SLOT_AVAILABLE"):
+                print("\nНет свободных индуссов на сервере, таймаут 10 секунд...")
+                time.sleep(7)
+            else:
+                print("\nПроизошла неведомая ебаная хуйня, сорян. Вот ответ от сервера:", (data["errorDescription"]))
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
         time.sleep(3)
 
+
+# ====== Антикапча ======
 class CaptchaSolver_anticaptcha:
 
     def __init__(self, key, keyreq):
         self.api = "http://api.anti-captcha.com/"
         self.key = key
-        print("Solver 'anti-captcha' initialized with key: " + self.key)
+        try:
+            if keyreq.status_code == 200:
+                print("Solver 'anti-captcha' initialized with key: [ДАННЫЕ УДАЛЕНЫ]")
+        except Exception:
+            print("Solver 'anti-captcha' initialized with key: " + self.key)
 
-    def solve(self, image, badproxies):
+    def solve(self, image, badproxies, forbiddenproxy, postsCounter):
         task = {}
         task["type"] = "ImageToTextTask"
         task["body"] = base64.b64encode(image).decode("utf-8")
@@ -83,4 +116,15 @@ class CaptchaSolver_anticaptcha:
                 if (response["status"] == "ready"):
                     return response["solution"]["text"]
                 time.sleep(3)
+        elif (data["errorId"] == 1):
+            if (data["errorDescription"] == "ERROR_KEY_DOES_NOT_EXIST"):
+                print("\nКлюч отозван, не могу продолжать работу...")
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
+            elif (data["errorDescription"] == "ERROR_ZERO_BALANCE"):
+                print("\nЗакончились деньги на капче, не могу продолжать работу...")
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
+            else:
+                print("\nПроизошла неведомая ебаная хуйня, сорян. Вот ответ от сервера:", (data["errorDescription"]))
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
+        time.sleep(3)
 

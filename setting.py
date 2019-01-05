@@ -75,7 +75,6 @@ class Setup:
 		parser.add_argument("-C", "--color", dest="shakalColor")
 		parser.add_argument("-a", "--affine", dest="shakalAffine")
 		parser.add_argument("-P", "--png", dest="toPNG")
-
 		args = parser.parse_args(args)
 
 		self.username = args.username

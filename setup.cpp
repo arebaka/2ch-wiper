@@ -357,7 +357,7 @@ string Setup::comline () {
         for (unsigned int i(0); i < shrapnelThreads.size(); i++)
             command += (" " + shrapnelThreads[i]);
 
-    cout << command << endl << endl << endl << endl;
+//    cout << command << endl << endl << endl << endl;
     return command;
 }
 

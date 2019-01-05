@@ -19,7 +19,7 @@ class CaptchaSolver_XCaptcha:
         except Exception:
             print("Solver 'X-Captcha' initialized with key: " + self.key)
 
-    def solve(self, image, badproxies, forbiddenproxy):
+    def solve(self, image, badproxies, forbiddenproxy, postsCounter):
 
         while True:
             task = (('key', self.key), ('method', 'userrecaptcha'), ('googlekey', '6LeQYz4UAAAAAL8JCk35wHSv6cuEV5PyLhI6IxsM'), ('pageurl', 'https://2ch.hk/b/'))
@@ -42,7 +42,7 @@ class CaptchaSolver_XCaptcha:
                     time.sleep(3)
             elif data.text == "ERROR_KEY_USER":
                 print("\nОшибка ключа, не могу продолжать работу...")
-                safe_quit(badproxies, forbiddenproxy)
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
             time.sleep(3)
 
 
@@ -58,7 +58,7 @@ class CaptchaSolver_captchaguru:
         except Exception:
             print("Solver 'captcha.guru' initialized with key: " + self.key)
 
-    def solve(self, image, badproxies, forbiddenproxy):
+    def solve(self, image, badproxies, forbiddenproxy, postsCounter):
         task = {}
         task["type"] = "NoCaptchaTask"
         task["websiteURL"] = "https://2ch.hk/b/"
@@ -73,16 +73,16 @@ class CaptchaSolver_captchaguru:
         elif (data["errorId"] == 1):
             if (data["errorDescription"] == "ERROR_KEY_DOES_NOT_EXIST"):
                 print("\nКлюч отозван, не могу продолжать работу...")
-                safe_quit(badproxies, forbiddenproxy)
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
             elif (data["errorDescription"] == "ERROR_ZERO_BALANCE"):
                 print("\nЗакончились деньги на капче, не могу продолжать работу...")
-                safe_quit(badproxies, forbiddenproxy)
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
             elif (data["errorDescription"] == "ERROR_NO_SLOT_AVAILABLE"):
                 print("\nНет свободных индуссов на сервере, таймаут 10 секунд...")
                 time.sleep(7)
             else:
                 print("\nПроизошла неведомая ебаная хуйня, сорян. Вот ответ от сервера:", (data["errorDescription"]))
-                safe_quit(badproxies, forbiddenproxy)
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
         time.sleep(3)
 
 
@@ -98,7 +98,7 @@ class CaptchaSolver_anticaptcha:
         except Exception:
             print("Solver 'anti-captcha' initialized with key: " + self.key)
 
-    def solve(self, image, badproxies, forbiddenproxy):
+    def solve(self, image, badproxies, forbiddenproxy, postsCounter):
         task = {}
         task["type"] = "NoCaptchaTaskProxyless"
         # пока так, позже прикручу передачу наших проксичек
@@ -114,11 +114,11 @@ class CaptchaSolver_anticaptcha:
         elif (data["errorId"] == 1):
             if (data["errorDescription"] == "ERROR_KEY_DOES_NOT_EXIST"):
                 print("\nКлюч отозван, не могу продолжать работу...")
-                safe_quit(badproxies, forbiddenproxy)
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
             elif (data["errorDescription"] == "ERROR_ZERO_BALANCE"):
                 print("\nЗакончились деньги на капче, не могу продолжать работу...")
-                safe_quit(badproxies, forbiddenproxy)
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
             else:
                 print("\nПроизошла неведомая ебаная хуйня, сорян. Вот ответ от сервера:", (data["errorDescription"]))
-                safe_quit(badproxies, forbiddenproxy)
+                safe_quit(badproxies, forbiddenproxy, postsCounter)
         time.sleep(3)

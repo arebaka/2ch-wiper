@@ -6,7 +6,7 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # ====== Отключение ======
-def safe_quit(badproxies, forbiddenproxy, sig=0, frame=0):
+def safe_quit(badproxies, forbiddenproxy, postsCounter, sig=0, frame=0):
 	print("\n\nЖду, пока обновится лист с проксичками...")
 
 	f = open("proxies", "r+")
@@ -27,12 +27,26 @@ def safe_quit(badproxies, forbiddenproxy, sig=0, frame=0):
 
 	print(str((len(badproxies) - len(forbiddenproxy))), "забаненых проксичек почищено!")
 	print(str(len(forbiddenproxy)), "запрещенных проксичек почищено!")
+
+	data = {}
+	with open(".config") as file:
+		for row in file:
+			value = []
+			key, value = row.split()
+			data[key] = value[0]
+	data["total_posts"] = str(int(data["total_posts"]) + postsCounter)
+	data["posts"] = str(postsCounter)
+	with open("config", "w") as file:
+		for key in data:
+			file.write(key+" "+data[key])
+			file.write("\n")
+
 	print("Выключаюсь...")
 
 	os._exit(0)
 
 # ====== Обработка клавиш ======
-def eternal_input(badproxies, forbiddenproxy):
+def eternal_input(badproxies, forbiddenproxy, postsCounter):
 	while True:
 		print("Choose your option")
 		choice = input("[S]tatistics, [Q]uit, [C]lear parasha\n")
@@ -41,7 +55,7 @@ def eternal_input(badproxies, forbiddenproxy):
 			if choice.lower() == "s" or choice.lower() == "ы":
 				Stats.printStats(badproxies, forbiddenproxy)
 			elif choice.lower() == "q" or choice.lower() == "й":
-				safe_quit(badproxies, forbiddenproxy)
+				safe_quit(badproxies, forbiddenproxy, postsCounter)
 				badproxies.clear()
 				forbiddenproxy.clear()
 			elif choice.lower() == "c" or choice.lower() == "с":
