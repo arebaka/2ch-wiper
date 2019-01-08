@@ -1,6 +1,7 @@
 #include "gui.h"
 #include "ui_gui.h"
 #include <stdlib.h>
+#include <QDesktopWidget>
 
 GUI::GUI (QWidget * parent)
     : QMainWindow(parent) , ui(new Ui::GUI) , started(false) , postsCount("0")
@@ -9,11 +10,15 @@ GUI::GUI (QWidget * parent)
     fileDialog = new QFileDialog;
     ui->wipechan->set_blockquote(ui->blockquote);
 
+    set_classes();
+
     QFile style;
     style.setFileName(QDir::currentPath()+"/gui/gui.css");
     style.open(QFile::ReadOnly);
     QString QSS = style.readAll();
     setStyleSheet(QSS);
+
+    set_layout(QDir::currentPath().toStdString()+"/gui/layout");
 
     music = new QSound(QDir::currentPath()+"/gui/gachi.wav");
     anima = new QMovie(QDir::currentPath()+"/gui/desu.gif");
@@ -27,12 +32,12 @@ GUI::GUI (QWidget * parent)
     ui->close->hide();
     ui->backBanner->hide();
 
-    ui->key->setEchoMode(QLineEdit::Password);
-
+    ui->mainModeSet->hide();
+    ui->shrapnelSet->hide();
     ui->triggerSet->hide();
     ui->complainSet->hide();
     ui->sageSet->hide();
-    ui->shaskalSet->hide();
+    ui->shackalSet->hide();
     ui->randChaos->setDisabled(true);
     ui->toThread->setDisabled(true);
     ui->key->setDisabled(true);
@@ -55,6 +60,235 @@ GUI::GUI (QWidget * parent)
 GUI::~GUI () {
     delete ui;
 }
+
+void GUI::set_classes () {
+    ui->topBanner->property("class");
+    ui->backBanner->property("class");
+    ui->topBanner->setProperty("class", "banner");
+    ui->topBanner->setProperty("class", "banner");
+
+    ui->helpButton->property("class");
+    ui->peedorBarButton->property("class");
+    ui->musicButton->property("class");
+    ui->openButton->property("class");
+    ui->saveButton->property("class");
+    ui->helpButton->setProperty("class", "left-button");
+    ui->peedorBarButton->setProperty("class", "left-button");
+    ui->musicButton->setProperty("class", "left-button");
+    ui->openButton->setProperty("class", "left-button");
+    ui->saveButton->setProperty("class", "left-button");
+
+    ui->rollUp->property("class");
+    ui->close->property("class");
+    ui->rollUp->setProperty("class", "right-button");
+    ui->close->setProperty("class", "right-button");
+
+    ui->mainSet->property("class");
+    ui->solverSet->property("class");
+    ui->postSet->property("class");
+    ui->mediaSet->property("class");
+    ui->mainSet->setProperty("class", "settings-frame");
+    ui->solverSet->setProperty("class", "settings-frame");
+    ui->postSet->setProperty("class", "settings-frame");
+    ui->mediaSet->setProperty("class", "settings-frame");
+
+    ui->mainSetHeader->property("class");
+    ui->solverSetHeader->property("class");
+    ui->postSetHeader->property("class");
+    ui->mediaSetHeader->property("class");
+    ui->mainSetHeader->setProperty("class", "settings-frame-header");
+    ui->solverSetHeader->setProperty("class", "settings-frame-header");
+    ui->postSetHeader->setProperty("class", "settings-frame-header");
+    ui->mediaSetHeader->setProperty("class", "settings-frame-header");
+
+    ui->mainModeSet->property("class");
+    ui->shrapnelSet->property("class");
+    ui->triggerSet->property("class");
+    ui->complainSet->property("class");
+    ui->sageSet->property("class");
+    ui->shackalSet->property("class");
+    ui->mainModeSet->setProperty("class", "box-frame");
+    ui->shrapnelSet->setProperty("class", "box-frame");
+    ui->triggerSet->setProperty("class", "box-frame");
+    ui->complainSet->setProperty("class", "box-frame");
+    ui->sageSet->setProperty("class", "box-frame");
+    ui->shackalSet->setProperty("class", "box-frame");
+}
+
+void GUI::set_layout (std::string path) {
+    std::string data, key, x, y, width, height, text;
+    QWidget * widget;  QLabel * label;  QPushButton * button;  QCheckBox * checkBox;  QRadioButton * radioButton;  QLineEdit * edit;  QSpinBox * spin;
+    char type;
+    std::ifstream layout(path);
+    if (layout.is_open()) {
+        while(!layout.eof()) {
+            getline(layout, data);
+            if (!data.empty()) {
+                key = data.substr(0, data.find(' '));
+                data = data.substr(data.find(' ')+1, data.length()-1);
+                if (key == "GUI") {
+                    width = data.substr(0, data.find(' '));
+                    height = data.substr(data.find(' ')+1, data.length()-1);
+                    setMinimumSize(atoi(width.c_str()), atoi(height.c_str()));
+                    setMaximumSize(atoi(width.c_str()), atoi(height.c_str()));
+                    setGeometry(
+                        QStyle::alignedRect(
+                            Qt::LeftToRight,
+                            Qt::AlignCenter,
+                            QSize(atoi(width.c_str()), atoi(height.c_str())),
+                            qApp->desktop()->availableGeometry()
+                        )
+                    );
+                } else {
+                    if (key == "top_banner") { widget = label = ui->topBanner; type = 'l'; }
+                    else if (key == "help_button") { widget = button = ui->helpButton; type = 'b'; }
+                    else if (key == "peedor_bar_button") { widget = button = ui->peedorBarButton; type = 'b'; }
+                    else if (key == "music_button") { widget = button = ui->musicButton; type = 'b'; }
+                    else if (key == "open_config_button") { widget = button = ui->openButton; type = 'b'; }
+                    else if (key == "save_config_button") { widget = button = ui->saveButton; type = 'b'; }
+                    else if (key == "username_label") { widget = label = ui->usernameLabel; type = 'l'; }
+                    else if (key == "username") { widget = edit = ui->username; type = 'e'; }
+                    else if (key == "roll_up_button") { widget = button = ui->rollUp; type = 'b'; }
+                    else if (key == "close_button") { widget = button = ui->close; type = 'b'; }
+
+                    else if (key == "main_set") { widget = ui->mainSet; type = 'w'; }
+                    else if (key == "main_set_header") { widget = label = ui->mainSetHeader; type = 'l'; }
+
+                    else if (key == "main_mode") { widget = radioButton = ui->mainMode; type = 'r'; }
+                    else if (key == "main_mode_set") { widget = ui->mainModeSet; type = 'w'; }
+                    else if (key == "board_label") { widget = label = ui->boardLabel; type = 'l'; }
+                    else if (key == "board") { widget = ui->board; type = 'w'; }
+                    else if (key == "thread_label") { widget = label = ui->threadLabel; type = 'l'; }
+                    else if (key == "thread") { widget = edit = ui->thread; type = 'e'; }
+                    else if (key == "potocks_label") { widget = label = ui->potocksLabel; type = 'l'; }
+                    else if (key == "potocks") { widget = edit = ui->potocks; type = 'e'; }
+
+                    else if (key == "shrapnel_mode") { widget = radioButton = ui->shrapnelMode; type = 'r'; }
+                    else if (key == "shrapnel_set") { widget = ui->shrapnelSet; type = 'w'; }
+                    else if (key == "shrapnel_board_label") { widget = label = ui->shrapnelBoardLabel; type = 'l'; }
+                    else if (key == "shrapnel_board") { widget = ui->shrapnelBoard; type = 'w'; }
+                    else if (key == "threads_label") { widget = label = ui->threadsLabel; type = 'l'; }
+                    else if (key == "threads") { widget = edit = ui->threads; type = 'e'; }
+                    else if (key == "min_posts_label") { widget = label = ui->minPostsLabel; type = 'l'; }
+                    else if (key == "min_posts") { widget = edit = ui->minPosts; type = 'e'; }
+                    else if (key == "shrapnel_potocks_label") { widget = label = ui->shrapnelPotocksLabel; type = 'l'; }
+                    else if (key == "shrapnel_potocks") { widget = edit = ui->shrapnelPotocks; type = 'e'; }
+
+                    else if (key == "solver_set") { widget = ui->solverSet; type = 'w'; }
+                    else if (key == "solver_set_header") { widget = label = ui->solverSetHeader; type = 'l'; }
+
+                    else if (key == "solver_label") { widget = label = ui->solverLabel; type = 'l'; }
+                    else if (key == "anticaptcha") { widget = radioButton = ui->anticaptcha; type = 'r'; }
+                    else if (key == "guro_captcha") { widget = radioButton = ui->gurocaptcha; type = 'r'; }
+                    else if (key == "x_captcha") { widget = radioButton = ui->x_captcha; type = 'r'; }
+                    else if (key == "reserved") { widget = radioButton = ui->reserved; type = 'r'; }
+
+                    else if (key == "key_label") { widget = label = ui->keyLabel; type = 'l'; }
+                    else if (key == "key") { widget = edit = ui->key; type = 'e'; }
+                    else if (key == "server_key") { widget = checkBox = ui->serverKey; type = 'c'; }
+
+                    else if (key == "wipe_chan") { widget = ui->wipechan; type = 'w'; }
+                    else if (key == "blockquote") { widget = ui->blockquote; type = 'w'; }
+                    else if (key == "back_banner") { widget = ui->blockquote; type = 'w'; }
+
+                    else if (key == "post_set") { widget = ui->postSet; type = 'w'; }
+                    else if (key == "post_set_header") { widget = label = ui->postSetHeader; type = 'l'; }
+
+                    else if (key == "no_text") { widget = radioButton = ui->noText; type = 'r'; }
+                    else if (key == "quoting") { widget = radioButton = ui->quoting; type = 'r'; }
+                    else if (key == "copying") { widget = radioButton = ui->copying; type = 'r'; }
+                    else if (key == "overload") { widget = radioButton = ui->overload; type = 'r'; }
+                    else if (key == "pastes") { widget = radioButton = ui->pastes; type = 'r'; }
+                    else if (key == "complain") { widget = radioButton = ui->complain; type = 'r'; }
+                    else if (key == "random") { widget = radioButton = ui->random; type = 'r'; }
+
+                    else if (key == "repeats_label") { widget = label = ui->repeatsLabel; type = 'l'; }
+                    else if (key == "repeats") { widget = edit = ui->repeats; type = 'e'; }
+
+                    else if (key == "trigger_set") { widget = ui->triggerSet; type = 'w'; }
+                    else if (key == "trigger_mode_label") { widget = label = ui->triggerModeLabel; type = 'l'; }
+                    else if (key == "chaining") { widget = radioButton = ui->chaining; type = 'r'; }
+                    else if (key == "random_trigger") { widget = radioButton = ui->randTrigger; type = 'r'; }
+                    else if (key == "shashlik") { widget = radioButton = ui->shashlik; type = 'r'; }
+                    else if (key == "op_post_trigger") { widget = radioButton = ui->oppost; type = 'r'; }
+                    else if (key == "no_trigger") { widget = radioButton = ui->notrigger; type = 'r'; }
+
+                    else if (key == "complain_set") { widget = ui->complainSet; type = 'w'; }
+                    else if (key == "complain_set_label") { widget = label = ui->complainSetLabel; type = 'l'; }
+                    else if (key == "complain_board_label") { widget = label = ui->complainBoardLabel; type = 'l'; }
+                    else if (key == "complain_board") { widget = ui->complainBoard; type = 'w'; }
+                    else if (key == "links_count_label") { widget = label = ui->linksCountLabel; type = 'l'; }
+                    else if (key == "links_count") { widget = spin = ui->linksCount; type = 's'; }
+                    else if (key == "with_posts") { widget = checkBox = ui->withPosts; type = 'c'; }
+
+                    else if (key == "line1") { widget = ui->line1; type = 'w'; }
+
+                    else if (key == "chaos") { widget = checkBox = ui->chaos; type = 'r'; }
+                    else if (key == "random_chaos") { widget = checkBox = ui->randChaos; type = 'r'; }
+                    else if (key == "to_thread_label") { widget = label = ui->toThreadLabel; type = 'l'; }
+                    else if (key == "to_thread") { widget = edit = ui->toThread; type = 'e'; }
+
+                    else if (key == "line2") { widget = ui->line2; type = 'w'; }
+
+                    else if (key == "sage") { widget = checkBox = ui->sage; type = 'c'; }
+                    else if (key == "sage_set") { widget = ui->sageSet; type = 'w'; }
+                    else if (key == "sage_always") { widget = radioButton = ui->sageAlways; type = 'r'; }
+                    else if (key == "sage_from_posts") { widget = radioButton = ui->sageFromPosts; type = 'r'; }
+
+                    else if (key == "media_set") { widget = ui->mediaSet; type = 'w'; }
+                    else if (key == "media_set_header") { widget = label = ui->mediaSetHeader; type = 'l'; }
+
+                    else if (key == "images") { widget = radioButton = ui->images; type = 'r'; }
+                    else if (key == "images_count_label") { widget = label = ui->imagesCountLabel; type = 'l'; }
+                    else if (key == "images_count") { widget = spin = ui->imagesCount; type = 's'; }
+                    else if (key == "images_folder_label") { widget = label = ui->imagesFolderLabel; type = 'l'; }
+                    else if (key == "images_folder") { widget = edit = ui->imagesFolder; type = 'e'; }
+                    else if (key == "videos") { widget = radioButton = ui->videos; type = 'r'; }
+                    else if (key == "videos_count_label") { widget = label = ui->videosCountLabel; type = 'l'; }
+                    else if (key == "videos_count") { widget = spin = ui->videosCount; type = 's'; }
+                    else if (key == "videos_folder_label") { widget = label = ui->videosFolderLabel; type = 'l'; }
+                    else if (key == "videos_folder") { widget = edit = ui->videosFolder; type = 'e'; }
+                    else if (key == "medias_from_posts") { widget = radioButton = ui->medias; type = 'r'; }
+                    else if (key == "no_media") { widget = radioButton = ui->noMedia; type = 'r'; }
+
+                    else if (key == "shackal_set") { widget = ui->shackalSet; type = 'w'; }
+                    else if (key == "shackal_degree_label") { widget = label = ui->shakalPowerLabel; type = 'l'; }
+                    else if (key == "shackal_degree") { widget = ui->shakalPower; type = 'w'; }
+                    else if (key == "colorization") { widget = checkBox = ui->shakalColor; type = 'c'; }
+                    else if (key == "affine") { widget = checkBox = ui->shakalAffine; type = 'c'; }
+                    else if (key == "to_PNG") { widget = checkBox = ui->toPNG; type = 'c'; }
+                    else if (key == "start_button") { widget = button = ui->button; type = 'b'; }
+
+                    else type = 0;
+
+                    if (type != 0) {
+                        x = data.substr(0, data.find(' '));
+                        data = data.substr(data.find(' ')+1, data.length()-1);
+                        y = data.substr(0, data.find(' '));
+                        data = data.substr(data.find(' ')+1, data.length()-1);
+                        width = data.substr(0, data.find(' '));
+                        data = data.substr(data.find(' ')+1, data.length()-1);
+                        height = data.substr(0, data.find(' '));
+                        widget->setGeometry(atoi(x.c_str()), atoi(y.c_str()), atoi(width.c_str()), atoi(height.c_str()));
+
+                        if (data.find(' ') != -1) {
+                            text = data.substr(data.find(' ')+1, data.length()-1);
+                            if (type == 'b') button->setText(text.c_str());
+                            else if (type == 'l') label->setText(text.c_str());
+                            else if (type == 'r') radioButton->setText(text.c_str());
+                            else if (type == 'e') edit->setPlaceholderText(text.c_str());
+                            else if (type == 'c') checkBox->setText(text.c_str());
+                            else if (type == 's') spin->setValue(atoi(text.c_str()));
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
 
 void GUI::debug (const char &mode) {
     setup.set_logMode(mode);
@@ -81,9 +315,9 @@ void GUI::updateData () {
 
     } else {
         ui->totalPosts->display(0);
-        ui->username->setText("Аноним");
+        ui->username->setText("Сэмпай");
         totalPosts = "0";
-        username = "Аноним";
+        username = "Сэмпай";
 
         updateConfig();
     }
@@ -114,21 +348,36 @@ void GUI::on_button_clicked () {
 
 bool GUI::start () {
     setup.clear();
-    ui->textBrowser->clear();
     setup.set_username(username);
 
     if (ui->mainMode->isChecked()) {
         setup.set_board(ui->board->currentText().toStdString());
-        setup.set_potocksCount(ui->potocks->text().toStdString());
-        setup.set_thread(ui->thread->text().toStdString());
+        if (ui->thread->text().toStdString().empty())
+            setup.set_thread(ui->thread->placeholderText().toStdString());
+        else
+            setup.set_thread(ui->thread->text().toStdString());
+        if (ui->potocks->text().toStdString().empty())
+            setup.set_potocksCount(ui->potocks->placeholderText().toStdString());
+        else
+            setup.set_potocksCount(ui->potocks->text().toStdString());
         setup.set_shrapnelCharge("0");
 
     } else if (ui->shrapnelMode->isChecked()) {
-        setup.set_board(ui->shrapnelBoard->currentText().toStdString());
-        setup.set_minPostsCount(ui->minPosts->text().toStdString());
-        setup.set_potocksCount(ui->shrapnelPotocks->text().toStdString());
         setup.set_thread("1");
-        setup.set_shrapnelCharge(ui->threads->text().toStdString());
+        setup.set_board(ui->shrapnelBoard->currentText().toStdString());
+        if (ui->threads->text().toStdString().empty())
+            setup.set_shrapnelCharge(ui->threads->placeholderText().toStdString());
+        else
+            setup.set_shrapnelCharge(ui->threads->text().toStdString());
+        if (ui->minPosts->text().toStdString().empty())
+            setup.set_minPostsCount(ui->minPosts->placeholderText().toStdString());
+        else
+            setup.set_minPostsCount(ui->minPosts->text().toStdString());
+        if (ui->shrapnelPotocks->text().toStdString().empty())
+            setup.set_potocksCount(ui->shrapnelPotocks->placeholderText().toStdString());
+        else
+            setup.set_potocksCount(ui->shrapnelPotocks->text().toStdString());
+
     }
 
     if (ui->anticaptcha->isChecked())
@@ -140,10 +389,15 @@ bool GUI::start () {
 
     if (ui->serverKey->isChecked())
         setup.set_key("");
-    else if (ui->key->text() != "")
+    else if (ui->key->text() == "")
+        setup.set_key(ui->key->placeholderText().toStdString());
+    else
         setup.set_key(ui->key->text().toStdString());
 
-    setup.set_proxyRepeatsCount(ui->repeats->text().toStdString());
+    if (ui->repeats->text() == "")
+        setup.set_proxyRepeatsCount(ui->repeats->placeholderText().toStdString());
+    else
+        setup.set_proxyRepeatsCount(ui->repeats->text().toStdString());
 
     if (ui->noText->isChecked())
         setup.set_mode("2");
@@ -179,6 +433,8 @@ bool GUI::start () {
     if (ui->chaos->isChecked()) {
         if (ui->randChaos->isChecked())
             setup.set_chaos("0");
+        else if (ui->toThread->text() == "")
+            setup.set_chaos(ui->toThread->placeholderText().toStdString());
         else
             setup.set_chaos(ui->toThread->text().toStdString());
     }
@@ -186,11 +442,17 @@ bool GUI::start () {
     if (ui->images->isChecked()) {
         setup.set_mediaKind('1');
         setup.set_mediasCount(ui->imagesCount->text().toStdString());
-        setup.set_mediaGroup(ui->imagesFolder->text().toStdString());
+        if (ui->imagesFolder->text() == "")
+            setup.set_mediaGroup(ui->imagesFolder->placeholderText().toStdString());
+        else
+            setup.set_mediaGroup(ui->imagesFolder->text().toStdString());
     } else if (ui->videos->isChecked()) {
         setup.set_mediaKind('2');
         setup.set_mediasCount(ui->videosCount->text().toStdString());
-        setup.set_mediaGroup(ui->videosFolder->text().toStdString());
+        if (ui->videosFolder->text() == "")
+            setup.set_mediaGroup(ui->videosFolder->placeholderText().toStdString());
+        else
+            setup.set_mediaGroup(ui->videosFolder->text().toStdString());
     } else if (ui->medias->isChecked())
         setup.set_mediaKind('3');
     else if (ui->noMedia->isChecked())
@@ -367,7 +629,7 @@ void GUI::on_images_clicked () {
     ui->videosCount->setDisabled(true);
     ui->imagesFolder->setDisabled(false);
     ui->videosFolder->setDisabled(true);
-    ui->shaskalSet->show();
+    ui->shackalSet->show();
 }
 
 void GUI::on_videos_clicked () {
@@ -375,7 +637,7 @@ void GUI::on_videos_clicked () {
     ui->videosCount->setDisabled(false);
     ui->imagesFolder->setDisabled(true);
     ui->videosFolder->setDisabled(false);
-    ui->shaskalSet->hide();
+    ui->shackalSet->hide();
 }
 
 void GUI::on_medias_clicked () {
@@ -383,7 +645,7 @@ void GUI::on_medias_clicked () {
     ui->videosCount->setDisabled(true);
     ui->imagesFolder->setDisabled(true);
     ui->videosFolder->setDisabled(true);
-    ui->shaskalSet->show();
+    ui->shackalSet->show();
 }
 
 void GUI::on_noMedia_clicked () {
@@ -391,7 +653,7 @@ void GUI::on_noMedia_clicked () {
     ui->videosCount->setDisabled(true);
     ui->imagesFolder->setDisabled(true);
     ui->videosFolder->setDisabled(true);
-    ui->shaskalSet->hide();
+    ui->shackalSet->hide();
 }
 
 
@@ -405,6 +667,8 @@ void GUI::on_openButton_clicked () {
 
     getline(config, value);
     if (value == "main") {
+        ui->shrapnelSet->hide();
+        ui->mainModeSet->show();
         ui->mainMode->setChecked(true);
         ui->board->setDisabled(false);
         ui->thread->setDisabled(false);
@@ -414,6 +678,8 @@ void GUI::on_openButton_clicked () {
         ui->minPosts->setDisabled(true);
         ui->shrapnelPotocks->setDisabled(true);
     } else if (value == "shrapnel") {
+        ui->mainModeSet->hide();
+        ui->shrapnelSet->show();
         ui->shrapnelMode->setChecked(true);
         ui->board->setDisabled(true);
         ui->thread->setDisabled(true);
@@ -545,33 +811,33 @@ void GUI::on_openButton_clicked () {
         ui->videosCount->setDisabled(true);
         ui->imagesFolder->setDisabled(false);
         ui->videosFolder->setDisabled(true);
-        ui->shaskalSet->show();
+        ui->shackalSet->show();
     } else if (value == "videos") {
         ui->videos->setChecked(true);
         ui->imagesCount->setDisabled(true);
         ui->videosCount->setDisabled(false);
         ui->imagesFolder->setDisabled(true);
         ui->videosFolder->setDisabled(false);
-        ui->shaskalSet->hide();
+        ui->shackalSet->hide();
     } else if (value == "medias") {
         ui->medias->setChecked(true);
         ui->imagesCount->setDisabled(true);
         ui->videosCount->setDisabled(true);
         ui->imagesFolder->setDisabled(true);
         ui->videosFolder->setDisabled(true);
-        ui->shaskalSet->show();
+        ui->shackalSet->show();
     } else if (value == "nothing") {
         ui->noMedia->setChecked(true);
         ui->imagesCount->setDisabled(true);
         ui->videosCount->setDisabled(false);
         ui->imagesFolder->setDisabled(true);
         ui->videosFolder->setDisabled(true);
-        ui->shaskalSet->hide();
+        ui->shackalSet->hide();
     }
     getline(config, value);
-    ui->imagesCount->setText(value.c_str());
+    ui->imagesCount->setValue(atoi(value.c_str()));
     getline(config, value);
-    ui->videosCount->setText(value.c_str());
+    ui->videosCount->setValue(atoi(value.c_str()));
     getline(config, value);
     ui->imagesFolder->setText(value.c_str());
     getline(config, value);
@@ -662,6 +928,8 @@ void GUI::on_saveButton_clicked () {
 
 
 void GUI::on_mainMode_clicked () {
+    ui->shrapnelSet->hide();
+    ui->mainModeSet->show();
     ui->board->setDisabled(false);
     ui->thread->setDisabled(false);
     ui->potocks->setDisabled(false);
@@ -672,6 +940,8 @@ void GUI::on_mainMode_clicked () {
 }
 
 void GUI::on_shrapnelMode_clicked () {
+    ui->mainModeSet->hide();
+    ui->shrapnelSet->show();
     ui->board->setDisabled(true);
     ui->thread->setDisabled(true);
     ui->potocks->setDisabled(true);

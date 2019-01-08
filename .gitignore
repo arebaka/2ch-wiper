@@ -128,6 +128,7 @@ save
 !gui/images
 !gui/Wipe-chan/images
 .config
+/gui/resources
 
 *~
 *.autosave

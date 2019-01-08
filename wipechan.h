@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
-#include <QLabel>
+#include <QPlainTextEdit>
 #include <QDir>
 #include <iostream>
 #include <fstream>
@@ -14,13 +14,15 @@ private:
         std::vector<std::string> salute;
         std::vector<std::string> comeback;
         std::vector<std::string> start;
-        std::vector<std::string> finish;
+        std::vector<std::string> averageFinish;
+        std::vector<std::string> wellFinish;
+        std::vector<std::string> badFinish;
         std::vector<std::string> error;
         std::vector<std::string> banned;
         std::vector<std::string> forbidden;
     } quoteBank;
 
-    QLabel * blockquote;
+    QPlainTextEdit * blockquote;
     std::string * quote;
 
     bool called;
@@ -30,6 +32,7 @@ private:
     void set_height();
     void set_quote(const std::string &quote, std::vector<std::string> * bank);
     void set_quote_bank();
+    void add_quote_part(const std::vector<std::string> &bank, const std::vector<std::string> &params);
 
     void hello(const std::string &username);
     void start(const std::string &username);
@@ -40,8 +43,8 @@ private:
 public:
     Wipechan();
     Wipechan(QWidget * centralWidget);
-    Wipechan(QWidget * centralWidget, QLabel * blockquote);
-    void set_blockquote(QLabel * blockquote);
+    Wipechan(QWidget * centralWidget, QPlainTextEdit * blockquote);
+    void set_blockquote(QPlainTextEdit * blockquote);
 
     void call(const std::string &request, const std::vector<std::string> &params={});
     void uncall();

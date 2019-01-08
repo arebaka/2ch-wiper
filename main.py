@@ -36,7 +36,7 @@ postsCounter = 0
 # ====== Шапка ======
 def show_logo():
 	os.system('cls' if os.name == 'nt' else 'clear')
-	print("\n***************************************** v2.1 **")
+	print("\n***************************************** v2.3 **")
 	print("*    2CH.HK WIPE MACHINE - ReCaptcha edition    *")
 	print("*     Только для внутреннего использования      *")
 	print("*        Оригинальный проект: glow_stick        *")
@@ -267,7 +267,7 @@ class Wiper:
 		image = requests.get("https://2ch.hk/api/captcha/2chaptcha/image/" + captchaID, headers={"User-Agent": self.agents[0]}, timeout=self.setup.TIMEOUT, verify=False).content
 		error = open("error.gif","rb")
 
-		if image == error.read():
+		if True:#image == error.read():
 			self.captchaType = "re"
 			if solver == 0:
 				self.solver = solvers_re.CaptchaSolver_XCaptcha(self.setup.key, self.setup.keyreq)
@@ -341,6 +341,10 @@ class Wiper:
 					if self.thread != "0":
 						black_anus = random.randint(1, len(thread.posts)-1)  # номер поста для триггера
 						white_anus = random.randint(0, len(self.threads[threadNum].posts)-1)  # номер поста для дублирования
+						if self.setup.mode == 7 and self.setup.mediaKind == 0 and len(self.threads[threadNum].posts[white_anus].comment) == 0:
+							for i in range(10):
+								white_anus = random.randint(0, len(self.threads[threadNum].posts)-1)
+								if len(self.threads[threadNum].posts[white_anus].comment) != 0: break;  # это КОСТЬIЛЬ
 
 					# === берём сначала триггер ===
 					if self.setup.triggerForm == 1:
@@ -480,7 +484,7 @@ class Wiper:
 									proxy = self.proxies.pop(0)
 									counter = 0
 			if not proxy in badproxies:
-				self.proxies.push(proxy)
+				self.proxies.append(proxy)
 
 		except Exception as e:
 			print(e)

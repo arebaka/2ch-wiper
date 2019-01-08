@@ -119,6 +119,7 @@ class Setup:
 		if args.shakalAffine == "1": self.shakalAffine = True  # флаг аффинного шакала
 		else: self.shakalAffine = False
 		if args.toPNG == "1": self.toPNG = True  # флаг конвертации в PNG
+		else: self.toPNG = False
 
 	# === определение ОС и кодировки ===
 	def set_encoding(self):

@@ -1,25 +1,27 @@
 #include "wipechan.h"
+#include <stdlib.h>
 
 Wipechan::Wipechan () : QFrame() , called(false) , wasCalled(false) {
     quote = new std::string;
-    blockquote = new QLabel;
+    blockquote = new QPlainTextEdit;
     set_quote_bank();
 }
 
 Wipechan::Wipechan (QWidget * centralWidget) : QFrame(centralWidget) , called(false) , wasCalled(false) {
     quote = new std::string;
-    blockquote = new QLabel;
+    blockquote = new QPlainTextEdit;
     set_quote_bank();
 }
 
-Wipechan::Wipechan (QWidget * centralWidget, QLabel * blockquote) : QFrame(centralWidget) , called(false) , wasCalled(false) {
+Wipechan::Wipechan (QWidget * centralWidget, QPlainTextEdit * blockquote) : QFrame(centralWidget) , called(false) , wasCalled(false) {
     quote = new std::string;
     this->blockquote = blockquote;
     set_quote_bank();
 }
 
-void Wipechan::set_blockquote (QLabel * blockquote) {
+void Wipechan::set_blockquote (QPlainTextEdit * blockquote) {
     this->blockquote = blockquote;
+    blockquote->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 
@@ -40,7 +42,9 @@ void Wipechan::set_quote_bank () {
     set_quote("salute", &quoteBank.salute);
     set_quote("comeback", &quoteBank.comeback);
     set_quote("start", &quoteBank.start);
-    set_quote("finish", &quoteBank.finish);
+    set_quote("average-finish", &quoteBank.averageFinish);
+    set_quote("well-finish", &quoteBank.wellFinish);
+    set_quote("bad-finish", &quoteBank.badFinish);
     set_quote("error", &quoteBank.error);
     set_quote("banned", &quoteBank.banned);
     set_quote("forbidden", &quoteBank.forbidden);
@@ -62,8 +66,8 @@ void Wipechan::call (const std::string &request, const std::vector<std::string> 
     else if (request == "error") error(params);
     else if (request == "finish") finish(params[0]);
 
+    blockquote->setPlainText(quote->c_str());
     set_height();
-    blockquote->setText(quote->c_str());
 }
 
 void Wipechan::uncall () {
@@ -72,32 +76,34 @@ void Wipechan::uncall () {
 }
 
 void Wipechan::set_height () {
-    unsigned char rowsCount = quote->length() * blockquote->font().pixelSize() * 2/3 / (blockquote->size().width() - 10);
-    if (quote->length() * blockquote->font().pixelSize() * 2/3 % (blockquote->size().width() - 10) != 0) rowsCount++;
-    if (rowsCount == 1) rowsCount++;
-    blockquote->resize(blockquote->size().width(), rowsCount * blockquote->font().pixelSize() + 10);
+    unsigned char rowsCount = blockquote->document()->documentLayout()->documentSize().height();
+    if (rowsCount == 0) rowsCount = 1;
+    blockquote->resize(blockquote->size().width(), rowsCount * 2 * blockquote->font().pixelSize() + 10);
+    if (blockquote->height() > size().height()-20) blockquote->resize(blockquote->size().width(), size().height()-20);
+    blockquote->moveCursor(QTextCursor::Start);
+    blockquote->ensureCursorVisible();
 }
 
 
 
+void Wipechan::add_quote_part(const std::vector<std::string> &bank, const std::vector<std::string> &params) {
+    rand = random() % bank.size();
+    unsigned int tabPos(bank[rand].find("\t"));
+    quote->append(bank[rand].substr(0, tabPos));
+    if (tabPos != -1) {
+        quote->append(params[0]);
+        quote->append(bank[rand].substr(tabPos+1, bank[rand].length()));
+    }
+}
 
 void Wipechan::hello (const std::string &username) {
-    setStyleSheet("background: url(gui/Wipe-chan/images/patch.png);");
-    blockquote->setStyleSheet("background: white;");
     quote->clear();
     if (!wasCalled) {
-        rand = random() % quoteBank.salute.size();
-        quote->append(quoteBank.salute[rand].substr(0, quoteBank.salute[rand].find("\t")));
-        quote->append(username);
-        quote->append(quoteBank.salute[rand].substr(quoteBank.salute[rand].find("\t")+1, quoteBank.salute[rand].length()));
+        add_quote_part(quoteBank.salute, {username});
         wasCalled = true;
 
-    } else {
-        rand = random() % quoteBank.comeback.size();
-        quote->append(quoteBank.comeback[rand].substr(0, quoteBank.comeback[rand].find("\t")));
-        quote->append(username);
-        quote->append(quoteBank.comeback[rand].substr(quoteBank.comeback[rand].find("\t")+1, quoteBank.comeback[rand].length()));
-    }
+    } else
+        add_quote_part(quoteBank.comeback, {username});
 
     show();
     called = true;
@@ -105,10 +111,8 @@ void Wipechan::hello (const std::string &username) {
 
 void Wipechan::start (const std::string &username) {
     quote->clear();
-    rand = random() % quoteBank.start.size();
-    quote->append(quoteBank.start[rand].substr(0, quoteBank.start[rand].find("\t")));
-    quote->append(username);
-    quote->append(quoteBank.start[rand].substr(quoteBank.start[rand].find("\t")+1, quoteBank.start[rand].length()));
+    add_quote_part(quoteBank.start, {username});
+    repaint();
 }
 
 void Wipechan::error (const std::vector<std::string> &errors) {
@@ -121,12 +125,15 @@ void Wipechan::error (const std::vector<std::string> &errors) {
         quote->append(errors[i] + "\n");
 
     show();
+
 }
 
 void Wipechan::finish (const std::string &postsCount) {
     quote->clear();
-    rand = random() % quoteBank.finish.size();
-    quote->append(quoteBank.finish[rand].substr(0, quoteBank.finish[rand].find("\t")));
-    quote->append(postsCount);
-    quote->append(quoteBank.finish[rand].substr(quoteBank.finish[rand].find("\t")+1, quoteBank.finish[rand].length()));
+    if (atoi(postsCount.c_str()) > 200)
+        add_quote_part(quoteBank.wellFinish, {postsCount});
+    else if (atoi(postsCount.c_str()) < 10)
+        add_quote_part(quoteBank.badFinish, {postsCount});
+    else
+        add_quote_part(quoteBank.averageFinish, {postsCount});
 }
