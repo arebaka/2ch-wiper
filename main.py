@@ -78,6 +78,7 @@ class Captcha:
 		self.headers["Upgrade-Insecure-Requests"] = "1"
 
 	def solve(self):
+		global postsCounter
 		print(self.proxy["http"], "solving captcha")
 		self.value = self.solver.solve(self.image, badproxies, forbiddenproxy, postsCounter)
 		return (None, self.id), (None, self.value)
@@ -310,6 +311,7 @@ class Wiper:
 		return text
 
 	def send_post(self):
+		global postsCounter
 		if (len(self.proxies) == 0): return False
 		proxy = self.proxies.pop(0)
 		agent = random.choice(self.agents)
@@ -493,6 +495,7 @@ class Wiper:
 		return True
 
 	def wipe(self, thread_count):
+		global postsCounter
 		Stats.setnumOfThreads(thread_count)
 
 		class WiperThread(threading.Thread):

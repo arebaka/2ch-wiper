@@ -39,13 +39,19 @@ void Wipechan::set_quote (const std::string &quote, std::vector<std::string> * b
 }
 
 void Wipechan::set_quote_bank () {
-    set_quote("salute", &quoteBank.salute);
-    set_quote("comeback", &quoteBank.comeback);
-    set_quote("start", &quoteBank.start);
-    set_quote("average-finish", &quoteBank.averageFinish);
-    set_quote("well-finish", &quoteBank.wellFinish);
-    set_quote("bad-finish", &quoteBank.badFinish);
-    set_quote("error", &quoteBank.error);
+    set_quote("meet", &quoteBank.meet);
+    set_quote("hello/bad", &quoteBank.hello[0]);
+    set_quote("hello/neutral", &quoteBank.hello[1]);
+    set_quote("hello/well", &quoteBank.hello[2]);
+    set_quote("start/bad", &quoteBank.start[0]);
+    set_quote("start/neutral", &quoteBank.start[1]);
+    set_quote("start/well", &quoteBank.start[2]);
+    set_quote("finish/bad", &quoteBank.finish[0]);
+    set_quote("finish/neutral", &quoteBank.finish[1]);
+    set_quote("finish/well", &quoteBank.finish[2]);
+    set_quote("error/bad", &quoteBank.error[0]);
+    set_quote("error/neutral", &quoteBank.error[1]);
+    set_quote("error/well", &quoteBank.error[2]);
     set_quote("banned", &quoteBank.banned);
     set_quote("forbidden", &quoteBank.forbidden);
 }
@@ -99,11 +105,11 @@ void Wipechan::add_quote_part(const std::vector<std::string> &bank, const std::v
 void Wipechan::hello (const std::string &username) {
     quote->clear();
     if (!wasCalled) {
-        add_quote_part(quoteBank.salute, {username});
+        add_quote_part(quoteBank.meet, {username});
         wasCalled = true;
 
     } else
-        add_quote_part(quoteBank.comeback, {username});
+        add_quote_part(quoteBank.hello[1], {username});
 
     show();
     called = true;
@@ -111,16 +117,15 @@ void Wipechan::hello (const std::string &username) {
 
 void Wipechan::start (const std::string &username) {
     quote->clear();
-    add_quote_part(quoteBank.start, {username});
+    add_quote_part(quoteBank.start[1], {username});
     repaint();
 }
 
 void Wipechan::error (const std::vector<std::string> &errors) {
-    setStyleSheet("background: url(gui/Wipe-chan/images/patch.png);");
     blockquote->setStyleSheet("background: white;");
     quote->clear();
-    rand = random() % quoteBank.error.size();
-    quote->append(quoteBank.error[rand] + "\n");
+    rand = random() % quoteBank.error[1].size();
+    quote->append(quoteBank.error[1][rand] + "\n");
     for (unsigned int i(0); i < errors.size(); i++)
         quote->append(errors[i] + "\n");
 
@@ -131,9 +136,9 @@ void Wipechan::error (const std::vector<std::string> &errors) {
 void Wipechan::finish (const std::string &postsCount) {
     quote->clear();
     if (atoi(postsCount.c_str()) > 200)
-        add_quote_part(quoteBank.wellFinish, {postsCount});
-    else if (atoi(postsCount.c_str()) < 10)
-        add_quote_part(quoteBank.badFinish, {postsCount});
+        add_quote_part(quoteBank.finish[2], {postsCount});
+    else if (atoi(postsCount.c_str()) < 20)
+        add_quote_part(quoteBank.finish[0], {postsCount});
     else
-        add_quote_part(quoteBank.averageFinish, {postsCount});
+        add_quote_part(quoteBank.finish[1], {postsCount});
 }

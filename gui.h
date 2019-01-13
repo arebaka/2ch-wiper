@@ -27,9 +27,9 @@ public:
     Setup setup;
 
 private slots:
-    void on_button_clicked();
-    void on_close_clicked();
-    void on_rollUp_clicked();
+    void on_startButton_clicked();
+    void on_closeButton_clicked();
+    void on_rollUpButton_clicked();
     void on_peedorBarButton_clicked();
     void on_noText_clicked();
     void on_quoting_clicked();
@@ -50,12 +50,13 @@ private slots:
     void on_saveButton_clicked();
     void on_mainMode_clicked();
     void on_shrapnelMode_clicked();
-
     void on_complain_clicked();
-
     void on_username_editingFinished();
-
     void on_helpButton_clicked();
+    void on_anticaptcha_clicked();
+    void on_x_captcha_clicked();
+    void on_gurocaptcha_clicked();
+    void on_reserved_clicked();
 
 private:
     Ui::GUI * ui;
@@ -85,6 +86,15 @@ private:
     void mouseMoveEvent(QMouseEvent * event);
     void mousePressEvent(QMouseEvent * event);
 
+    void check_main_mode();
+    void check_shrapnel_mode();
+    void check_solver();
+    void check_server_key(bool checked);
+    void check_mode(std::string box);
+    void check_chaos(bool checked);
+    void check_rand_chaos(bool checked);
+    void check_sage(bool checked);
+    void check_media(std::string type);
 };
 
 

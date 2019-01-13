@@ -1,0 +1,125 @@
+
+main-set 13 12 371 283
+main-set-header 24 22 331 17 Main settings                          
+
+main-mode 24 68 170 18 Main mode
+main-mode-set 41 105 289 170
+board-label 12 19 115 14 Board index:
+board 130 10 147 30 b
+thread-label 12 60 115 14 Thread №:
+thread 130 51 147 30 0
+potocks-label 12 101 115 14 Fibers count:
+potocks 130 92 147 30 0
+
+shrapnel-mode 198 68 170 18 Shrapnel mode
+shrapnel-set 41 105 289 170
+shrapnel-board-label 12 19 115 14 Board index:
+shrapnel-board 130 10 147 30 b
+threads-label 12 60 115 14 Threads count:
+threads 130 51 147 30
+min-posts-label 12 101 115 14 Posts count >
+min-posts 130 92 147 30 0
+shrapnel-potocks-label 12 142 115 14 Fibers count:
+shrapnel-potocks 130 133 147 30 0
+
+solver-set 393 12 371 283
+solver-set-header 24 22 331 17 Captcha solver                       
+
+solver-label 10 50 280 20  
+anticaptcha 22 68 150 18 Anticaptcha
+guro-captcha 22 102 150 18 Guro-captcha
+x-captcha 196 68 150 18 X-captcha
+reserved 196 102 150 18 (reserved)
+
+key-label 24 132 100 18 Solver key:
+key 23 156 323 30
+server-key 23 197 300 18 Parse key from bund-server
+
+
+post-set 13 304 371 429
+post-set-header 24 22 323 17 Post settings
+
+text-label 24 53 100 13 Content:
+no-text 23 84 150 18 No text
+quoting 23 119 150 18 Quoting posts
+copying 23 156 150 18 Copyint posts
+overload 23 193 0 0 Browser overload
+pastes 23 193 150 18 Text from file
+complain 23 229 0 0 Complain o' wipe
+random 23 229 150 18 Random text
+
+repeats-label 160 50 110 25 Proxy list loops:
+repeats 270 50 40 25 100
+
+trigger-set 160 80 150 180
+trigger-mode-label 10 0 130 25 Trigger mode:
+chaining 10 30 130 20 Chaining posts
+random-trigger 10 60 130 20 Random
+shashlik 10 90 130 20 Shashlik
+op-post-trigger 10 120 130 20 OP-post answer
+no-trigger 10 150 130 20 No trigger
+
+complain-set 160 80 150 140
+complain-set-label 10 0 130 25 Complain settings:
+complain-board-label 10 30 130 25 Board index:
+complain-board 10 50 130 25 b
+links-count-label 10 80 90 25 Links count:
+links-count 100 80 40 25 10
+with-posts 10 110 130 20 With posts
+
+line1 10 260 300 10
+
+chaos 10 270 150 20 Chaos mode
+random-chaos 160 270 150 20 Random chaos
+to-thread-label 30 300 130 25 Paste to thread:
+to-thread 160 300 120 25
+
+line2 10 330 300 10
+
+sage 10 340 300 20 Use SAGE
+sage-set 30 360 260 40
+sage-always 20 10 110 20 Always
+sage-from-posts 130 10 110 20 From posts
+
+
+media-set 990 70 300 360
+media-set-header 0 5 300 35 Media settings
+
+images 20 50 120 20 Images
+images-count-label 150 50 80 25 Per post:
+images-count 230 50 50 25 1
+images-folder-label 40 80 110 25 From folder:
+images-folder 150 80 130 25
+videos 20 120 110 20 Videos
+videos-count-label 150 120 80 25 Per post:
+videos-count 230 120 50 25 1
+videos-folder-label 40 150 110 25 From folder:
+videos-folder 150 150 130 25
+medias-from-posts 20 180 260 20 Media from posts
+no-media 20 210 260 20 Nothing
+
+shackal-set 30 240 240 100
+shackal-degree-label 10 0 220 25 Shackal degree:
+shackal-degree 10 30 220 15
+colorization 10 50 110 20 Colorization
+affine 10 70 110 20 Affine t-on
+to-PNG 140 60 90 20 PNG
+
+
+stats 990 500 300 190
+stats-header 0 5 300 35 Statistics
+total-posts-label 20 50 130 30 Total posts:
+total-posts 150 50 130 30
+total-bans-label 20 80 130 30 Total bans:
+total-bans 150 80 130 30
+posts-label 20 110 130 30 Posts in last:
+posts 150 110 130 30
+proxies-label 20 140 130 30 Proxies:
+proxies 150 140 130 30
+
+
+back-banner 650 500 320 190
+anima 250 460 470 240
+wipe-chan 0 310 640 390
+blockquote 330 10 300 30
+start-button 990 440 300 50 START

@@ -11,15 +11,14 @@
 class Wipechan : public QFrame {
 private:
     struct {
-        std::vector<std::string> salute;
-        std::vector<std::string> comeback;
-        std::vector<std::string> start;
-        std::vector<std::string> averageFinish;
-        std::vector<std::string> wellFinish;
-        std::vector<std::string> badFinish;
-        std::vector<std::string> error;
+        std::vector<std::string> meet;
+        std::vector<std::string> hello[3];
+        std::vector<std::string> start[3];
+        std::vector<std::string> finish[3];
+        std::vector<std::string> error[3];
         std::vector<std::string> banned;
         std::vector<std::string> forbidden;
+        std::vector<std::string> help[10];
     } quoteBank;
 
     QPlainTextEdit * blockquote;

@@ -1,10 +1,13 @@
 /* ГУИ */
 QWidget {
-	color: white;
+	color: black;
 	font-size: 14px !important; /* размер шрифта */
 }
 GUI {
-	background: #374457;
+	background: #363c42;
+}
+QLabel {
+	color: #C3C7C8;
 }
 
 
@@ -13,34 +16,34 @@ GUI {
 	font-size: 50px !important;
 	text-align: center;
 	vertical-align: center;
-	background: #17191B;
-	border-top: 3px outset #1A1D21;
+	background: #282828;
+	border-top: 1px outset #606568;
 }
 
-.left-button {
-	color: black;
-	background-color: maroon;
-	border: 2px outset gray;
+.tool-button {
+	color: #C3C7C8;
+	background-color: gray;
+	background-repeat: no-repeat;
+	border: 2px outset darkgray;
 	border-radius: 5px;
 }
-.left-button:hover {
+.tool-button:hover {
 	color: white;
 	background-color: #20272B;
 }
-.left-button:pressed {
+.tool-button:pressed {
 	border-style: inset;
 }
-.left-button:checked {
+.tool-button:checked {
 	border-color: red;
 }
-.right-button {
-	color: black;
+.peedor-button {
 	font-size: 20px;
 	font-weight: bold;
 	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #FD8585, stop:1 #FA5D5D);
 	border-radius: 3px;
 }
-.right-button:hover {
+.peedor-button:hover {
 	color: white;
 }
 #helpButton {
@@ -59,134 +62,125 @@ GUI {
 	background-image: url(gui/images/music_on.png);
 }
 
-#totalPosts {
-	color: lime;
-}
-
 
 /* Вайп-тян */
 #backBanner {
 	background: url(gui/logo.png);
+	margin-top: -50px;
 }
 #wipechan {
-	background: url(gui/Wipe-chan/images/Wipe-chan.png);
-	background-repeat: repeat-y;
-	margin-left: 15px;
-	margin-top: 10px;
+	background: url(gui/Wipe-chan/image.png);
+	background-repeat: no-repeat;
+	margin-left: -50px;
+	margin-top: -100px;
 }
 #blockquote {
+	color: red;
 	font-family: monospace;
 	font-size: 12px !important;
+	font-weight: bold;
 	font-style: italic;
-	color: red;
 	padding: 5px 5px 5px 5px;
-	background-color: white !important;
+	background: white !important;
 	border: 2px solid black;
 	border-radius: 10px;
 }
 
 
 /* Кнопка старта */
-#button {
-	color: black;
+#startButton {
+	color: #363c42;
 	font-size: 35px !important;
 	font-weight: bold;
-	background: qlineargradient(spread:pad, x1:0, y1:0.3, x2:0, y2:1, stop:0 #FFFF00, stop:1 #F5CB3F);
-	border: 1px solid #F5C942;
-	border-radius: 10px 25px;
+	background: #23272b;
 }
-#button:hover {
+#startButton:hover {
 	color: #6A9ACD;
 }
-#button:pressed {
+#startButton:pressed {
 	background: yellow;
 }
 
 
 /* Формы */
-.settings-frame {
-	background-color: #20272B;
-	border-radius: 5px;
+.gui-frame {
+	background: #23272b;
 }
-#mainSet {
-	border-top: 5px solid #37C8C6;
+.stats-label {
+	font-size: 20px;
 }
-#solverSet {
-	border-top: 5px solid #9870AD;
+.gui-frame-header {
+	color: #C8C8C8;
+	font-size: 20px;
+	qproperty-alignment: "AlignLeft | AlignVTop";
+	text-transform: uppercase;
+	background: #23272b;
 }
-#postSet {
-	border-top: 5px solid #C89637;
+.form-box {
+	border-top: 1px solid #2d3134;
 }
-#mediaSet {
-	border-top: 5px solid #557230;
-}
-.settings-frame-header {
-	font-size: 25px;
-	background-color: #17191B;
-}
-.box-frame {
-	border: 2px dashed white;
-	border-radius: 5px;
+#shackalBox {
+	border: none;
+	background: #363c42;
 }
 
 
 /* Элементы форм */
-QRadioButton::indicator {
-	width: 20;
-	height: 20;
+QRadioButton, QCheckBox {
+	color: #C3C7C8;
 }
 QRadioButton::indicator:unchecked {
-	image: url(gui/images/radio_out.png);
+	image: url(gui/styles/metro/radio-off.png);
 }
 QRadioButton::indicator:unchecked:hover {
-	image: url(gui/images/radio_out_hover.png);
+	image: url(gui/styles/metro/radio-hover.png);
 }
 QRadioButton::indicator:unchecked:pressed {
-	image: url(gui/images/radio_pressed.png);
+	image: url(gui/styles/metro/radio-press.png);
 }
 QRadioButton::indicator:checked {
-	image: url(gui/images/radio_in.png);
+	image: url(gui/styles/metro/radio-on.png);
 }
 QRadioButton::indicator:checked:hover {
-	image: url(gui/images/radio_in_hover.png);
+	image: url(gui/styles/metro/radio-hover.png);
 }
 QRadioButton::indicator:checked:pressed {
-	image: url(gui/images/radio_pressed.png)
+	image: url(gui/styles/metro/radio-press.png)
 }
 
-QCheckBox::indicator {
-	width: 16;
-	height: 16;
-}
 QCheckBox::indicator:unchecked {
-	image: url(gui/images/check_out.png);
+	image: url(gui/styles/metro/check-off.png);
 }
 QCheckBox::indicator:unchecked:hover {
-	image: url(gui/images/check_out_hover.png);
+	image: url(gui/styles/metro/check-hover.png);
 }
 QCheckBox::indicator:unchecked:pressed {
-	image: url(gui/images/check_pressed.png);
+	image: url(gui/styles/metro/check-press.png);
 }
 QCheckBox::indicator:checked {
-	image: url(gui/images/check_in.png);
+	image: url(gui/styles/metro/check-on.png);
 }
 QCheckBox::indicator:checked:hover {
-	image: url(gui/images/check_in_hover.png)
+	image: url(gui/styles/metro/check-hover.png);
 }
 QCheckBox::indicator:checked:pressed {
-	image: url(gui/images/check_pressed.png);
+	image: url(gui/styles/metro/check-press.png);
 }
 
 QRadioButton:disabled, QCheckBox:disabled {
 	color: gray;
 }
 
-QLineEdit, QComboBox, QSpinBox {
-	background: white;
-	color: black;
-	border: 1px solid #374457;
-	border-radius: 2px;
+QLineEdit, QComboBox, QSpinBox, QMenu, QComboBox *, QSpinBox * {
+	color: #C8C8C8;
+	background: #293038;
 }
 QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled {
-	background: gray;
+	background: #302020;
+}
+
+.stats-LCD {
+	color: red;
+	background: black;
+	border: 1px ridge white;
 }

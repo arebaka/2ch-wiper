@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1300</width>
-    <height>500</height>
+    <height>700</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,13 +22,13 @@
   <property name="minimumSize">
    <size>
     <width>1300</width>
-    <height>500</height>
+    <height>700</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>1300</width>
-    <height>500</height>
+    <height>700</height>
    </size>
   </property>
   <property name="mouseTracking">
@@ -41,13 +41,16 @@
    <iconset resource="icon.qrc">
     <normaloff>:/b.ico</normaloff>:/b.ico</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="button">
+   <widget class="QPushButton" name="startButton">
     <property name="geometry">
      <rect>
-      <x>990</x>
-      <y>440</y>
-      <width>260</width>
+      <x>650</x>
+      <y>500</y>
+      <width>300</width>
       <height>50</height>
      </rect>
     </property>
@@ -64,7 +67,7 @@
      <string>START</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="close">
+   <widget class="QPushButton" name="closeButton">
     <property name="geometry">
      <rect>
       <x>1220</x>
@@ -77,7 +80,7 @@
      <string>X</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="rollUp">
+   <widget class="QPushButton" name="rollUpButton">
     <property name="geometry">
      <rect>
       <x>1139</x>
@@ -109,6 +112,9 @@
     </property>
     <property name="layoutDirection">
      <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
     </property>
     <property name="text">
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;BUND SCRIPT GUI &lt;span style=&quot; vertical-align:super;&quot;&gt;v2.2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -188,10 +194,13 @@
     <property name="geometry">
      <rect>
       <x>250</x>
-      <y>261</y>
+      <y>460</y>
       <width>470</width>
       <height>240</height>
      </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
     </property>
     <property name="text">
      <string/>
@@ -200,11 +209,14 @@
    <widget class="QLabel" name="backBanner">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>310</y>
-      <width>320</width>
-      <height>190</height>
+      <x>650</x>
+      <y>560</y>
+      <width>300</width>
+      <height>130</height>
      </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
     </property>
     <property name="text">
      <string/>
@@ -265,65 +277,17 @@
      <string>Username:</string>
     </property>
    </widget>
-   <widget class="QLCDNumber" name="totalPosts">
-    <property name="geometry">
-     <rect>
-      <x>940</x>
-      <y>30</y>
-      <width>100</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="lineWidth">
-     <number>1</number>
-    </property>
-    <property name="smallDecimalPoint">
-     <bool>false</bool>
-    </property>
-    <property name="digitCount">
-     <number>7</number>
-    </property>
-    <property name="segmentStyle">
-     <enum>QLCDNumber::Filled</enum>
-    </property>
-    <property name="intValue" stdset="0">
-     <number>0</number>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_17">
-    <property name="geometry">
-     <rect>
-      <x>940</x>
-      <y>0</y>
-      <width>140</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Total posts:</string>
-    </property>
-   </widget>
-   <widget class="Wipechan" name="wipechan">
+   <widget class="Wipechan" name="chan">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>310</y>
       <width>640</width>
-      <height>190</height>
+      <height>390</height>
      </rect>
     </property>
     <property name="frameShape">
-     <enum>QFrame::NoFrame</enum>
+     <enum>QFrame::Box</enum>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
@@ -336,6 +300,9 @@
        <width>300</width>
        <height>30</height>
       </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
      </property>
      <property name="readOnly">
       <bool>true</bool>
@@ -352,12 +319,12 @@
      </rect>
     </property>
     <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
+     <enum>QFrame::Box</enum>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QFrame" name="mainModeSet">
+    <widget class="QFrame" name="mainBox">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -367,12 +334,12 @@
       </rect>
      </property>
      <property name="frameShape">
-      <enum>QFrame::WinPanel</enum>
+      <enum>QFrame::Box</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QLineEdit" name="potocks">
+     <widget class="QLineEdit" name="fibers">
       <property name="geometry">
        <rect>
         <x>140</x>
@@ -417,7 +384,7 @@
        <string>0</string>
       </property>
      </widget>
-     <widget class="QLabel" name="potocksLabel">
+     <widget class="QLabel" name="fibersLabel">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -435,7 +402,7 @@
        <string>Potocks count:</string>
       </property>
       <property name="buddy">
-       <cstring>potocks</cstring>
+       <cstring>fibers</cstring>
       </property>
      </widget>
      <widget class="QLabel" name="threadLabel">
@@ -910,49 +877,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QRadioButton" name="shrapnelMode">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>50</y>
-       <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Shrapnel mode</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
-    <widget class="QRadioButton" name="mainMode">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Main mode</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup</string>
-     </attribute>
-    </widget>
-    <widget class="QFrame" name="shrapnelSet">
+    <widget class="QFrame" name="shrapnelBox">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -962,12 +887,12 @@
       </rect>
      </property>
      <property name="frameShape">
-      <enum>QFrame::WinPanel</enum>
+      <enum>QFrame::Box</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QLineEdit" name="shrapnelPotocks">
+     <widget class="QLineEdit" name="shrapnelFibers">
       <property name="geometry">
        <rect>
         <x>140</x>
@@ -1417,7 +1342,7 @@
        </property>
       </item>
      </widget>
-     <widget class="QLabel" name="shrapnelPotocksLabel">
+     <widget class="QLabel" name="shrapnelFibersLabel">
       <property name="geometry">
        <rect>
         <x>20</x>
@@ -1435,7 +1360,7 @@
        <string>Potocks count:</string>
       </property>
       <property name="buddy">
-       <cstring>shrapnelPotocks</cstring>
+       <cstring>shrapnelFibers</cstring>
       </property>
      </widget>
      <widget class="QLabel" name="shrapnelBoardLabel">
@@ -1541,26 +1466,69 @@
       </property>
      </widget>
     </widget>
-    <widget class="QLabel" name="mainSetHeader">
+    <widget class="QFrame" name="modeBox">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>10</y>
-       <width>300</width>
-       <height>30</height>
+       <x>10</x>
+       <y>40</y>
+       <width>280</width>
+       <height>40</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>18</pointsize>
-      </font>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
      </property>
-     <property name="text">
-      <string>Main settings</string>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+     <property name="lineWidth">
+      <number>1</number>
      </property>
+     <property name="midLineWidth">
+      <number>0</number>
+     </property>
+     <widget class="QRadioButton" name="shrapnelMode">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>10</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Shrapnel mode</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup</string>
+      </attribute>
+     </widget>
+     <widget class="QRadioButton" name="mainMode">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Main mode</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup</string>
+      </attribute>
+     </widget>
     </widget>
    </widget>
    <widget class="QFrame" name="solverSet">
@@ -1573,17 +1541,175 @@
      </rect>
     </property>
     <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
+     <enum>QFrame::Box</enum>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QRadioButton" name="reserved">
+    <widget class="QFrame" name="solverBox">
      <property name="geometry">
       <rect>
-       <x>150</x>
-       <y>110</y>
-       <width>140</width>
+       <x>10</x>
+       <y>70</y>
+       <width>280</width>
+       <height>70</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QRadioButton" name="gurocaptcha">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>40</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Guro-captcha</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_2</string>
+      </attribute>
+     </widget>
+     <widget class="QRadioButton" name="anticaptcha">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Anticaptcha</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_2</string>
+      </attribute>
+     </widget>
+     <widget class="QRadioButton" name="reserved">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>40</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>(reserved)</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_2</string>
+      </attribute>
+     </widget>
+     <widget class="QRadioButton" name="x_captcha">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>10</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>X-Captcha</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_2</string>
+      </attribute>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="keyBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>160</y>
+       <width>280</width>
+       <height>70</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QCheckBox" name="serverKey">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>45</y>
+        <width>280</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Parse key from bund-server</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="key">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>280</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QLabel" name="solverLabel">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>280</width>
        <height>20</height>
       </rect>
      </property>
@@ -1593,11 +1719,8 @@
       </font>
      </property>
      <property name="text">
-      <string>(reserved)</string>
+      <string>Solver:</string>
      </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_2</string>
-     </attribute>
     </widget>
     <widget class="QLabel" name="keyLabel">
      <property name="geometry">
@@ -1620,147 +1743,6 @@
       <cstring>key</cstring>
      </property>
     </widget>
-    <widget class="QRadioButton" name="gurocaptcha">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>110</y>
-       <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Guro-captcha</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_2</string>
-     </attribute>
-    </widget>
-    <widget class="QRadioButton" name="x_captcha">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>80</y>
-       <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>X-Captcha</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_2</string>
-     </attribute>
-    </widget>
-    <widget class="QLineEdit" name="key">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>165</y>
-       <width>280</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="echoMode">
-      <enum>QLineEdit::Password</enum>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="anticaptcha">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Anticaptcha</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_2</string>
-     </attribute>
-    </widget>
-    <widget class="QCheckBox" name="serverKey">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>200</y>
-       <width>280</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Parse key from bund-server</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="solverLabel">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>280</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Solver:</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="solverSetHeader">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>10</y>
-       <width>300</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>18</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Captcha solver settings</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
    </widget>
    <widget class="QFrame" name="postSet">
     <property name="geometry">
@@ -1772,152 +1754,22 @@
      </rect>
     </property>
     <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
+     <enum>QFrame::Box</enum>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QLineEdit" name="repeats">
-     <property name="geometry">
-      <rect>
-       <x>260</x>
-       <y>50</y>
-       <width>30</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="placeholderText">
-      <string>50</string>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="overload">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>140</y>
-       <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Гуглобомба</string>
-     </property>
-     <property name="text">
-      <string>Browser overload</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_3</string>
-     </attribute>
-    </widget>
-    <widget class="Line" name="line2">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>330</y>
-       <width>280</width>
-       <height>10</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="random">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>230</y>
-       <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Рандомный текст</string>
-     </property>
-     <property name="text">
-      <string>Random text</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_3</string>
-     </attribute>
-    </widget>
-    <widget class="QRadioButton" name="noText">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>50</y>
-       <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Без текста</string>
-     </property>
-     <property name="text">
-      <string>No text</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_3</string>
-     </attribute>
-    </widget>
-    <widget class="QCheckBox" name="randChaos">
+    <widget class="QFrame" name="complainBox">
      <property name="geometry">
       <rect>
        <x>150</x>
-       <y>270</y>
+       <y>110</y>
        <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Перемешать треды</string>
-     </property>
-     <property name="text">
-      <string>Random chaos</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QFrame" name="complainSet">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>80</y>
-       <width>140</width>
-       <height>140</height>
+       <height>110</height>
       </rect>
      </property>
      <property name="frameShape">
-      <enum>QFrame::WinPanel</enum>
+      <enum>QFrame::Box</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -1928,29 +1780,11 @@
      <property name="midLineWidth">
       <number>0</number>
      </property>
-     <widget class="QLabel" name="complainSetLabel">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>0</y>
-        <width>120</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Complain settings:</string>
-      </property>
-     </widget>
      <widget class="QLabel" name="complainBoardLabel">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>0</y>
         <width>120</width>
         <height>25</height>
        </rect>
@@ -1971,7 +1805,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>50</y>
+        <y>20</y>
         <width>120</width>
         <height>25</height>
        </rect>
@@ -2400,7 +2234,7 @@
       <property name="geometry">
        <rect>
         <x>90</x>
-        <y>80</y>
+        <y>50</y>
         <width>40</width>
         <height>25</height>
        </rect>
@@ -2428,7 +2262,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>110</y>
+        <y>80</y>
         <width>120</width>
         <height>20</height>
        </rect>
@@ -2452,7 +2286,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>80</y>
+        <y>50</y>
         <width>80</width>
         <height>25</height>
        </rect>
@@ -2470,126 +2304,12 @@
       </property>
      </widget>
     </widget>
-    <widget class="QCheckBox" name="sage">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>340</y>
-       <width>280</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Use SAGE</string>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="copying">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>110</y>
-       <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Дублирование</string>
-     </property>
-     <property name="text">
-      <string>Copying posts</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_3</string>
-     </attribute>
-    </widget>
-    <widget class="QRadioButton" name="quoting">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Гринтекст</string>
-     </property>
-     <property name="text">
-      <string>Quoting posts</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_3</string>
-     </attribute>
-    </widget>
-    <widget class="QRadioButton" name="pastes">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>170</y>
-       <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Копипасты</string>
-     </property>
-     <property name="text">
-      <string>Post text from file</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_3</string>
-     </attribute>
-    </widget>
-    <widget class="QRadioButton" name="complain">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>200</y>
-       <width>140</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Фейковые жалобы на вайп</string>
-     </property>
-     <property name="text">
-      <string>Complain o' wipe</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_3</string>
-     </attribute>
-    </widget>
-    <widget class="QLineEdit" name="toThread">
+    <widget class="QLabel" name="repeatsLabel">
      <property name="geometry">
       <rect>
        <x>150</x>
-       <y>300</y>
-       <width>120</width>
+       <y>50</y>
+       <width>110</width>
        <height>25</height>
       </rect>
      </property>
@@ -2598,17 +2318,320 @@
        <pointsize>10</pointsize>
       </font>
      </property>
-     <property name="toolTip">
-      <string>Слить все посты в один тред</string>
+     <property name="text">
+      <string>Proxy list loops:</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="chaos">
+    <widget class="QFrame" name="chaosBox">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>270</y>
+       <y>260</y>
+       <width>280</width>
+       <height>70</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <widget class="QCheckBox" name="chaos">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="text">
+       <string>Chaos mode</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="target">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>40</y>
+        <width>120</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Слить все посты в один тред</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="targetLabel">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>120</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Paste to thread:</string>
+      </property>
+      <property name="buddy">
+       <cstring>target</cstring>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="randChaos">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>10</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Перемешать треды</string>
+      </property>
+      <property name="text">
+       <string>Random chaos</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="textBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
        <width>140</width>
-       <height>20</height>
+       <height>220</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QRadioButton" name="random">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>190</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Рандомный текст</string>
+      </property>
+      <property name="text">
+       <string>Random text</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_3</string>
+      </attribute>
+     </widget>
+     <widget class="QRadioButton" name="copying">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>70</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Дублирование</string>
+      </property>
+      <property name="text">
+       <string>Copying posts</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_3</string>
+      </attribute>
+     </widget>
+     <widget class="QRadioButton" name="complain">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>160</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Фейковые жалобы на вайп</string>
+      </property>
+      <property name="text">
+       <string>Complain o' wipe</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_3</string>
+      </attribute>
+     </widget>
+     <widget class="QRadioButton" name="quoting">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>40</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Гринтекст</string>
+      </property>
+      <property name="text">
+       <string>Quoting posts</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_3</string>
+      </attribute>
+     </widget>
+     <widget class="QRadioButton" name="pastes">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>130</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Копипасты</string>
+      </property>
+      <property name="text">
+       <string>Post text from file</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_3</string>
+      </attribute>
+     </widget>
+     <widget class="QRadioButton" name="noText">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Без текста</string>
+      </property>
+      <property name="text">
+       <string>No text</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_3</string>
+      </attribute>
+     </widget>
+     <widget class="QRadioButton" name="overload">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>100</y>
+        <width>140</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Гуглобомба</string>
+      </property>
+      <property name="text">
+       <string>Browser overload</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_3</string>
+      </attribute>
+     </widget>
+    </widget>
+    <widget class="QLabel" name="textLabel">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>20</y>
+       <width>59</width>
+       <height>14</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="triggerLabel">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>80</y>
+       <width>140</width>
+       <height>25</height>
       </rect>
      </property>
      <property name="font">
@@ -2616,27 +2639,21 @@
        <pointsize>10</pointsize>
       </font>
      </property>
-     <property name="toolTip">
-      <string/>
-     </property>
      <property name="text">
-      <string>Chaos mode</string>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
+      <string>Trigger mode:</string>
      </property>
     </widget>
-    <widget class="QFrame" name="triggerSet">
+    <widget class="QFrame" name="triggerBox">
      <property name="geometry">
       <rect>
        <x>150</x>
-       <y>80</y>
+       <y>110</y>
        <width>140</width>
-       <height>180</height>
+       <height>150</height>
       </rect>
      </property>
      <property name="frameShape">
-      <enum>QFrame::WinPanel</enum>
+      <enum>QFrame::Box</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -2651,7 +2668,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>0</y>
         <width>120</width>
         <height>20</height>
        </rect>
@@ -2675,7 +2692,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>30</y>
         <width>120</width>
         <height>20</height>
        </rect>
@@ -2699,7 +2716,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>90</y>
+        <y>60</y>
         <width>120</width>
         <height>20</height>
        </rect>
@@ -2723,7 +2740,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>120</y>
+        <y>90</y>
         <width>120</width>
         <height>20</height>
        </rect>
@@ -2747,7 +2764,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>150</y>
+        <y>120</y>
         <width>120</width>
         <height>20</height>
        </rect>
@@ -2767,31 +2784,13 @@
        <string notr="true">buttonGroup_5</string>
       </attribute>
      </widget>
-     <widget class="QLabel" name="triggerModeLabel">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>0</y>
-        <width>120</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>Trigger mode:</string>
-      </property>
-     </widget>
     </widget>
-    <widget class="QLabel" name="repeatsLabel">
+    <widget class="QLabel" name="complainLabel">
      <property name="geometry">
       <rect>
        <x>150</x>
-       <y>50</y>
-       <width>110</width>
+       <y>80</y>
+       <width>140</width>
        <height>25</height>
       </rect>
      </property>
@@ -2801,19 +2800,16 @@
       </font>
      </property>
      <property name="text">
-      <string>Proxy list loops:</string>
-     </property>
-     <property name="buddy">
-      <cstring>repeats</cstring>
+      <string>Complain settings:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="toThreadLabel">
+    <widget class="QCheckBox" name="sage">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>300</y>
-       <width>120</width>
-       <height>25</height>
+       <x>10</x>
+       <y>340</y>
+       <width>280</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="font">
@@ -2822,13 +2818,10 @@
       </font>
      </property>
      <property name="text">
-      <string>Paste to thread:</string>
-     </property>
-     <property name="buddy">
-      <cstring>toThread</cstring>
+      <string>Use SAGE</string>
      </property>
     </widget>
-    <widget class="QFrame" name="sageSet">
+    <widget class="QFrame" name="sageBox">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -2838,7 +2831,7 @@
       </rect>
      </property>
      <property name="frameShape">
-      <enum>QFrame::WinPanel</enum>
+      <enum>QFrame::Box</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -2886,50 +2879,36 @@
       </attribute>
      </widget>
     </widget>
-    <widget class="Line" name="line1">
+    <widget class="QLabel" name="chaosLabel">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>260</y>
-       <width>280</width>
-       <height>10</height>
+       <width>59</width>
+       <height>14</height>
       </rect>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
-     </property>
-     <property name="midLineWidth">
-      <number>0</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="postSetHeader">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>10</y>
-       <width>300</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>18</pointsize>
-      </font>
      </property>
      <property name="text">
-      <string>Post settings</string>
+      <string/>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    </widget>
+    <widget class="QSpinBox" name="repeats">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>50</y>
+       <width>40</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>1000</number>
+     </property>
+     <property name="value">
+      <number>100</number>
      </property>
     </widget>
    </widget>
@@ -2939,55 +2918,31 @@
       <x>970</x>
       <y>70</y>
       <width>300</width>
-      <height>360</height>
+      <height>420</height>
      </rect>
     </property>
     <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
+     <enum>QFrame::Box</enum>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QRadioButton" name="images">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>50</y>
-       <width>120</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Пикчи</string>
-     </property>
-     <property name="text">
-      <string>Images</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_4</string>
-     </attribute>
-    </widget>
-    <widget class="QFrame" name="shackalSet">
+    <widget class="QFrame" name="shackalBox">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>240</y>
+       <y>300</y>
        <width>240</width>
        <height>100</height>
       </rect>
      </property>
      <property name="frameShape">
-      <enum>QFrame::WinPanel</enum>
+      <enum>QFrame::Box</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <widget class="QCheckBox" name="shakalAffine">
+     <widget class="QCheckBox" name="shackalAffine">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -3008,7 +2963,7 @@
        <string>Affine t-on</string>
       </property>
      </widget>
-     <widget class="QLabel" name="shakalPowerLabel">
+     <widget class="QLabel" name="shackalDegreeLabel">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -3026,10 +2981,10 @@
        <string>Shackal degree:</string>
       </property>
       <property name="buddy">
-       <cstring>shakalPower</cstring>
+       <cstring>shackalDegree</cstring>
       </property>
      </widget>
-     <widget class="QCheckBox" name="shakalColor">
+     <widget class="QCheckBox" name="shackalColor">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -3053,7 +3008,7 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QSlider" name="shakalPower">
+     <widget class="QSlider" name="shackalDegree">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -3086,9 +3041,9 @@
      <widget class="QCheckBox" name="toPNG">
       <property name="geometry">
        <rect>
-        <x>140</x>
+        <x>150</x>
         <y>60</y>
-        <width>80</width>
+        <width>90</width>
         <height>20</height>
        </rect>
       </property>
@@ -3111,252 +3066,623 @@
       </property>
      </widget>
     </widget>
-    <widget class="QRadioButton" name="medias">
+    <widget class="QFrame" name="mediaBox">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>180</y>
-       <width>260</width>
+       <x>10</x>
+       <y>40</y>
+       <width>280</width>
+       <height>240</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QSpinBox" name="imagesCount">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>10</y>
+        <width>50</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>4</number>
+      </property>
+      <property name="value">
+       <number>1</number>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="medias">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>160</y>
+        <width>260</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Прикрепления из постов</string>
+      </property>
+      <property name="text">
+       <string>Media from posts</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_4</string>
+      </attribute>
+     </widget>
+     <widget class="QLineEdit" name="videosFolder">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>120</y>
+        <width>130</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Подпапка с видео</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="images">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>120</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Пикчи</string>
+      </property>
+      <property name="text">
+       <string>Images</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_4</string>
+      </attribute>
+     </widget>
+     <widget class="QLabel" name="videosCountLabel">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>90</y>
+        <width>80</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Per post:</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="noMedia">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>200</y>
+        <width>260</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Ничего</string>
+      </property>
+      <property name="text">
+       <string>Nothing</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_4</string>
+      </attribute>
+     </widget>
+     <widget class="QLabel" name="imagesFolderLabel">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>40</y>
+        <width>110</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>From folder:</string>
+      </property>
+      <property name="buddy">
+       <cstring>imagesFolder</cstring>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="imagesFolder">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>40</y>
+        <width>130</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Подпапка с пикчами</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="videos">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>110</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="toolTip">
+       <string>Видео</string>
+      </property>
+      <property name="text">
+       <string>Videos</string>
+      </property>
+      <attribute name="buttonGroup">
+       <string notr="true">buttonGroup_4</string>
+      </attribute>
+     </widget>
+     <widget class="QSpinBox" name="videosCount">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>90</y>
+        <width>50</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="maximum">
+       <number>4</number>
+      </property>
+      <property name="value">
+       <number>1</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="imagesCountLabel">
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>10</y>
+        <width>80</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Per post:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="videosFolderLabel">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>120</y>
+        <width>110</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>From folder:</string>
+      </property>
+      <property name="buddy">
+       <cstring>videosFolder</cstring>
+      </property>
+     </widget>
+     <widget class="QLabel" name="mediaLabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>59</width>
+        <height>14</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QLabel" name="shackalLabel">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>280</y>
+       <width>240</width>
        <height>20</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Прикрепления из постов</string>
-     </property>
      <property name="text">
-      <string>Media from posts</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_4</string>
-     </attribute>
-    </widget>
-    <widget class="QSpinBox" name="videosCount">
-     <property name="geometry">
-      <rect>
-       <x>230</x>
-       <y>120</y>
-       <width>50</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="maximum">
-      <number>4</number>
-     </property>
-     <property name="value">
-      <number>1</number>
+      <string/>
      </property>
     </widget>
-    <widget class="QSpinBox" name="imagesCount">
+   </widget>
+   <widget class="QFrame" name="stats">
+    <property name="geometry">
+     <rect>
+      <x>970</x>
+      <y>500</y>
+      <width>300</width>
+      <height>190</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QLabel" name="totalPostsLabel">
      <property name="geometry">
       <rect>
-       <x>230</x>
+       <x>20</x>
        <y>50</y>
-       <width>50</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="maximum">
-      <number>4</number>
-     </property>
-     <property name="value">
-      <number>1</number>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="noMedia">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>210</y>
-       <width>260</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Ничего</string>
-     </property>
-     <property name="text">
-      <string>Nothing</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_4</string>
-     </attribute>
-    </widget>
-    <widget class="QRadioButton" name="videos">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>120</y>
-       <width>110</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Видео</string>
-     </property>
-     <property name="text">
-      <string>Videos</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string notr="true">buttonGroup_4</string>
-     </attribute>
-    </widget>
-    <widget class="QLabel" name="videosCountLabel">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>120</y>
-       <width>80</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Per post:</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="videosFolder">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>150</y>
        <width>130</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Подпапка с видео</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="imagesCountLabel">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>50</y>
-       <width>80</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>Per post:</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="imagesFolder">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>80</y>
-       <width>130</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="toolTip">
-      <string>Подпапка с пикчами</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="videosFolderLabel">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>150</y>
-       <width>110</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>From folder:</string>
-     </property>
-     <property name="buddy">
-      <cstring>videosFolder</cstring>
-     </property>
-    </widget>
-    <widget class="QLabel" name="imagesFolderLabel">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>80</y>
-       <width>110</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>From folder:</string>
-     </property>
-     <property name="buddy">
-      <cstring>imagesFolder</cstring>
-     </property>
-    </widget>
-    <widget class="QLabel" name="mediaSetHeader">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>10</y>
-       <width>300</width>
        <height>30</height>
       </rect>
      </property>
      <property name="font">
       <font>
-       <pointsize>18</pointsize>
+       <pointsize>12</pointsize>
       </font>
      </property>
      <property name="text">
-      <string>Media settings</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+      <string>Total posts:</string>
      </property>
     </widget>
+    <widget class="QLCDNumber" name="totalPosts">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>50</y>
+       <width>130</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
+     <property name="smallDecimalPoint">
+      <bool>false</bool>
+     </property>
+     <property name="digitCount">
+      <number>8</number>
+     </property>
+     <property name="segmentStyle">
+      <enum>QLCDNumber::Flat</enum>
+     </property>
+     <property name="intValue" stdset="0">
+      <number>0</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="totalBansLabel">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>80</y>
+       <width>130</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Total Bans:</string>
+     </property>
+    </widget>
+    <widget class="QLCDNumber" name="totalBans">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>80</y>
+       <width>130</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
+     <property name="smallDecimalPoint">
+      <bool>false</bool>
+     </property>
+     <property name="digitCount">
+      <number>8</number>
+     </property>
+     <property name="segmentStyle">
+      <enum>QLCDNumber::Flat</enum>
+     </property>
+     <property name="intValue" stdset="0">
+      <number>4</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="postsLabel">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>110</y>
+       <width>130</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Posts in last:</string>
+     </property>
+    </widget>
+    <widget class="QLCDNumber" name="posts">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>110</y>
+       <width>130</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
+     <property name="smallDecimalPoint">
+      <bool>false</bool>
+     </property>
+     <property name="digitCount">
+      <number>8</number>
+     </property>
+     <property name="segmentStyle">
+      <enum>QLCDNumber::Flat</enum>
+     </property>
+     <property name="intValue" stdset="0">
+      <number>0</number>
+     </property>
+    </widget>
+    <widget class="QLCDNumber" name="proxies">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>140</y>
+       <width>130</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
+     <property name="smallDecimalPoint">
+      <bool>false</bool>
+     </property>
+     <property name="digitCount">
+      <number>8</number>
+     </property>
+     <property name="segmentStyle">
+      <enum>QLCDNumber::Flat</enum>
+     </property>
+     <property name="intValue" stdset="0">
+      <number>6</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="proxiesLabel">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>140</y>
+       <width>130</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Proxies:</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="mainSetHeader">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>300</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Main settings</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="solverSetHeader">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>80</y>
+      <width>300</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Captcha solver settings</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="postSetHeader">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>80</y>
+      <width>300</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Post settings</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="mediaSetHeader">
+    <property name="geometry">
+     <rect>
+      <x>970</x>
+      <y>80</y>
+      <width>300</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Media settings</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="statsHeader">
+    <property name="geometry">
+     <rect>
+      <x>970</x>
+      <y>510</y>
+      <width>300</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Statistics</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="modeLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>90</y>
+      <width>59</width>
+      <height>14</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
    <zorder>topBanner</zorder>
    <zorder>backBanner</zorder>
    <zorder>anima</zorder>
-   <zorder>button</zorder>
-   <zorder>close</zorder>
-   <zorder>rollUp</zorder>
+   <zorder>startButton</zorder>
+   <zorder>closeButton</zorder>
+   <zorder>rollUpButton</zorder>
    <zorder>openButton</zorder>
    <zorder>saveButton</zorder>
    <zorder>peedorBarButton</zorder>
@@ -3364,13 +3690,18 @@
    <zorder>helpButton</zorder>
    <zorder>username</zorder>
    <zorder>usernameLabel</zorder>
-   <zorder>totalPosts</zorder>
-   <zorder>label_17</zorder>
-   <zorder>wipechan</zorder>
    <zorder>mainSet</zorder>
    <zorder>solverSet</zorder>
    <zorder>postSet</zorder>
    <zorder>mediaSet</zorder>
+   <zorder>stats</zorder>
+   <zorder>chan</zorder>
+   <zorder>mainSetHeader</zorder>
+   <zorder>solverSetHeader</zorder>
+   <zorder>postSetHeader</zorder>
+   <zorder>mediaSetHeader</zorder>
+   <zorder>statsHeader</zorder>
+   <zorder>modeLabel</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -3387,11 +3718,11 @@
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_9"/>
-  <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup_5"/>
-  <buttongroup name="buttonGroup_4"/>
   <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup_5"/>
+  <buttongroup name="buttonGroup_9"/>
+  <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup_4"/>
  </buttongroups>
 </ui>

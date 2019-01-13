@@ -247,6 +247,8 @@ vector<string> Setup::validate () {
     if (thread == "0" && chaos != "-1") errors.push_back("Нельзя устраивать хаос с нулевой!");
     if (shrapnelCharge == "0" && chaos == "0") errors.push_back("Для полного хаоса требуется шрапнель!");
     if (thread == "0" && sageMode == '2') errors.push_back("Нельзя копировать сажу с нулевой!");
+    if (mode == "0" && triggerForm == "0" && (mediaKind == '0' || ((mediaKind == '1' || mediaKind == '2') && mediasCount == "0"))) errors.push_back("Ничего не запостится!");
+
     if (errors.size() == 0) errors.push_back("OK");
 
     return errors;
