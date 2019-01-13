@@ -157,13 +157,13 @@ QRadioButton::indicator {
 	width: 20;
 	height: 20;
 }
-QRadioButton::indicator:unchecked {
+QRadioButton::indicator {
 	image: url(gui/styles/bund/radio_out.png);
 }
-QRadioButton::indicator:unchecked:hover {
+QRadioButton::indicator:hover {
 	image: url(gui/styles/bund/radio_out_hover.png);
 }
-QRadioButton::indicator:unchecked:pressed {
+QRadioButton::indicator:pressed {
 	image: url(gui/styles/bund/radio_pressed.png);
 }
 QRadioButton::indicator:checked {
@@ -180,13 +180,13 @@ QCheckBox::indicator {
 	width: 16;
 	height: 16;
 }
-QCheckBox::indicator:unchecked {
+QCheckBox::indicator {
 	image: url(gui/styles/bund/check_out.png);
 }
-QCheckBox::indicator:unchecked:hover {
+QCheckBox::indicator:hover {
 	image: url(gui/styles/bund/check_out_hover.png);
 }
-QCheckBox::indicator:unchecked:pressed {
+QCheckBox::indicator:pressed {
 	image: url(gui/styles/bund/check_pressed.png);
 }
 QCheckBox::indicator:checked {

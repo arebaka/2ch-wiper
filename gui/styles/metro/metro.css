@@ -112,7 +112,6 @@ QLabel {
 .gui-frame-header {
 	color: #C8C8C8;
 	font-size: 20px;
-	qproperty-alignment: "AlignLeft | AlignVTop";
 	text-transform: uppercase;
 	background: #23272b;
 }
@@ -129,13 +128,13 @@ QLabel {
 QRadioButton, QCheckBox {
 	color: #C3C7C8;
 }
-QRadioButton::indicator:unchecked {
+QRadioButton::indicator {
 	image: url(gui/styles/metro/radio-off.png);
 }
-QRadioButton::indicator:unchecked:hover {
+QRadioButton::indicator:hover {
 	image: url(gui/styles/metro/radio-hover.png);
 }
-QRadioButton::indicator:unchecked:pressed {
+QRadioButton::indicator:pressed {
 	image: url(gui/styles/metro/radio-press.png);
 }
 QRadioButton::indicator:checked {
@@ -148,13 +147,13 @@ QRadioButton::indicator:checked:pressed {
 	image: url(gui/styles/metro/radio-press.png)
 }
 
-QCheckBox::indicator:unchecked {
+QCheckBox::indicator {
 	image: url(gui/styles/metro/check-off.png);
 }
-QCheckBox::indicator:unchecked:hover {
+QCheckBox::indicator:hover {
 	image: url(gui/styles/metro/check-hover.png);
 }
-QCheckBox::indicator:unchecked:pressed {
+QCheckBox::indicator:pressed {
 	image: url(gui/styles/metro/check-press.png);
 }
 QCheckBox::indicator:checked {
