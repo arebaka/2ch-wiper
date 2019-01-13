@@ -14,9 +14,8 @@ QLabel {
 /* Панель */
 #topBanner {
 	font-size: 50px !important;
-	text-align: center;
-	vertical-align: center;
 	padding-top: 5px;
+	qproperty-alignment: AlignCenter;
 	background: #17191B;
 	border-top: 3px outset #1A1D21;
 }
@@ -127,11 +126,16 @@ QLabel {
 }
 .gui-frame-header {
 	font-size: 25px;
+	qproperty-alignment: AlignCenter;
 	background: #17191B;
 }
-.form-box, #triggerLabel, #complainLabel {
+#mainBox, #shrapnelBox, #triggerBox, #complainBox, #triggerLabel, #complainLabel, #sageBox, #shackalBox {
 	border: 2px ridge gray;
 	border-radius: 5px;
+}
+#chaosBox {
+	border-top: 2px outset gray;
+	border-bottom: 2px inset gray;
 }
 .stats-label {
 	font-size: 20px;
@@ -158,22 +162,22 @@ QRadioButton::indicator {
 	height: 20;
 }
 QRadioButton::indicator {
-	image: url(gui/styles/bund/radio_out.png);
+	image: url(gui/styles/bund/radio.png);
 }
 QRadioButton::indicator:hover {
-	image: url(gui/styles/bund/radio_out_hover.png);
+	image: url(gui/styles/bund/radio-hover.png);
 }
 QRadioButton::indicator:pressed {
-	image: url(gui/styles/bund/radio_pressed.png);
+	image: url(gui/styles/bund/radio-pressed.png);
 }
 QRadioButton::indicator:checked {
-	image: url(gui/styles/bund/radio_in.png);
+	image: url(gui/styles/bund/radio-checked.png);
 }
 QRadioButton::indicator:checked:hover {
-	image: url(gui/styles/bund/radio_in_hover.png);
+	image: url(gui/styles/bund/radio-checked-hover.png);
 }
 QRadioButton::indicator:checked:pressed {
-	image: url(gui/styles/bund/radio_pressed.png)
+	image: url(gui/styles/bund/radio-pressed.png)
 }
 
 QCheckBox::indicator {
@@ -181,22 +185,22 @@ QCheckBox::indicator {
 	height: 16;
 }
 QCheckBox::indicator {
-	image: url(gui/styles/bund/check_out.png);
+	image: url(gui/styles/bund/checkbox.png);
 }
 QCheckBox::indicator:hover {
-	image: url(gui/styles/bund/check_out_hover.png);
+	image: url(gui/styles/bund/checkbox-hover.png);
 }
 QCheckBox::indicator:pressed {
-	image: url(gui/styles/bund/check_pressed.png);
+	image: url(gui/styles/bund/checkbox-pressed.png);
 }
 QCheckBox::indicator:checked {
-	image: url(gui/styles/bund/check_in.png);
+	image: url(gui/styles/bund/checkbox-checked.png);
 }
 QCheckBox::indicator:checked:hover {
-	image: url(gui/styles/bund/check_in_hover.png)
+	image: url(gui/styles/bund/checkbox-checked-hover.png)
 }
 QCheckBox::indicator:checked:pressed {
-	image: url(gui/styles/bund/check_pressed.png);
+	image: url(gui/styles/bund/checkbox-pressed.png);
 }
 
 QRadioButton:disabled, QCheckBox:disabled {
@@ -207,6 +211,9 @@ QLineEdit, QComboBox, QSpinBox, QMenu, QComboBox *, QSpinBox * {
 	background: white;
 	border: 1px solid #17191B;
 	border-radius: 2px;
+}
+QLineEdit:focus, QComboBox:focus {
+	border: 1px inset lime;
 }
 QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled {
 	background: gray;

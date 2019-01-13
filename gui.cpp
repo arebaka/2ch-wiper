@@ -10,8 +10,6 @@ GUI::GUI (QWidget * parent)
     ui->setupUi(this);
     fileDialog = new QFileDialog;
 
-    set_classes();
-
     std::string path;
     std::ifstream theme(QDir::currentPath().toStdString()+"/gui/theme");
     getline(theme, path);
@@ -43,80 +41,6 @@ GUI::~GUI () {
     delete ui;
 }
 
-void GUI::set_classes () {
-    ui->topBanner->property("class");
-    ui->backBanner->property("class");
-    ui->topBanner->setProperty("class", "banner");
-    ui->topBanner->setProperty("class", "banner");
-
-    ui->helpButton->property("class");
-    ui->peedorBarButton->property("class");
-    ui->musicButton->property("class");
-    ui->openButton->property("class");
-    ui->saveButton->property("class");
-    ui->helpButton->setProperty("class", "tool-button");
-    ui->peedorBarButton->setProperty("class", "tool-button");
-    ui->musicButton->setProperty("class", "tool-button");
-    ui->openButton->setProperty("class", "tool-button");
-    ui->saveButton->setProperty("class", "tool-button");
-
-    ui->rollUpButton->property("class");
-    ui->closeButton->property("class");
-    ui->rollUpButton->setProperty("class", "peedor-button");
-    ui->closeButton->setProperty("class", "peedor-button");
-
-    ui->mainSet->property("class");
-    ui->solverSet->property("class");
-    ui->postSet->property("class");
-    ui->mediaSet->property("class");
-    ui->stats->property("class");
-    ui->mainSet->setProperty("class", "gui-frame form");
-    ui->solverSet->setProperty("class", "gui-frame form");
-    ui->postSet->setProperty("class", "gui-frame form");
-    ui->mediaSet->setProperty("class", "gui-frame form");
-    ui->stats->setProperty("class", "gui-frame");
-
-    ui->mainSetHeader->property("class");
-    ui->solverSetHeader->property("class");
-    ui->postSetHeader->property("class");
-    ui->mediaSetHeader->property("class");
-    ui->statsHeader->property("class");
-    ui->mainSetHeader->setProperty("class", "gui-frame-header form-header");
-    ui->solverSetHeader->setProperty("class", "gui-frame-header form-header");
-    ui->postSetHeader->setProperty("class", "gui-frame-header form-header");
-    ui->mediaSetHeader->setProperty("class", "gui-frame-header form-header");
-    ui->statsHeader->setProperty("class", "gui-frame-header");
-
-    ui->mainBox->property("class");
-    ui->shrapnelBox->property("class");
-    ui->triggerBox->property("class");
-    ui->complainBox->property("class");
-    ui->sageBox->property("class");
-    ui->shackalBox->property("class");
-    ui->mainBox->setProperty("class", "form-box");
-    ui->shrapnelBox->setProperty("class", "form-box");
-    ui->triggerBox->setProperty("class", "form-box");
-    ui->complainBox->setProperty("class", "form-box");
-    ui->sageBox->setProperty("class", "form-box");
-    ui->shackalBox->setProperty("class", "form-box");
-
-    ui->totalPostsLabel->property("class");
-    ui->totalBansLabel->property("class");
-    ui->postsLabel->property("class");
-    ui->proxiesLabel->property("class");
-    ui->totalPostsLabel->setProperty("class", "stats-label");
-    ui->totalBansLabel->setProperty("class", "stats-label");
-    ui->postsLabel->setProperty("class", "stats-label");
-    ui->proxiesLabel->setProperty("class", "stats-label");
-    ui->totalPosts->property("class");
-    ui->totalBans->property("class");
-    ui->posts->property("class");
-    ui->proxies->property("class");
-    ui->totalPosts->setProperty("class", "stats-LCD");
-    ui->totalBans->setProperty("class", "stats-LCD");
-    ui->posts->setProperty("class", "stats-LCD");
-    ui->proxies->setProperty("class", "stats-LCD");
-}
 
 void GUI::set_layout (std::string path) {
     const char * members[] = {"GUI",
@@ -238,7 +162,7 @@ void GUI::set_layout (std::string path) {
                     else if (members[i] == "solver_box") { widget = ui->solverBox; type = 'w'; }
                     else if (members[i] == "solver_label") { widget = label = ui->solverLabel; type = 'l'; }
                     else if (members[i] == "anticaptcha") { widget = radioButton = ui->anticaptcha; type = 'r'; }
-                    else if (members[i] == "guto-captcha") { widget = radioButton = ui->gurocaptcha; type = 'r'; }
+                    else if (members[i] == "guro-captcha") { widget = radioButton = ui->gurocaptcha; type = 'r'; }
                     else if (members[i] == "x-captcha") { widget = radioButton = ui->x_captcha; type = 'r'; }
                     else if (members[i] == "reserved") { widget = radioButton = ui->reserved; type = 'r'; }
 

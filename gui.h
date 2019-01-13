@@ -62,7 +62,6 @@ private:
     Ui::GUI * ui;
     QFileDialog * fileDialog;
 
-    void set_classes();
     void set_layout(std::string path);
 
     bool started;  // start/stop

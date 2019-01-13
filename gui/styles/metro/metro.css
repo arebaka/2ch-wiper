@@ -4,7 +4,7 @@ QWidget {
 	font-size: 14px !important; /* размер шрифта */
 }
 GUI {
-	background: #363c42;
+	background: #363C42;
 }
 QLabel {
 	color: #C3C7C8;
@@ -13,10 +13,10 @@ QLabel {
 
 /* Панель */
 #topBanner {
-	font-size: 50px !important;
-	text-align: center;
-	vertical-align: center;
-	background: #282828;
+	font-size: 20px !important;
+	padding: 10px;
+	qproperty-alignment: AlignTop;
+	background: #23272B;
 	border-top: 1px outset #606568;
 }
 
@@ -25,7 +25,7 @@ QLabel {
 	background-color: gray;
 	background-repeat: no-repeat;
 	border: 2px outset darkgray;
-	border-radius: 5px;
+	border-radius: 2px;
 }
 .tool-button:hover {
 	color: white;
@@ -80,7 +80,7 @@ QLabel {
 	font-size: 12px !important;
 	font-weight: bold;
 	font-style: italic;
-	padding: 5px 5px 5px 5px;
+	padding: 5px;
 	background: white !important;
 	border: 2px solid black;
 	border-radius: 10px;
@@ -89,22 +89,22 @@ QLabel {
 
 /* Кнопка старта */
 #startButton {
-	color: #363c42;
+	color: #363C42;
 	font-size: 35px !important;
 	font-weight: bold;
-	background: #23272b;
+	background: #23272B;
 }
 #startButton:hover {
 	color: #6A9ACD;
 }
 #startButton:pressed {
-	background: yellow;
+	background: gray;
 }
 
 
 /* Формы */
 .gui-frame {
-	background: #23272b;
+	background: #23272B;
 }
 .stats-label {
 	font-size: 20px;
@@ -113,14 +113,19 @@ QLabel {
 	color: #C8C8C8;
 	font-size: 20px;
 	text-transform: uppercase;
-	background: #23272b;
 }
-.form-box {
-	border-top: 1px solid #2d3134;
+#mainBox, #shrapnelBox {
+	border-top: 1px solid #363C42;
+}
+#textBox, #triggerBox, #chaosBox {
+	border-bottom: 1px solid #363C42;
+}
+#triggerBox {
+	border-left: 1px solid #363C42;
 }
 #shackalBox {
 	border: none;
-	background: #363c42;
+	background: #363C42;
 }
 
 
@@ -129,41 +134,41 @@ QRadioButton, QCheckBox {
 	color: #C3C7C8;
 }
 QRadioButton::indicator {
-	image: url(gui/styles/metro/radio-off.png);
+	image: url(gui/styles/metro/radio.png);
 }
 QRadioButton::indicator:hover {
 	image: url(gui/styles/metro/radio-hover.png);
 }
 QRadioButton::indicator:pressed {
-	image: url(gui/styles/metro/radio-press.png);
+	image: url(gui/styles/metro/radio-pressed.png);
 }
 QRadioButton::indicator:checked {
-	image: url(gui/styles/metro/radio-on.png);
+	image: url(gui/styles/metro/radio-checked.png);
 }
 QRadioButton::indicator:checked:hover {
-	image: url(gui/styles/metro/radio-hover.png);
+	image: url(gui/styles/metro/radio-checked-hover.png);
 }
 QRadioButton::indicator:checked:pressed {
-	image: url(gui/styles/metro/radio-press.png)
+	image: url(gui/styles/metro/radio-pressed.png);
 }
 
 QCheckBox::indicator {
-	image: url(gui/styles/metro/check-off.png);
+	image: url(gui/styles/metro/checkbox.png);
 }
 QCheckBox::indicator:hover {
-	image: url(gui/styles/metro/check-hover.png);
+	image: url(gui/styles/metro/checkbox-hover.png);
 }
 QCheckBox::indicator:pressed {
-	image: url(gui/styles/metro/check-press.png);
+	image: url(gui/styles/metro/checkbox-pressed.png);
 }
 QCheckBox::indicator:checked {
-	image: url(gui/styles/metro/check-on.png);
+	image: url(gui/styles/metro/checkbox-checked.png);
 }
 QCheckBox::indicator:checked:hover {
-	image: url(gui/styles/metro/check-hover.png);
+	image: url(gui/styles/metro/checkbox-checked-hover.png);
 }
 QCheckBox::indicator:checked:pressed {
-	image: url(gui/styles/metro/check-press.png);
+	image: url(gui/styles/metro/checkbox-pressed.png);
 }
 
 QRadioButton:disabled, QCheckBox:disabled {
@@ -174,8 +179,11 @@ QLineEdit, QComboBox, QSpinBox, QMenu, QComboBox *, QSpinBox * {
 	color: #C8C8C8;
 	background: #293038;
 }
+QLineEdit:focus, QComboBox:focus {
+	border: 1px ridge #588E9B;
+}
 QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled {
-	background: #302020;
+	background: #363C42;
 }
 
 .stats-LCD {

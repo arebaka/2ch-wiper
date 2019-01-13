@@ -529,7 +529,7 @@
 "chaos_box": {
 	"x": 10,
 	"y": 260,
-	"width": 300,
+	"width": 320,
 	"height": 70
 },
 "chaos_label": {
@@ -575,7 +575,7 @@
 "sage": {
 	"x": 10,
 	"y": 340,
-	"width": 300,
+	"width": 320,
 	"height": 20,
 	"text": "Use SAGE"
 },
@@ -739,6 +739,12 @@
 	"disabled": true,
 	"hiding": true,
 	"hidden": true
+},
+"shackal_label": {
+	"x": 0,
+	"y": 0,
+	"width": 0,
+	"height": 0
 },
 "shackal_degree_label": {
 	"x": 10,
