@@ -93,12 +93,12 @@ void Wipechan::set_height () {
 
 
 void Wipechan::add_quote_part(const std::vector<std::string> &bank, const std::vector<std::string> &params) {
-    rand = random() % bank.size();
-    unsigned int tabPos(bank[rand].find("\t"));
-    quote->append(bank[rand].substr(0, tabPos));
+    rnd = rand() % bank.size();
+    unsigned int tabPos(bank[rnd].find("\t"));
+    quote->append(bank[rnd].substr(0, tabPos));
     if (tabPos != -1) {
         quote->append(params[0]);
-        quote->append(bank[rand].substr(tabPos+1, bank[rand].length()));
+        quote->append(bank[rnd].substr(tabPos+1, bank[rnd].length()));
     }
 }
 
@@ -124,8 +124,8 @@ void Wipechan::start (const std::string &username) {
 void Wipechan::error (const std::vector<std::string> &errors) {
     blockquote->setStyleSheet("background: white;");
     quote->clear();
-    rand = random() % quoteBank.error[1].size();
-    quote->append(quoteBank.error[1][rand] + "\n");
+    rnd = rand() % quoteBank.error[1].size();
+    quote->append(quoteBank.error[1][rnd] + "\n");
     for (unsigned int i(0); i < errors.size(); i++)
         quote->append(errors[i] + "\n");
 

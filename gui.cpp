@@ -1,5 +1,6 @@
 #include "gui.h"
 #include "ui_gui.h"
+#include <cstdio>
 #include <stdlib.h>
 #include <QDesktopWidget>
 #include "rapidjson/document.h"
@@ -34,7 +35,7 @@ GUI::GUI (QWidget * parent)
     ui->rollUpButton->hide();
     ui->closeButton->hide();
 
-    updateData();
+    loadData();
 }
 
 GUI::~GUI () {
@@ -298,9 +299,9 @@ void GUI::debug (const char &mode) {
     setup.set_logMode(mode);
 }
 
-void GUI::updateData () {
+void GUI::loadData () {
     std::string datum, key, value;
-    std::ifstream config(".config");
+    std::ifstream config(QDir::currentPath().toStdString() + "/.config");
     if (config.is_open()) {
         while(!config.eof()) {
             getline(config, datum);
@@ -309,9 +310,10 @@ void GUI::updateData () {
             if (key == "total_posts") {
                 ui->totalPosts->display(atoi(value.c_str()));
                 totalPosts = value;
-            } else if (key == "posts")
-                postsCount = value;
-            else if (key == "username") {
+            } else if (key == "total_bans") {
+                ui->totalBans->display(value.c_str());
+                totalBans = value;
+            } else if (key == "username") {
                 ui->username->setText(value.c_str());
                 username = value;
             }
@@ -319,20 +321,58 @@ void GUI::updateData () {
 
     } else {
         ui->totalPosts->display(0);
+        username = "Аноним";
         ui->username->setText("Аноним");
         totalPosts = "0";
-        username = "Аноним";
+        ui->totalPosts->display(0);
+        totalBans = "0";
+        ui->totalBans->display(0);
 
         updateConfig();
     }
+    config.close();
 
-    ui->totalPosts->repaint();
+    config.open("proxies");
+    unsigned long i;
+    for (i = 0; !config.eof(); i++) getline(config, datum);
+    proxiesCount = to_string(i-1);
+    ui->proxies->display(proxiesCount.c_str());
+}
+
+void GUI::updateData () {
+    std::string key, datum, value;
+    std::ifstream responce(QDir::currentPath().toStdString() + "/.responce");
+    if (responce.is_open()) {
+        while(!responce.eof()) {
+            getline(responce, datum);
+            key = datum.substr(0, datum.find(' '));
+            value = datum.substr(datum.find(' ')+1, datum.length()-1);
+            if (key == "posts") {
+                postsCount = value;
+                ui->posts->display(atoi(postsCount.c_str()));
+                totalPosts = to_string(atoi(totalPosts.c_str()) + atoi(value.c_str()));
+                ui->totalPosts->display(atoi(totalPosts.c_str()));
+            } else if (key == "bans") {
+                totalBans = to_string(atoi(totalBans.c_str()) + atoi(value.c_str()));
+                ui->totalBans->display(atoi(totalBans.c_str()));
+            }
+        }
+    }
+    responce.close();
+    remove(std::string(QDir::currentPath().toStdString() + "/.responce").c_str());
+
+    responce.open("proxies");
+    unsigned long i;
+    for (i = 0; !responce.eof(); i++) { getline(responce, datum); if (datum.empty()) i--; }
+    proxiesCount = to_string(i-1);
+    ui->proxies->display(proxiesCount.c_str());
 }
 
 void GUI::updateConfig () {
     std::ofstream config(".config");
-    config << "total_posts " << totalPosts << std::endl;
     config << "username " << username << std::endl;
+    config << "total_posts " << totalPosts << std::endl;
+    config << "total_bans " << totalBans << std::endl;
 }
 
 

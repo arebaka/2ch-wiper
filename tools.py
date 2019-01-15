@@ -29,20 +29,14 @@ def safe_quit(badproxies, forbiddenproxy, postsCounter, sig=0, frame=0):
 	print(str(len(forbiddenproxy)), "запрещенных проксичек почищено!")
 
 	data = {}
-	with open(".config") as file:
-		for row in file:
-			value = []
-			key, value = row.split()
-			data[key] = value[0]
-	data["total_posts"] = str(int(data["total_posts"]) + postsCounter)
 	data["posts"] = str(postsCounter)
+	data["bans"] = str(len(badproxies) - len(forbiddenproxy))
 	with open("config", "w") as file:
 		for key in data:
 			file.write(key+" "+data[key])
 			file.write("\n")
 
 	print("Выключаюсь...")
-
 	os._exit(0)
 
 # ====== Обработка клавиш ======

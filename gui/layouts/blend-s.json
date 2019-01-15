@@ -1,17 +1,17 @@
 {
 
 "GUI": {
-	"width": 1400,
-	"height": 750
+	"width": 1020,
+	"height": 640
 },
 
 
 "top_banner": {
-	"x": 1185,
-	"y": 15,
-	"width": 200,
-	"height": 310,
-	"text": "<html><head/><body><p>INFO<br><sub>GUI ver: 2.4</sub></p></body></html>"
+	"x": 0,
+	"y": 0,
+	"width": 40,
+	"height": 640,
+	"text": "<html><head/><body><p>B<br>U<br>N<br>D<br><br>W<br>I<br>P<br>E<br>R</p></body></html>"
 },
 "help_button": {
 	"x": 1355,
@@ -75,15 +75,15 @@
 
 
 "main_set": {
-	"x": 15,
-	"y": 15,
-	"width": 380,
-	"height": 250
+	"x": 400,
+	"y": 20,
+	"width": 300,
+	"height": 300
 },
 "main_set_header": {
-	"x": 35,
-	"y": 35,
-	"width": 340,
+	"x": 500,
+	"y": 10,
+	"width": 200,
 	"height": 20,
 	"text": "Main settings"
 },
@@ -236,15 +236,15 @@
 
 
 "solver_set": {
-	"x": 405,
-	"y": 15,
-	"width": 380,
-	"height": 250
+	"x": 700,
+	"y": 20,
+	"width": 300,
+	"height": 300
 },
 "solver_set_header": {
-	"x": 425,
-	"y": 35,
-	"width": 340,
+	"x": 700,
+	"y": 10,
+	"width": 200,
 	"height": 20,
 	"text": "Captcha solver"
 },
@@ -326,15 +326,15 @@
 
 
 "post_set": {
-	"x": 15,
-	"y": 275,
-	"width": 380,
-	"height": 460
+	"x": 400,
+	"y": 320,
+	"width": 300,
+	"height": 300
 },
 "post_set_header": {
-	"x": 35,
-	"y": 295,
-	"width": 340,
+	"x": 500,
+	"y": 610,
+	"width": 200,
 	"height": 20,
 	"text": "Post settings"
 },
@@ -607,15 +607,15 @@
 
 
 "media_set": {
-	"x": 405,
-	"y": 275,
-	"width": 380,
-	"height": 460
+	"x": 700,
+	"y": 320,
+	"width": 300,
+	"height": 300
 },
 "media_set_header": {
-	"x": 425,
-	"y": 295,
-	"width": 340,
+	"x": 700,
+	"y": 610,
+	"width": 200,
 	"height": 20,
 	"text": "Media"
 },
@@ -780,14 +780,14 @@
 "stats": {
 	"x": 795,
 	"y": 15,
-	"width": 380,
-	"height": 250
+	"width": 0,
+	"height": 0
 },
 "stats_header": {
 	"x": 815,
 	"y": 35,
-	"width": 340,
-	"height": 20,
+	"width": 0,
+	"height": 0,
 	"text": "Statistics"
 },
 "total_posts_label": {

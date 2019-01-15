@@ -26,7 +26,7 @@ private:
 
     bool called;
     bool wasCalled;
-    unsigned int rand;
+    unsigned int rnd;
 
     void set_height();
     void set_quote(const std::string &quote, std::vector<std::string> * bank);

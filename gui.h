@@ -67,6 +67,7 @@ private:
     bool started;  // start/stop
     bool start();
     bool stop();
+    void loadData();
     void updateData();
     void updateConfig();
 
@@ -79,6 +80,8 @@ private:
     std::string username;
     std::string totalPosts;
     std::string postsCount;
+    std::string totalBans;
+    std::string proxiesCount;
     QMovie * anima;
 
     QPoint mpos;
