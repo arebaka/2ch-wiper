@@ -313,7 +313,7 @@ string Setup::comline () {
     command += logMode;
 
     command += (" -s " + solver + " -k ");
-    if (!hasKey || key == "") command += "0 ";
+    if (!hasKey || key == "") command += "0 -r";
     else command += (key + " -r ");
     command += (proxyRepeatsCount + " -m " + mode + " ");
 
@@ -359,7 +359,7 @@ string Setup::comline () {
         for (unsigned int i(0); i < shrapnelThreads.size(); i++)
             command += (" " + shrapnelThreads[i]);
 
-//    cout << command << endl << endl << endl << endl;
+    cout << command << endl << endl << endl << endl;
     return command;
 }
 

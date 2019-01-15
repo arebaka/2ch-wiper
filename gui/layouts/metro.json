@@ -757,21 +757,21 @@
 "colorization": {
 	"x": 30,
 	"y": 70,
-	"width": 110,
+	"width": 280,
 	"height": 20,
 	"text": "Colorization"
 },
 "affine": {
 	"x": 30,
 	"y": 90,
-	"width": 110,
+	"width": 280,
 	"height": 20,
 	"text": "Affine transformation"
 },
 "to_PNG": {
 	"x": 30,
 	"y": 110,
-	"width": 90,
+	"width": 280,
 	"height": 20,
 	"text": "Convert to PNG"
 },
