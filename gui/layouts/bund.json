@@ -46,14 +46,27 @@
 	"text": "Save config..."
 },
 "username_label": {
-	"x": 180,
+	"x": 1020,
 	"y": 0,
-	"width": 180,
+	"width": 100,
 	"height": 30,
 	"text": "Username:"
 },
 "username": {
-	"x": 180,
+	"x": 1120,
+	"y": 0,
+	"width": 180,
+	"height": 30
+},
+"password_label": {
+	"x": 1020,
+	"y": 30,
+	"width": 100,
+	"height": 30,
+	"text": "Password:"
+},
+"password": {
+	"x": 1120,
 	"y": 30,
 	"width": 180,
 	"height": 30
@@ -224,7 +237,7 @@
 	"y": 100,
 	"width": 120,
 	"height": 25,
-	"text": "Potocks count:"
+	"text": "Fibers count:"
 },
 "shrapnel_fibers": {
 	"x": 140,
@@ -320,7 +333,7 @@
 	"y": 45,
 	"width": 280,
 	"height": 20,
-	"text": "Parse key from bund_server",
+	"text": "Parse key from bund-server",
 	"checked": true
 },
 
@@ -399,7 +412,7 @@
 	"y": 130,
 	"width": 160,
 	"height": 25,
-	"text": "Post text from file"
+	"text": "Text from file"
 },
 "complain": {
 	"x": 0,
@@ -461,7 +474,7 @@
 	"y": 95,
 	"width": 140,
 	"height": 25,
-	"text": "OP_post answer"
+	"text": "OP-post answer"
 },
 "no_trigger": {
 	"x": 10,
@@ -559,7 +572,7 @@
 	"y": 40,
 	"width": 130,
 	"height": 25,
-	"text": "Paste to thread:",
+	"text": "Target thread:",
 	"disable": true,
 	"disabled": true
 },
@@ -675,14 +688,14 @@
 },
 "videos": {
 	"x": 10,
-	"y": 90,
+	"y": 80,
 	"width": 120,
 	"height": 25,
 	"text": "Videos"
 },
 "videos_count_label": {
 	"x": 130,
-	"y": 90,
+	"y": 80,
 	"width": 80,
 	"height": 25,
 	"text": "Per post:",
@@ -691,7 +704,7 @@
 },
 "videos_count": {
 	"x": 210,
-	"y": 90,
+	"y": 80,
 	"width": 40,
 	"height": 25,
 	"text": "1",
@@ -700,7 +713,7 @@
 },
 "videos_folder_label": {
 	"x": 30,
-	"y": 120,
+	"y": 110,
 	"width": 100,
 	"height": 25,
 	"text": "From folder:",
@@ -709,7 +722,7 @@
 },
 "videos_folder": {
 	"x": 130,
-	"y": 120,
+	"y": 110,
 	"width": 120,
 	"height": 25,
 	"disable": true,
@@ -717,14 +730,14 @@
 },
 "medias_from_posts": {
 	"x": 10,
-	"y": 160,
+	"y": 150,
 	"width": 240,
 	"height": 25,
 	"text": "Media from posts"
 },
 "no_media": {
 	"x": 10,
-	"y": 200,
+	"y": 180,
 	"width": 240,
 	"height": 25,
 	"text": "Nothing"
@@ -732,9 +745,9 @@
 
 "shackal_box": {
 	"x": 20,
-	"y": 300,
+	"y": 270,
 	"width": 240,
-	"height": 100,
+	"height": 130,
 	"disable": true,
 	"disabled": true,
 	"hiding": true,
@@ -751,34 +764,35 @@
 	"y": 0,
 	"width": 220,
 	"height": 25,
-	"text": "Shackal degree:"
+	"text": "Image distortion degree:"
 },
 "shackal_degree": {
 	"x": 10,
 	"y": 30,
 	"width": 220,
-	"height": 15
+	"height": 15,
+	"vertical": false
 },
 "colorization": {
 	"x": 10,
-	"y": 50,
-	"width": 110,
+	"y": 60,
+	"width": 220,
 	"height": 20,
 	"text": "Colorization"
 },
 "affine": {
 	"x": 10,
-	"y": 70,
-	"width": 110,
+	"y": 80,
+	"width": 220,
 	"height": 20,
-	"text": "Affine t-on"
+	"text": "Affine transformation"
 },
 "to_PNG": {
-	"x": 150,
-	"y": 60,
-	"width": 90,
+	"x": 10,
+	"y": 100,
+	"width": 220,
 	"height": 20,
-	"text": "PNG"
+	"text": "Convert to PNG"
 },
 
 
@@ -802,7 +816,7 @@
 	"height": 30,
 	"text": "Total posts:"
 },
-"total_posts": {
+"total_posts_LCD": {
 	"x": 160,
 	"y": 50,
 	"width": 100,
@@ -816,7 +830,7 @@
 	"height": 30,
 	"text": "Total bans:"
 },
-"total_bans": {
+"total_bans_LCD": {
 	"x": 160,
 	"y": 80,
 	"width": 100,
@@ -828,9 +842,9 @@
 	"y": 110,
 	"width": 140,
 	"height": 30,
-	"text": "Posts in last:"
+	"text": "Last posts:"
 },
-"posts": {
+"posts_LCD": {
 	"x": 160,
 	"y": 110,
 	"width": 100,
@@ -844,7 +858,7 @@
 	"height": 30,
 	"text": "Proxies:"
 },
-"proxies": {
+"proxies_LCD": {
 	"x": 160,
 	"y": 140,
 	"width": 100,

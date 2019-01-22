@@ -9,6 +9,7 @@ private:
 //    static const vector<string> source;
 
     string username;  // имя пользователя
+    string password;  // пароль для получения казённого ключа
     string board;  // доска
     string thread;  // тред
     string chaos;  // флаг хаоса и тред для постинга
@@ -46,10 +47,10 @@ private:
 
 public:
     Setup();
-    Setup(const int &argsCount, const char * args[]);
     ~Setup();
 
     void set_username(const string &username="");
+    void set_password(const string &password="");
     void set_board(const string &board="b");
     void set_thread(const string &thread="0");
     void set_chaos(const string &chaos="-1");
@@ -78,7 +79,6 @@ public:
     void set_complains_with_posts(const bool &status);
 
     void clear();
-    Setup parse(const int &argsCount, const char * args[]);
     vector<string> validate();
     unsigned char complete();
     vector<string> start();

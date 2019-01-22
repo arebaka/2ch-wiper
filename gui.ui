@@ -3468,7 +3468,7 @@
       <string>stats-label</string>
      </property>
     </widget>
-    <widget class="QLCDNumber" name="totalPosts">
+    <widget class="QLCDNumber" name="totalPostsLCD">
      <property name="geometry">
       <rect>
        <x>150</x>
@@ -3522,7 +3522,7 @@
       <string>stats-label</string>
      </property>
     </widget>
-    <widget class="QLCDNumber" name="totalBans">
+    <widget class="QLCDNumber" name="totalBansLCD">
      <property name="geometry">
       <rect>
        <x>150</x>
@@ -3576,7 +3576,7 @@
       <string>stats-label</string>
      </property>
     </widget>
-    <widget class="QLCDNumber" name="posts">
+    <widget class="QLCDNumber" name="postsLCD">
      <property name="geometry">
       <rect>
        <x>150</x>
@@ -3609,7 +3609,7 @@
       <string>stats-LCD</string>
      </property>
     </widget>
-    <widget class="QLCDNumber" name="proxies">
+    <widget class="QLCDNumber" name="proxiesLCD">
      <property name="geometry">
       <rect>
        <x>150</x>
@@ -3658,6 +3658,90 @@
      </property>
      <property name="text">
       <string>Proxies:</string>
+     </property>
+     <property name="class" stdset="0">
+      <string>stats-label</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="totalPosts">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="class" stdset="0">
+      <string>stats-label</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="totalBans">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>0</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="class" stdset="0">
+      <string>stats-label</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="posts">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>0</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="class" stdset="0">
+      <string>stats-label</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="proxies">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>0</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
      </property>
      <property name="class" stdset="0">
       <string>stats-label</string>
@@ -3797,6 +3881,48 @@
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="passwordLabel">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>0</y>
+      <width>200</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Password:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="password">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>30</y>
+      <width>150</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="maxLength">
+     <number>64</number>
+    </property>
+    <property name="frame">
+     <bool>true</bool>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
+   </widget>
    <zorder>topBanner</zorder>
    <zorder>backBanner</zorder>
    <zorder>anima</zorder>
@@ -3822,6 +3948,8 @@
    <zorder>mediaSetHeader</zorder>
    <zorder>statsHeader</zorder>
    <zorder>modeLabel</zorder>
+   <zorder>passwordLabel</zorder>
+   <zorder>password</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -3839,10 +3967,10 @@
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup_4"/>
+  <buttongroup name="buttonGroup_9"/>
   <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup_5"/>
   <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_9"/>
  </buttongroups>
 </ui>

@@ -45,7 +45,7 @@ GUI::~GUI () {
 
 void GUI::set_layout (std::string path) {
     const char * members[] = {"GUI",
-    "top_banner", "help_button", "peedor_bar_button", "music_button", "open_config_button", "save_config_button", "username_label", "username", "roll_up_button", "close_button",
+    "top_banner", "help_button", "peedor_bar_button", "music_button", "open_config_button", "save_config_button", "username_label", "username", "password_label", "password", "roll_up_button", "close_button",
 
     "main_set", "main_set_header",
     "mode_box", "mode_label", "main_mode", "shrapnel_mode",
@@ -68,15 +68,14 @@ void GUI::set_layout (std::string path) {
     "media_box", "media_label", "images", "images_count_label", "images_count", "images_folder_label", "images_folder", "videos", "videos_count_label", "videos_count", "videos_folder_label", "videos_folder", "medias_from_posts", "no_media",
     "shackal_box", "shackal_label", "shackal_degree_label", "shackal_degree", "colorization", "affine", "to_PNG",
 
-    "stats", "stats_header", "total_posts_label", "total_posts", "total_bans_label", "total_bans", "posts_label", "posts", "proxies_label", "proxies",
+    "stats", "stats_header", "total_posts_label", "total_posts", "total_posts_LCD", "total_bans_label", "total_bans", "total_bans_LCD", "posts_label", "posts", "posts_LCD", "proxies_label", "proxies", "proxies_LCD",
 
     "Wipe-chan", "blockquote", "back_banner", "anima", "start_button"
 };
-    const char * values[] = {"x", "y", "width", "height", "text", "hiding", "hidden"};
     std::string text;
     int x, y, width, height, value, digitsCount;
-    bool hiding, hidden, disable, disabled, checked;
-    QWidget * widget;  QLabel * label;  QPushButton * button;  QCheckBox * checkBox;  QRadioButton * radioButton;  QLineEdit * edit;  QSpinBox * spin; QComboBox * combo; QLCDNumber * LCD;
+    bool hiding, hidden, disable, disabled, checked, vertical;
+    QWidget * widget;  QLabel * label;  QPushButton * button;  QCheckBox * checkBox;  QRadioButton * radioButton;  QLineEdit * edit;  QSpinBox * spin; QComboBox * combo; QLCDNumber * LCD; QSlider * slider;
     char type;
     rapidjson::Document JSON;
     rapidjson::Value member;
@@ -101,6 +100,7 @@ void GUI::set_layout (std::string path) {
                 if (member.HasMember("value") && member["value"].IsInt()) value = member["value"].GetInt(); else value = 0;
                 if (member.HasMember("digits_count") && member["digits_count"].IsInt()) digitsCount = member["digits_count"].GetInt(); else digitsCount = 0;
                 if (member.HasMember("checked") && member["checked"].IsBool()) checked = member["checked"].GetBool(); else checked = false;
+                if (member.HasMember("vertical") && member["vertical"].IsBool()) vertical = member["vertical"].GetBool(); else vertical = false;
                 if (member.HasMember("disable") && member["disable"].IsBool()) disable = member["disable"].GetBool(); else disable = false;
                 if (member.HasMember("disabled") && member["disabled"].IsBool()) disabled = member["disabled"].GetBool(); else disabled = false;
                 if (member.HasMember("hiding") && member["hiding"].IsBool()) hiding = member["hiding"].GetBool(); else hiding = false;
@@ -126,6 +126,8 @@ void GUI::set_layout (std::string path) {
                     else if (members[i] == "save_config_button") { widget = button = ui->saveButton; type = 'b'; }
                     else if (members[i] == "username_label") { widget = label = ui->usernameLabel; type = 'l'; }
                     else if (members[i] == "username") { widget = edit = ui->username; type = 'e'; }
+                    else if (members[i] == "password_label") { widget = label = ui->passwordLabel; type = 'l'; }
+                    else if (members[i] == "password") { widget = edit = ui->password; type = 'e'; }
                     else if (members[i] == "roll_up_button") { widget = button = ui->rollUpButton; type = 'b'; }
                     else if (members[i] == "close_button") { widget = button = ui->closeButton; type = 'b'; }
 
@@ -239,7 +241,7 @@ void GUI::set_layout (std::string path) {
                     else if (members[i] == "shackal_box") { widget = ui->shackalBox; type = 'w'; }
                     else if (members[i] == "shackal_label") { widget = label = ui->shackalLabel; type = 'l'; }
                     else if (members[i] == "shackal_degree_label") { widget = label = ui->shackalDegreeLabel; type = 'l'; }
-                    else if (members[i] == "shackal_degree") { widget = ui->shackalDegree; type = 'w'; }
+                    else if (members[i] == "shackal_degree") { widget = slider = ui->shackalDegree; type = 'S'; }
                     else if (members[i] == "colorization") { widget = checkBox = ui->shackalColor; type = 'c'; }
                     else if (members[i] == "affine") { widget = checkBox = ui->shackalAffine; type = 'c'; }
                     else if (members[i] == "to_PNG") { widget = checkBox = ui->toPNG; type = 'c'; }
@@ -248,13 +250,17 @@ void GUI::set_layout (std::string path) {
                     else if (members[i] == "stats") { widget = ui->stats; type = 'w'; }
                     else if (members[i] == "stats_header") { widget = label = ui->statsHeader; type = 'l'; }
                     else if (members[i] == "total_posts_label") { widget = label = ui->totalPostsLabel; type = 'l'; }
-                    else if (members[i] == "total_posts") { widget = LCD = ui->totalPosts; type = 'L'; }
+                    else if (members[i] == "total_posts") { widget = label = ui->totalPosts; type = 'l'; }
+                    else if (members[i] == "total_posts_LCD") { widget = LCD = ui->totalPostsLCD; type = 'L'; }
                     else if (members[i] == "total_bans_label") { widget = label = ui->totalBansLabel; type = 'l'; }
-                    else if (members[i] == "total_bans") { widget = LCD = ui->totalBans; type = 'L'; }
+                    else if (members[i] == "total_bans") { widget = label = ui->totalBans; type = 'l'; }
+                    else if (members[i] == "total_bans_LCD") { widget = LCD = ui->totalBansLCD; type = 'L'; }
                     else if (members[i] == "posts_label") { widget = label = ui->postsLabel; type = 'l'; }
-                    else if (members[i] == "posts") { widget = LCD = ui->posts; type = 'L'; }
+                    else if (members[i] == "posts") { widget = label = ui->posts; type = 'l'; }
+                    else if (members[i] == "posts_LCD") { widget = LCD = ui->postsLCD; type = 'L'; }
                     else if (members[i] == "proxies_label") { widget = label = ui->proxiesLabel; type = 'l'; }
-                    else if (members[i] == "proxies") { widget = LCD = ui->proxies; type = 'L'; }
+                    else if (members[i] == "proxies") { widget = label = ui->proxies; type = 'l'; }
+                    else if (members[i] == "proxies_LCD") { widget = LCD = ui->proxiesLCD; type = 'L'; }
 
 
                     else if (members[i] == "Wipe-chan") { widget = ui->chan; type = 'w'; }
@@ -282,12 +288,13 @@ void GUI::set_layout (std::string path) {
                         else if (type == 's') spin->setValue(value);
                         else if (type == 'm') combo->setCurrentText(text.c_str());
                         else if (type == 'L') LCD->setDigitCount(digitsCount);
+                        else if (type == 'S') slider->setOrientation(vertical ? Qt::Vertical : Qt::Horizontal);
                     }
                 }
             }
         }
     } else {
-        cout << "ОШИБКА В МАКЕТЕ\n";
+        std::cerr << "ОШИБКА В МАКЕТЕ!\n";
         exit(1);
     }
 }
@@ -308,25 +315,37 @@ void GUI::loadData () {
             key = datum.substr(0, datum.find(' '));
             value = datum.substr(datum.find(' ')+1, datum.length()-1);
             if (key == "total_posts") {
-                ui->totalPosts->display(atoi(value.c_str()));
+                ui->totalPosts->setText(value.c_str());
+                ui->totalPostsLCD->display(atoi(value.c_str()));
                 totalPosts = value;
             } else if (key == "total_bans") {
-                ui->totalBans->display(value.c_str());
+                ui->totalBans->setText(value.c_str());
+                ui->totalBansLCD->display(value.c_str());
                 totalBans = value;
+            } else if (key == "posts") {
+                ui->posts->setText(value.c_str());
+                ui->postsLCD->display(value.c_str());
+                postsCount = value;
             } else if (key == "username") {
                 ui->username->setText(value.c_str());
                 username = value;
+            } else if (key == "password") {
+                ui->password->setText(value.c_str());
             }
         }
 
     } else {
-        ui->totalPosts->display(0);
+        ui->totalPosts->setText("0");
+        ui->totalPostsLCD->display(0);
         username = "Аноним";
         ui->username->setText("Аноним");
-        totalPosts = "0";
-        ui->totalPosts->display(0);
+        ui->password->clear();
         totalBans = "0";
-        ui->totalBans->display(0);
+        ui->totalBans->setText("0");
+        ui->totalBansLCD->display(0);
+        postsCount = "0";
+        ui->posts->setText("0");
+        ui->postsLCD->display(0);
 
         updateConfig();
     }
@@ -336,7 +355,8 @@ void GUI::loadData () {
     unsigned long i;
     for (i = 0; !config.eof(); i++) getline(config, datum);
     proxiesCount = to_string(i-1);
-    ui->proxies->display(proxiesCount.c_str());
+    ui->proxies->setText(proxiesCount.c_str());
+    ui->proxiesLCD->display(proxiesCount.c_str());
 }
 
 void GUI::updateData () {
@@ -349,12 +369,15 @@ void GUI::updateData () {
             value = datum.substr(datum.find(' ')+1, datum.length()-1);
             if (key == "posts") {
                 postsCount = value;
-                ui->posts->display(atoi(postsCount.c_str()));
+                ui->posts->setText(postsCount.c_str());
+                ui->postsLCD->display(atoi(postsCount.c_str()));
                 totalPosts = to_string(atoi(totalPosts.c_str()) + atoi(value.c_str()));
-                ui->totalPosts->display(atoi(totalPosts.c_str()));
+                ui->totalPosts->setText(totalPosts.c_str());
+                ui->totalPostsLCD->display(atoi(totalPosts.c_str()));
             } else if (key == "bans") {
                 totalBans = to_string(atoi(totalBans.c_str()) + atoi(value.c_str()));
-                ui->totalBans->display(atoi(totalBans.c_str()));
+                ui->totalBans->setText(totalBans.c_str());
+                ui->totalBansLCD->display(atoi(totalBans.c_str()));
             }
         }
     }
@@ -365,7 +388,8 @@ void GUI::updateData () {
     unsigned long i;
     for (i = 0; !responce.eof(); i++) { getline(responce, datum); if (datum.empty()) i--; }
     proxiesCount = to_string(i-1);
-    ui->proxies->display(proxiesCount.c_str());
+    ui->proxies->setText(proxiesCount.c_str());
+    ui->proxiesLCD->display(proxiesCount.c_str());
 }
 
 void GUI::updateConfig () {
@@ -393,6 +417,7 @@ void GUI::on_startButton_clicked () {
 bool GUI::start () {
     setup.clear();
     setup.set_username(username);
+    setup.set_password(ui->password->text().toStdString());
 
     if (ui->mainMode->isChecked()) {
         setup.set_board(ui->board->currentText().toStdString());

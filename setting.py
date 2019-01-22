@@ -4,6 +4,7 @@ import os
 import requests
 import argparse
 import urllib3
+from requests.auth import HTTPBasicAuth
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 from scheme import *
@@ -19,65 +20,42 @@ def activate_debug(logMode):
 		logging.basicConfig(level=logging.DEBUG)
 
 
-## args:
-# 1 - доска
-# 2 - тред (или "0", если доску)
-# 3 - флаг хаоса и тред для постинга (-1, если без хаоса, 0, если шрапнельный хаос)
-# 4 - число потоков (или 0, если 1 пост в 5 минут)
-# 5 - номер вывода логов (или 0, если без них)
-# 6 - номер решателя
-# 7 - ключ (или "0" для казенного)
-# 8 - число повторов прокси
-# 9 - режим вайпалки
-# 10 - минимальный номер разбана / доска для жалоб (или -1, если не 1 и не 8 режим)
-# 11 - максимальный номер разбана / максимальное число ссылок в жалобах (или -1, если не 1 и не 8 режим)
-# 12 - номер режима триггера (или 0, если доску или просто без него)
-# 13 - число тредов для шрапнели (или 0, если без неё)
-# 14 - минимальное число постов в тредах для шрапнели (или -1, если без неё или с указанием тредов)
-# 15 - номер вида прикреплений (или 0, если дэ или просто без них)
-# 16 - подкаталог прикреплений (или ".", если из корня)
-# 17 - число прикреплений (или -1, если из постов)
-# 18 - номер режима сажи
-# 19 - уровень шакала от 0 до 100
-# 20 - флаг цветного шакала
-# 21 - флаг аффинного шакала
-# 22 - флаг конвертации в PNG с альфа-каналом
-# 23 итд - треды для шрапнели при ручном указании
-
 # ====== Конфигурация ======
 class Setup:
 
 	def __init__(self, args):
 		parser = argparse.ArgumentParser()
-		parser.add_argument("-u", "--username", dest="username")
-		parser.add_argument("-b", "--board", dest="board")
-		parser.add_argument("-t", "--thread", dest="thread")
-		parser.add_argument("-c", "--chaos", dest="chaos")
-		parser.add_argument("-p", "--potocks", dest="potocksCount")
-		parser.add_argument("-d", "--debug", dest="debug")
-		parser.add_argument("-s", "--solver", dest="solver")
-		parser.add_argument("-k", "--key", dest="key")
-		parser.add_argument("-r", "--repeats", dest="proxyRepeatsCount")
-		parser.add_argument("-m", "--mode", dest="mode")
-		parser.add_argument("--minBan", dest="minBan")
-		parser.add_argument("--maxBan", dest="maxBan")
-		parser.add_argument("-cb", "--complainBoard", dest="complainBoard")
-		parser.add_argument("-l", "--links", dest="linksCount")
-		parser.add_argument("-w", "--withPosts", dest="withPosts")
-		parser.add_argument("-T", "--trigger", dest="triggerForm")
-		parser.add_argument("-sh", "--shrapnel", dest="shrapnelCharge")
-		parser.add_argument("-mp", "--min", dest="minPostsCount")
-		parser.add_argument("-M", "--media", dest="mediaKind")
-		parser.add_argument("-g", "--group", dest="mediaGroup")
-		parser.add_argument("-mc", "--medias", dest="mediasCount")
-		parser.add_argument("-S", "--sage", dest="sageMode")
-		parser.add_argument("-SH", "--shakal", dest="shakalPower")
-		parser.add_argument("-C", "--color", dest="shakalColor")
-		parser.add_argument("-a", "--affine", dest="shakalAffine")
-		parser.add_argument("-P", "--png", dest="toPNG")
+		parser.add_argument("-u", "--username", dest="username")  # логин
+		parser.add_argument("--password", dest="password")  # пароль
+		parser.add_argument("-b", "--board", dest="board")  # доска
+		parser.add_argument("-t", "--thread", dest="thread") # тред (или "0", если доску)
+		parser.add_argument("-c", "--chaos", dest="chaos")  # флаг хаоса и тред для постинга (-1, если без хаоса, 0, если шрапнельный хаос)
+		parser.add_argument("-p", "--potocks", dest="potocksCount")  # число потоков (или 0, если 1 пост в 5 минут)
+		parser.add_argument("-d", "--debug", dest="debug")  # номер вывода логов (или 0, если без них)
+		parser.add_argument("-s", "--solver", dest="solver")  # номер решателя
+		parser.add_argument("-k", "--key", dest="key")  # ключ (или "0" для казенного)
+		parser.add_argument("-r", "--repeats", dest="proxyRepeatsCount")  # число повторов прокси
+		parser.add_argument("-m", "--mode", dest="mode")  # режим вайпалки
+		parser.add_argument("--minBan", dest="minBan")  # минимальный номер разбана (или -1, если не 8 режим)
+		parser.add_argument("--maxBan", dest="maxBan")  # максимальный номер разбана (или -1, если не 8 режим)
+		parser.add_argument("-cb", "--complainBoard", dest="complainBoard")  # доска для жалоб (или -1, если не 1 режим)
+		parser.add_argument("-l", "--links", dest="linksCount")  # максимальное число ссылок в жалобах (или -1, если не 1 режим)
+		parser.add_argument("-w", "--withPosts", dest="withPosts")  # флаг приписки постов к ссылкам в жалобах
+		parser.add_argument("-T", "--trigger", dest="triggerForm")  # номер режима триггера (или 0, если доску или просто без него)
+		parser.add_argument("-sh", "--shrapnel", dest="shrapnelCharge")  # число тредов для шрапнели (или 0, если без неё)
+		parser.add_argument("-mp", "--min", dest="minPostsCount")  # минимальное число постов в тредах для шрапнели (или -1, если без неё или с указанием тредов)
+		parser.add_argument("-M", "--media", dest="mediaKind")  # номер вида прикреплений (или 0, если дэ или просто без них)
+		parser.add_argument("-g", "--group", dest="mediaGroup")  # подкаталог прикреплений (или ".", если из корня)
+		parser.add_argument("-mc", "--medias", dest="mediasCount")  # число прикреплений (или -1, если из постов)
+		parser.add_argument("-S", "--sage", dest="sageMode")  # номер режима сажи
+		parser.add_argument("-SH", "--shakal", dest="shakalPower")  # уровень шакала от 0 до 100
+		parser.add_argument("-C", "--color", dest="shakalColor")  # флаг цветного шакала
+		parser.add_argument("-a", "--affine", dest="shakalAffine")  # флаг аффинного шакала
+		parser.add_argument("-P", "--png", dest="toPNG")  # флаг конвертации в PNG с альфа-каналом
 		args = parser.parse_args(args)
 
 		self.username = args.username
+		self.password = args.password
 		if int(args.debug) != 0:
 			activate_debug(int(args.debug))
 		self.cpFile, self.bansFile, self.fullFile = self.set_encoding()  # файлы с пастами
@@ -88,7 +66,7 @@ class Setup:
 		self.potocksCount = int(args.potocksCount)  # число потоков
 		self.TIMEOUT, self.PAUSE = self.set_consts(self.potocksCount)  # таймаут, пауза
 
-		self.solver, self.key, self.keyreq = self.set_key(int(args.solver), args.key)  # солвер, ключ, статус ключа
+		self.solver, self.key, self.keyreq = self.set_key(int(args.solver), args.key, args.username, args.password)  # солвер, ключ, статус ключа
 		self.proxyRepeatsCount = int(args.proxyRepeatsCount)  # число повторов прокси
 		self.mode, self.pastes, self.bigPaste = self.set_mode(int(args.mode))  # режим вайпалки, пасты
 
@@ -141,7 +119,7 @@ class Setup:
 		return TIMEOUT, PAUSE
 
 	# === получение казённого ключа ===
-	def get_key(self, solver):
+	def get_key(self, solver, username, password):
 		if solver == 0:
 			solverStr = "xcaptcha"
 			print("Пытаюсь получить казеный ключ для икскаптчи...")
@@ -152,12 +130,15 @@ class Setup:
 			solverStr = "anticaptcha"
 			print("Пытаюсь получить казеный ключ для антикапчи...")
 
-		keyreq = requests.get('https://2ch-ri.ga/captcha/'+solverStr)
+		keyreq = requests.get('https://2ch-ri.ga/captcha/'+solverStr, auth=(username, password))
 		if keyreq.status_code == 200 and len(keyreq.text) == 32:
 			print("Ключ загружен!")
 			key = keyreq.text
 		elif keyreq.status_code == 404 or len(keyreq.text) == 0:
 			print("Ключ недоступен!")
+			exit()
+		elif keyreq.status_code == 401:
+			print("Неверный логин/пароль!")
 			exit()
 		else:
 			print("Получен неожиданный ответ от сервера:", keyreq, keyreq.text)
@@ -166,9 +147,9 @@ class Setup:
 		return key, keyreq
 
 	# === валидация ключа ===
-	def set_key(self, solver, key):
+	def set_key(self, solver, key, username, password):
 		if key == "0":
-			key, keyreq = self.get_key(solver)
+			key, keyreq = self.get_key(solver, username, password)
 		elif len(key) == 32:
 			print("Верифицируем ключ...")
 			if solver == 0:

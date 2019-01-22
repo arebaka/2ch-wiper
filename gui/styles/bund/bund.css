@@ -14,7 +14,7 @@ QLabel {
 /* Панель */
 #topBanner {
 	font-size: 50px !important;
-	padding-top: 5px;
+	padding-top: 3px;
 	qproperty-alignment: AlignCenter;
 	background: #17191B;
 	border-top: 3px outset #1A1D21;
@@ -213,7 +213,7 @@ QLineEdit, QComboBox, QSpinBox, QMenu, QComboBox *, QSpinBox * {
 	border-radius: 2px;
 }
 QLineEdit:focus, QComboBox:focus {
-	border: 1px inset lime;
+	border: 2px dotted lime;
 }
 QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled {
 	background: gray;

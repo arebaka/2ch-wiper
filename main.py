@@ -36,7 +36,7 @@ postsCounter = 0
 # ====== Шапка ======
 def show_logo():
 	os.system('cls' if os.name == 'nt' else 'clear')
-	print("\n***************************************** v2.3 **")
+	print("\n***************************************** v2.5 **")
 	print("*    2CH.HK WIPE MACHINE - ReCaptcha edition    *")
 	print("*     Только для внутреннего использования      *")
 	print("*        Оригинальный проект: glow_stick        *")
