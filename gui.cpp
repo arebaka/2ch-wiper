@@ -395,6 +395,7 @@ void GUI::updateData () {
 void GUI::updateConfig () {
     std::ofstream config(".config");
     config << "username " << username << std::endl;
+    config << "password " << ui->password->text().toStdString() << std::endl;
     config << "total_posts " << totalPosts << std::endl;
     config << "total_bans " << totalBans << std::endl;
 }
