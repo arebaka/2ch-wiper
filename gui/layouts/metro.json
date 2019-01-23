@@ -16,47 +16,60 @@
 "help_button": {
 	"x": 1355,
 	"y": 265,
-	"width": 30,
-	"height": 60
+	"width": 0,
+	"height": 0
 },
 "peedor_bar_button": {
-	"x": 1355,
-	"y": 75,
+	"x": 0,
+	"y": 0,
 	"width": 0,
 	"height": 0
 },
 "music_button": {
-	"x": 1355,
-	"y": 235,
-	"width": 30,
-	"height": 30
+	"x": 1335,
+	"y": 275,
+	"width": 50,
+	"height": 50
 },
 "open_config_button": {
 	"x": 1185,
-	"y": 265,
+	"y": 275,
 	"width": 170,
-	"height": 30,
-	"text": "Open config..."
+	"height": 25,
+	"text": "Open config...     "
 },
 "save_config_button": {
-	"x": 1185,
-	"y": 295,
+	"x": 1184,
+	"y": 300,
 	"width": 170,
-	"height": 30,
-	"text": "Save config..."
+	"height": 25,
+	"text": "Save config...     "
 },
 "username_label": {
-	"x": 180,
-	"y": 0,
-	"width": 0,
-	"height": 0,
+	"x": 1205,
+	"y": 115,
+	"width": 160,
+	"height": 20,
 	"text": "Username:"
 },
 "username": {
-	"x": 180,
-	"y": 30,
-	"width": 0,
-	"height": 0
+	"x": 1205,
+	"y": 135,
+	"width": 160,
+	"height": 30
+},
+"password_label": {
+	"x": 1205,
+	"y": 175,
+	"width": 160,
+	"height": 20,
+	"text": "password"
+},
+"password": {
+	"x": 1205,
+	"y": 195,
+	"width": 160,
+	"height": 30
 },
 "roll_up_button": {
 	"x": 1139,
@@ -251,7 +264,7 @@
 
 "solver_box": {
 	"x": 20,
-	"y": 60,
+	"y": 50,
 	"width": 340,
 	"height": 70
 },
@@ -804,6 +817,7 @@
 	"height": 30,
 	"digits_count": 6
 },
+"total_posts_LCD": {},
 "total_bans_label": {
 	"x": 20,
 	"y": 80,
@@ -818,12 +832,13 @@
 	"height": 30,
 	"digits_count": 6
 },
+"total_bans_LCD": {},
 "posts_label": {
 	"x": 20,
 	"y": 110,
 	"width": 140,
 	"height": 30,
-	"text": "Posts in last:"
+	"text": "Last posts:"
 },
 "posts": {
 	"x": 160,
@@ -832,6 +847,7 @@
 	"height": 30,
 	"digits_count": 6
 },
+"posts_LCD": {},
 "proxies_label": {
 	"x": 20,
 	"y": 140,
@@ -846,6 +862,7 @@
 	"height": 30,
 	"digits_count": 6
 },
+"proxies_LCD": {},
 
 
 "back_banner": {

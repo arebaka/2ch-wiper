@@ -17,22 +17,18 @@ QLabel {
 	padding: 10px;
 	qproperty-alignment: AlignTop;
 	background: #23272B;
-	border-top: 1px outset #606568;
 }
 
 .tool-button {
+	font-size: 16px !important;
 	color: #C3C7C8;
-	background-color: gray;
 	background-repeat: no-repeat;
-	border: 2px outset darkgray;
-	border-radius: 2px;
 }
 .tool-button:hover {
-	color: white;
-	background-color: #20272B;
+	font-weight: bold;
 }
 .tool-button:pressed {
-	border-style: inset;
+	color: white;
 }
 .tool-button:checked {
 	border-color: red;
@@ -49,17 +45,11 @@ QLabel {
 #helpButton {
 	background-image: url(gui/images/help_button.png);
 }
-#peedorBarButton {
-	background-image: url(gui/images/mars.png);
-}
-#peedorBarButton:checked {
-	background-image: url(gui/images/venue.png);
-}
 #musicButton {
-	background-image: url(gui/images/music_off.png);
+	background-image: url(gui/images/sound-off.png);
 }
 #musicButton:checked {
-	background-image: url(gui/images/music_on.png);
+	background-image: url(gui/images/sound-on.png);
 }
 
 
@@ -106,9 +96,6 @@ QLabel {
 .gui-frame {
 	background: #23272B;
 }
-.stats-label {
-	font-size: 20px;
-}
 .gui-frame-header {
 	color: #C8C8C8;
 	font-size: 20px;
@@ -126,6 +113,10 @@ QLabel {
 #shackalBox {
 	border: none;
 	background: #363C42;
+}
+
+#triggerLabel, #chaining, #randTrigger, #shashlik, #oppost, #notrigger {
+	padding-left: 20px;
 }
 
 
@@ -184,10 +175,4 @@ QLineEdit:focus, QComboBox:focus {
 }
 QLineEdit:disabled, QComboBox:disabled, QSpinBox:disabled {
 	background: #363C42;
-}
-
-.stats-LCD {
-	color: red;
-	background: black;
-	border: 1px ridge white;
 }
