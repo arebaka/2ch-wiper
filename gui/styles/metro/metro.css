@@ -42,8 +42,12 @@ QLabel {
 .peedor-button:hover {
 	color: white;
 }
+#helpButton:hover, #musicButton:hover {
+	background-color: #C3C7C8;
+	border-radius: 12px;
+}
 #helpButton {
-	background-image: url(gui/images/help_button.png);
+	background-image: url(gui/images/chan_button.png);
 }
 #musicButton {
 	background-image: url(gui/images/sound-off.png);

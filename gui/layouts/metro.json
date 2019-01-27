@@ -14,10 +14,10 @@
 	"text": "<html><head/><body><p>INFO<br><sub>GUI ver: 2.4</sub></p></body></html>"
 },
 "help_button": {
-	"x": 1355,
-	"y": 265,
-	"width": 0,
-	"height": 0
+	"x": 1360,
+	"y": 275,
+	"width": 25,
+	"height": 25
 },
 "peedor_bar_button": {
 	"x": 0,
@@ -26,10 +26,10 @@
 	"height": 0
 },
 "music_button": {
-	"x": 1335,
-	"y": 275,
-	"width": 50,
-	"height": 50
+	"x": 1360,
+	"y": 300,
+	"width": 25,
+	"height": 25
 },
 "open_config_button": {
 	"x": 1185,
@@ -878,10 +878,10 @@
 	"height": 240
 },
 "Wipe-chan": {
-	"x": 0,
-	"y": 310,
-	"width": 640,
-	"height": 390
+	"x": 795,
+	"y": 335,
+	"width": 590,
+	"height": 400
 },
 "blockquote": {
 	"x": 330,

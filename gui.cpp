@@ -322,16 +322,15 @@ void GUI::loadData () {
                 ui->totalBans->setText(value.c_str());
                 ui->totalBansLCD->display(value.c_str());
                 totalBans = value;
-            } else if (key == "posts") {
-                ui->posts->setText(value.c_str());
-                ui->postsLCD->display(value.c_str());
-                postsCount = value;
             } else if (key == "username") {
                 ui->username->setText(value.c_str());
                 username = value;
             } else if (key == "password") {
                 ui->password->setText(value.c_str());
             }
+            postsCount = "0";
+            ui->posts->setText("0");
+            ui->postsLCD->display(0);
         }
 
     } else {
