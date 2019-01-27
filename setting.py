@@ -143,7 +143,7 @@ class Setup:
 		else:
 			print("Получен неожиданный ответ от сервера:", keyreq, keyreq.text)
 			exit()
-		self.set_key(solver, key)
+		self.set_key(solver, key, username, password)
 		return key, keyreq
 
 	# === валидация ключа ===
