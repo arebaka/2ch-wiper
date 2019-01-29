@@ -746,9 +746,9 @@
 
 "shackal_box": {
 	"x": 20,
-	"y": 220,
+	"y": 210,
 	"width": 340,
-	"height": 150,
+	"height": 130,
 	"disable": true,
 	"disabled": true,
 	"hiding": false,
@@ -756,37 +756,47 @@
 },
 "shackal_degree_label": {
 	"x": 30,
-	"y": 20,
+	"y": 10,
 	"width": 280,
 	"height": 25,
 	"text": "Image distortion degree:"
 },
 "shackal_degree": {
 	"x": 30,
-	"y": 45,
+	"y": 35,
 	"width": 280,
 	"height": 20
 },
 "colorization": {
 	"x": 30,
-	"y": 70,
+	"y": 60,
 	"width": 280,
 	"height": 20,
 	"text": "Colorization"
 },
 "affine": {
 	"x": 30,
-	"y": 90,
+	"y": 80,
 	"width": 280,
 	"height": 20,
 	"text": "Affine transformation"
 },
 "to_PNG": {
 	"x": 30,
-	"y": 110,
+	"y": 100,
 	"width": 280,
 	"height": 20,
 	"text": "Convert to PNG"
+},
+
+"empty_filename": {
+	"x": 26,
+	"y": 355,
+	"width": 280,
+	"height": 20,
+	"text": "Empty filename",
+	"disable": true,
+	"disabled": true
 },
 
 

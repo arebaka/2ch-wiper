@@ -154,14 +154,14 @@ class Post:
 		self.params.append(("email", (None, "sage")))
 		self.params.append(("sage", (None, "on")))
 
-	def set_image(self, file_name, shakalPower=0, shakalColor=False, shakalAffine=False, toPNG=False):
+	def set_image(self, file_name, shakalPower=0, shakalColor=False, shakalAffine=False, toPNG=False, emptyFilename=False):
 		image = self.shakal(file_name, shakalPower, shakalColor, shakalAffine, toPNG)
-		file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
+		file_name_displayed = "💩" if emptyFilename else str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
 		if toPNG: file_name_displayed += ".png"
 		else: file_name_displayed += ".jpg"
 		self.params.append(("formimages[]", (file_name_displayed, image, "image/jpeg")))
 
-	def set_video(self, file_name):
+	def set_video(self, file_name, emptyFilename=False):
 		if file_name.find(".mp4") != -1: ext = "mp4"
 		elif file_name.find(".webm") != -1: ext = "webm"
 
@@ -173,7 +173,7 @@ class Post:
 		file_name_displayed += str("." + ext)
 		self.params.append(("formimages[]", (file_name_displayed, video_bytes, str("video/" + ext))))
 
-	def set_media(self, mediaName, media, shakalPower=0, shakalColor=False, shakalAffine=False, toPNG=False):
+	def set_media(self, mediaName, media, shakalPower=0, shakalColor=False, shakalAffine=False, toPNG=False, emptyFilename=False):
 		file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
 
 		if mediaName.find(".jpg") != -1 or mediaName.find(".png") != -1 or mediaName.find(".gif") != -1 or mediaName.find(".bmp") != -1:
@@ -401,11 +401,11 @@ class Wiper:
 								if self.setup.mediaKind != 3:
 									blue_anus = random.randint(0, len(self.setup.mediaPaths)-1)  # номер пикчи или видео с диска
 								if self.setup.mediaKind == 1:
-									post.set_image(self.setup.mediaPaths[blue_anus], self.setup.shakalPower, self.setup.shakalColor, self.setup.shakalAffine, self.setup.toPNG)
+									post.set_image(self.setup.mediaPaths[blue_anus], self.setup.shakalPower, self.setup.shakalColor, self.setup.shakalAffine, self.setup.toPNG, self.setup.emptyFilename)
 								elif self.setup.mediaKind == 2:
-									post.set_video(self.setup.mediaPaths[blue_anus])
+									post.set_video(self.setup.mediaPaths[blue_anus], self.setup.emptyFilename)
 								elif self.setup.mediaKind == 3:
-									post.set_media(self.threads[threadNum].posts[white_anus].medias[mediaNum].name, self.threads[threadNum].posts[white_anus].medias[mediaNum].file, self.setup.shakalPower, self.setup.shakalColor, self.setup.shakalAffine, self.setup.toPNG)
+									post.set_media(self.threads[threadNum].posts[white_anus].medias[mediaNum].name, self.threads[threadNum].posts[white_anus].medias[mediaNum].file, self.setup.shakalPower, self.setup.shakalColor, self.setup.shakalAffine, self.setup.toPNG, self.setup.emptyFilename)
 						except Exception as e:
 							print(e)
 							print("Не могу скачать / прикрепить файл.")

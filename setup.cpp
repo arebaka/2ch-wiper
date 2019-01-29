@@ -9,7 +9,7 @@ Setup::Setup ()
       hasProxyRepeatsCount(false) , hasMode(false) , hasMinBan(false) , hasMaxBan(false) , hasTriggerForm(false) , \
       hasShrapnelCharge(false) , hasMinPostsCount(false) , hasMediaKind(false) , hasMediaGroup(false) , \
       hasMediasCount(false) , hasSageMode(false) , hasShackalPower(false) , shackalColor(false) , shackalAffine(false) , \
-      toPNG(false) , hasComplainBoard(false) , hasComplainsCount(false) , complainWithPosts(false)
+      toPNG(false) , hasComplainBoard(false) , hasComplainsCount(false) , complainWithPosts(false) , emptyFilename(false)
 {}
 
 Setup::~Setup () {}
@@ -185,6 +185,9 @@ void Setup::set_shackal_affine (const bool &status) {
 void Setup::set_2PNG (const bool &status) {
     toPNG = status;
 }
+void Setup::set_empty_filename (const bool &status) {
+    emptyFilename = status;
+}
 void Setup::set_shrapnelThreads (const vector<string> &shrapnelThreads) {
     if (!this->shrapnelThreads.empty()) this->shrapnelThreads.clear();
     this->shrapnelThreads.reserve(shrapnelThreads.size());
@@ -356,6 +359,8 @@ string Setup::comline () {
     else command += "-a 0 ";
     if (toPNG) command += "-P 1 ";
     else command += "-P 0 ";
+    if (emptyFilename) command += "-ef 1";
+    else command += "-ef 0";
 
     if (hasShrapnelCharge && !hasMinPostsCount)
         for (unsigned int i(0); i < shrapnelThreads.size(); i++)
