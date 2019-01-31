@@ -67,7 +67,6 @@ void GUI::set_layout (std::string path) {
     "media_set", "media_set_header",
     "media_box", "media_label", "images", "images_count_label", "images_count", "images_folder_label", "images_folder", "videos", "videos_count_label", "videos_count", "videos_folder_label", "videos_folder", "medias_from_posts", "no_media",
     "shackal_box", "shackal_label", "shackal_degree_label", "shackal_degree", "colorization", "affine", "to_PNG",
-    "empty_filename",
 
     "stats", "stats_header", "total_posts_label", "total_posts", "total_posts_LCD", "total_bans_label", "total_bans", "total_bans_LCD", "posts_label", "posts", "posts_LCD", "proxies_label", "proxies", "proxies_LCD",
 
@@ -246,7 +245,6 @@ void GUI::set_layout (std::string path) {
                     else if (members[i] == "colorization") { widget = checkBox = ui->shackalColor; type = 'c'; }
                     else if (members[i] == "affine") { widget = checkBox = ui->shackalAffine; type = 'c'; }
                     else if (members[i] == "to_PNG") { widget = checkBox = ui->toPNG; type = 'c'; }
-                    else if (members[i] == "empty_filename") { widget = checkBox = ui->emptyFilename; type = 'c'; }
 
 
                     else if (members[i] == "stats") { widget = ui->stats; type = 'w'; }
@@ -886,11 +884,17 @@ void GUI::on_openButton_clicked () {
         if (ui->videosFolderLabel->property("hidden").toBool()) ui->videosFolderLabel->hide();
         if (ui->videosFolder->property("hidden").toBool()) ui->videosFolder->hide();
 
+        if (ui->imagesCountLabel->property("disabled").toBool()) ui->imagesCountLabel->setDisabled(true);
+        if (ui->imagesCount->property("disabled").toBool()) ui->imagesCount->setDisabled(true);
+        if (ui->imagesFolderLabel->property("disabled").toBool()) ui->imagesFolderLabel->setDisabled(true);
+        if (ui->imagesFolder->property("disabled").toBool()) ui->imagesFolder->setDisabled(true);
+        if (ui->imagesCountLabel->property("hidden").toBool()) ui->imagesCountLabel->hide();
+        if (ui->imagesCount->property("hidden").toBool()) ui->imagesCount->hide();
+        if (ui->imagesFolderLabel->property("hidden").toBool()) ui->imagesFolderLabel->hide();
+        if (ui->imagesFolder->property("hidden").toBool()) ui->imagesFolder->hide();
+
         if (ui->shackalBox->property("disabled").toBool()) ui->shackalBox->setDisabled(true);
         if (ui->shackalBox->property("hidden").toBool()) ui->shackalBox->hide();
-
-        if (ui->emptyFilename->property("disabled").toBool()) ui->emptyFilename->setDisabled(true);
-        if (ui->emptyFilename->property("hidden").toBool()) ui->emptyFilename->hide();
     }
     getline(config, value);
     ui->imagesCount->setValue(atoi(value.c_str()));
@@ -907,9 +911,6 @@ void GUI::on_openButton_clicked () {
     ui->shackalColor->setChecked((value == "color"));
     getline(config, value);
     ui->shackalAffine->setChecked(value == "affine");
-
-    getline(config, value);
-    ui->emptyFilename->setChecked(value == "empty filename");
 }
 
 void GUI::on_saveButton_clicked () {
@@ -981,9 +982,6 @@ void GUI::on_saveButton_clicked () {
     if (ui->shackalColor->isChecked()) config << "color";
     config << std::endl;
     if (ui->shackalAffine->isChecked()) config << "affine";
-    config << std::endl;
-
-    if (ui->emptyFilename->isChecked()) config << "empty filename";
     config << std::endl;
 }
 
@@ -1154,9 +1152,6 @@ void GUI::check_media (std::string type) {
         ui->shackalBox->setDisabled(false);
         ui->shackalBox->show();
 
-        ui->emptyFilename->setDisabled(false);
-        ui->emptyFilename->show();
-
     } else if (type == "videos") {
         ui->videosCount->setDisabled(false);
         ui->videosFolder->setDisabled(false);
@@ -1172,9 +1167,6 @@ void GUI::check_media (std::string type) {
 
         if (ui->shackalBox->property("disable").toBool()) ui->shackalBox->setDisabled(true);
         if (ui->shackalBox->property("hiding").toBool()) ui->shackalBox->hide();
-
-        ui->emptyFilename->setDisabled(false);
-        ui->emptyFilename->show();
 
     } else if (type == "medias") {
         if (ui->videosCountLabel->property("disable").toBool()) ui->videosCountLabel->setDisabled(true);
@@ -1198,9 +1190,6 @@ void GUI::check_media (std::string type) {
         ui->shackalBox->setDisabled(false);
         ui->shackalBox->show();
 
-        ui->emptyFilename->setDisabled(false);
-        ui->emptyFilename->show();
-
     } else if (type == "nothing") {
         if (ui->videosCountLabel->property("disable").toBool()) ui->videosCountLabel->setDisabled(true);
         if (ui->videosCount->property("disable").toBool()) ui->videosCount->setDisabled(true);
@@ -1222,8 +1211,5 @@ void GUI::check_media (std::string type) {
 
         if (ui->shackalBox->property("disable").toBool()) ui->shackalBox->setDisabled(true);
         if (ui->shackalBox->property("hiding").toBool()) ui->shackalBox->hide();
-
-        if (ui->emptyFilename->property("disable").toBool()) ui->emptyFilename->setDisabled(true);
-        if (ui->emptyFilename->property("hiding").toBool()) ui->emptyFilename->hide();
     }
 }

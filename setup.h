@@ -30,7 +30,6 @@ private:
     unsigned char shackalPower; // уровень шакала
     bool shackalColor, shackalAffine;  // опции шакала
     bool toPNG;  // преобразование пикч в PNG
-    bool emptyFilename;  // пустые имена прикреплений
     vector<string> shrapnelThreads;  // треды для шрапнели при ручном указании
 
     bool hasBoard, hasThread, hasChaos, hasPotocksCount, hasLogMode, hasSolver, hasKey, hasProxyRepeatsCount, hasMode, hasMinBan, hasMaxBan, \
@@ -74,7 +73,6 @@ public:
     void set_shackal_color(const bool &status);
     void set_shackal_affine(const bool &status);
     void set_2PNG(const bool &status);
-    void set_empty_filename(const bool &status);
     void set_shrapnelThreads(const vector<string> &shrapnelThreads);
     void set_complain_board(const string &complainBoard="b");
     void set_complains_count(const int &complainsCount=1);

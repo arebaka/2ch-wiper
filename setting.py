@@ -52,7 +52,6 @@ class Setup:
 		parser.add_argument("-C", "--color", dest="shakalColor")  # флаг цветного шакала
 		parser.add_argument("-a", "--affine", dest="shakalAffine")  # флаг аффинного шакала
 		parser.add_argument("-P", "--png", dest="toPNG")  # флаг конвертации в PNG с альфа-каналом
-		parser.add_argument("-ef", "--emptyFilename", dest="emptyFilename")  # флаг пустых имён прикреплений
 		args = parser.parse_args(args)
 
 		self.username = args.username
@@ -93,14 +92,12 @@ class Setup:
 		self.sageMode = int(args.sageMode) # режим сажи
 		
 		self.shakalPower = int(args.shakalPower)  # уровень шакала
-		if args.shakalColor == 1: self.shakalColor = True  # флаг цветного шакала
+		if args.shakalColor == "1": self.shakalColor = True  # флаг цветного шакала
 		else: self.shakalColor = False
-		if args.shakalAffine == 1: self.shakalAffine = True  # флаг аффинного шакала
+		if args.shakalAffine == "1": self.shakalAffine = True  # флаг аффинного шакала
 		else: self.shakalAffine = False
-		if args.toPNG == 1: self.toPNG = True  # флаг конвертации в PNG
+		if args.toPNG == "1": self.toPNG = True  # флаг конвертации в PNG
 		else: self.toPNG = False
-		if args.emptyFilename == 1: self.emptyFilename = True  # флаг пустых имён прикреплений
-		else: self.emptyFilename = False
 
 	# === определение ОС и кодировки ===
 	def set_encoding(self):
@@ -146,13 +143,14 @@ class Setup:
 		else:
 			print("Получен неожиданный ответ от сервера:", keyreq, keyreq.text)
 			exit()
+		self.set_key(solver, key, username, password)
 		return key, keyreq
 
 	# === валидация ключа ===
 	def set_key(self, solver, key, username, password):
 		if key == "0":
 			key, keyreq = self.get_key(solver, username, password)
-		if len(key) == 32:
+		elif len(key) == 32:
 			print("Верифицируем ключ...")
 			if solver == 0:
 				keyStatus = requests.get("http://x-captcha2.ru/res.php?key=" + key + "&action=getbalance")
