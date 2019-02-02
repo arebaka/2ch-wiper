@@ -1,6 +1,14 @@
+/*
+@font-face {
+	font-family: Anime;
+	src: url(gui/fonts/Anime Ace v05.ttf);
+}
+*/
+
 /* ГУИ */
 QWidget {
 	color: black;
+	font-family: "Iconica Medium" sans-serif;
 	font-size: 14px !important; /* размер шрифта */
 }
 GUI {
@@ -62,21 +70,18 @@ QLabel {
 	background: url(gui/logo.png);
 	margin-top: -50px;
 }
-#wipechan {
+#chan {
 	background: url(gui/Wipe-chan/image.png);
 	background-repeat: no-repeat;
-	margin-left: -50px;
-	margin-top: -100px;
+	margin: -80px -120px;
 }
 #blockquote {
-	color: red;
-	font-family: monospace;
+	color: #C3C7C8;
+	font-family: "Anime Ace v05";
 	font-size: 12px !important;
-	font-weight: bold;
-	font-style: italic;
-	padding: 5px;
-	background: white !important;
-	border: 2px solid black;
+	padding: 3px 5px;
+	background: #363C42;
+	border: 5px solid #588E9B;
 	border-radius: 10px;
 }
 

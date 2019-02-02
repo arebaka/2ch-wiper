@@ -58,18 +58,22 @@ private slots:
     void on_gurocaptcha_clicked();
     void on_reserved_clicked();
 
+    bool eventFilter(QObject * object, QEvent * event);
+
 private:
     Ui::GUI * ui;
     QFileDialog * fileDialog;
 
     void set_layout(std::string path);
+    void install_filter();
 
     bool started;  // start/stop
     bool start();
     bool stop();
     void loadData();
-    void updateData();
+    void updateData(const bool &chanIsCalled);
     void updateConfig();
+    void delAll(std::ifstream &response);
 
     void closeEvent (QCloseEvent * event);
     void exposeEvent(QExposeEvent * event);
@@ -77,11 +81,13 @@ private:
     QSound * music;
     bool isPlaying;
     bool isPidor;
-    std::string username;
-    std::string totalPosts;
+    std::string username = "Аноним";
+    std::string totalPosts = "0";
     std::string postsCount;
-    std::string totalBans;
+    std::string totalBans = "0";
     std::string proxiesCount;
+    bool met = false;
+    long relation = 5000;
     QMovie * anima;
 
     QPoint mpos;

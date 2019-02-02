@@ -11,7 +11,7 @@
 	"y": 15,
 	"width": 200,
 	"height": 310,
-	"text": "<html><head/><body><p>INFO<br><sub>GUI ver: 2.4</sub></p></body></html>"
+	"text": "<html><head/><body><p>INFO<br><sub>GUI ver: 2.5</sub></p></body></html>"
 },
 "help_button": {
 	"x": 1360,
@@ -333,7 +333,7 @@
 	"y": 40,
 	"width": 328,
 	"height": 25,
-	"text": "Parse key from bund-server",
+	"text": "Get key from bund-server",
 	"checked": true
 },
 
@@ -804,14 +804,14 @@
 	"text": "Statistics"
 },
 "total_posts_label": {
-	"x": 20,
+	"x": 25,
 	"y": 50,
 	"width": 140,
 	"height": 30,
 	"text": "Total posts:"
 },
 "total_posts": {
-	"x": 160,
+	"x": 170,
 	"y": 50,
 	"width": 100,
 	"height": 30,
@@ -819,14 +819,14 @@
 },
 "total_posts_LCD": {},
 "total_bans_label": {
-	"x": 20,
+	"x": 25,
 	"y": 80,
 	"width": 140,
 	"height": 30,
 	"text": "Total bans:"
 },
 "total_bans": {
-	"x": 160,
+	"x": 170,
 	"y": 80,
 	"width": 100,
 	"height": 30,
@@ -834,14 +834,14 @@
 },
 "total_bans_LCD": {},
 "posts_label": {
-	"x": 20,
+	"x": 25,
 	"y": 110,
 	"width": 140,
 	"height": 30,
 	"text": "Last posts:"
 },
 "posts": {
-	"x": 160,
+	"x": 170,
 	"y": 110,
 	"width": 100,
 	"height": 30,
@@ -849,14 +849,14 @@
 },
 "posts_LCD": {},
 "proxies_label": {
-	"x": 20,
+	"x": 25,
 	"y": 140,
 	"width": 140,
 	"height": 30,
 	"text": "Proxies:"
 },
 "proxies": {
-	"x": 160,
+	"x": 170,
 	"y": 140,
 	"width": 100,
 	"height": 30,
@@ -881,12 +881,12 @@
 	"x": 795,
 	"y": 335,
 	"width": 590,
-	"height": 400
+	"height": 415
 },
 "blockquote": {
-	"x": 330,
+	"x": 250,
 	"y": 10,
-	"width": 300,
+	"width": 340,
 	"height": 30
 },
 "start_button": {

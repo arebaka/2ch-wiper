@@ -1,6 +1,7 @@
 /* ГУИ */
 QWidget {
 	color: #EEFFEE;
+	font-family: monospace;
 	font-size: 14px !important; /* размер шрифта */
 }
 GUI {
@@ -145,7 +146,7 @@ GUI {
 }
 .gui-frame-header {
 	font-family: serif;
-	font-size: 18px;
+	font-size: 15px !important;
 	font-weight: bold;
 	qproperty-alignment: AlignCenter;
 	background: #34D600;
