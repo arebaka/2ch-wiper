@@ -31,13 +31,17 @@ def safe_quit(badproxies, forbiddenproxy, postsCounter, sig=0, frame=0):
 	data = {}
 	data["posts"] = str(postsCounter)
 	data["bans"] = str(len(badproxies) - len(forbiddenproxy))
-	with open(".responce", "w") as file:
+	with open(".responce", "a") as file:
 		for key in data:
-			file.write(key+" "+data[key])
-			file.write("\n")
+			file.write(key+" "+data[key]+"\n")
 
 	print("Выключаюсь...")
 	os._exit(0)
+
+def crash_quit (reason, badproxies=[], forbiddenproxy=[], postsCounter=0):
+	with open(".responce", "w") as file:
+		file.write("crash "+reason+"\n")
+	safe_quit(badproxies, forbiddenproxy, postsCounter)
 
 # ====== Обработка клавиш ======
 def eternal_input(badproxies, forbiddenproxy, postsCounter):

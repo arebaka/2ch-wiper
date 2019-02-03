@@ -258,9 +258,20 @@ class Wiper:
 		self.thread = setup.thread
 		self.setup = setup
 		self.catalog = catalog
-		self.threads = threads
+		self.threads = []
+		if (self.thread == "0"):
+			self.threads.append(Thread(self.setup.board, "0", self.setup.mode, 0))
+		else:
+			self.threads = threads
 
-		self.set_solver(setup.solver)
+#		self.set_solver(setup.solver)
+		self.captchaType = "re"
+		if setup.solver == 0:
+			self.solver = solvers_re.CaptchaSolver_XCaptcha(self.setup.key, self.setup.keyreq)
+		elif setup.solver == 1:
+			self.solver = solvers_re.CaptchaSolver_captchaguru(self.setup.key, self.setup.keyreq)
+		elif setup.solver == 2:
+			self.solver = solvers_re.CaptchaSolver_anticaptcha(self.setup.key, self.setup.keyreq)
 
 	def set_solver(self, solver):
 		captcha = requests.get("https://2ch.hk/api/captcha/2chaptcha/id?board=b&thread=0", headers={"User-Agent": self.agents[0]}, timeout=self.setup.TIMEOUT, verify=False).json()
@@ -268,7 +279,7 @@ class Wiper:
 		image = requests.get("https://2ch.hk/api/captcha/2chaptcha/image/" + captchaID, headers={"User-Agent": self.agents[0]}, timeout=self.setup.TIMEOUT, verify=False).content
 		error = open("error.gif","rb")
 
-		if True:#image == error.read():
+		if image == error.read():
 			self.captchaType = "re"
 			if solver == 0:
 				self.solver = solvers_re.CaptchaSolver_XCaptcha(self.setup.key, self.setup.keyreq)
@@ -428,7 +439,7 @@ class Wiper:
 						postsCounter += 1
 						try:
 							post_id = response["Target"]
-						except:
+						except Exception:
 							post_id = response["Num"]
 						if self.setup.shrapnelCharge == 0:
 							print(proxy+" - success. Post id: "+str(post_id))
@@ -537,6 +548,5 @@ try:
 	safe_quit(badproxies, forbiddenproxy, postsCounter)
 
 except Exception as e:
-	print(e, "(arelive obosralsya)")
-	input()
+	crash_quit("Потеряна связь с интернетами, проверь соединение. А может, arelive обосрался, тогда дрочи в присядку.")
 

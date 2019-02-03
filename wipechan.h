@@ -45,7 +45,7 @@ private:
     void start(const std::string &username, const long &relation);
     void finish(const std::vector<std::string> &results, const std::string &username, const long &relation);
     void error(const std::vector<std::string> &errors, const std::string &username, const long &relation);
-    void crash(const std::string &username, const long &relation);
+    void crash(const std::string &reason, const std::string &username, const long &relation);
     void tip(const std::vector<std::string> &params, const std::string &username);
 
 

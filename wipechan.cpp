@@ -159,7 +159,7 @@ void Wipechan::call (const Request &request, const std::vector<std::string> &par
     else if (request == START) start(username, relation);
     else if (request == FINISH) finish(params, username, relation);
     else if (request == ERROR) error(params, username, relation);
-    else if (request == CRASH) crash(username, relation);
+    else if (request == CRASH) crash(params[0], username, relation);
     else if (request == TIP) tip(params, username);
     else quote->append("\nWait... WHAT!???~~");
 
@@ -193,6 +193,7 @@ void Wipechan::start (const std::string &username, const long &relation) {
 void Wipechan::finish (const std::vector<std::string> &results, const std::string &username, const long &relation) {
     if (results[0] == "0" && results[1] == "0") {
         quote->append("Ты ничего не запостил, "+username);
+        return;
     }
 
     if (relation < 1000) add_quote_part(quoteBank.finish[0], results, username);
@@ -216,12 +217,14 @@ void Wipechan::error (const std::vector<std::string> &errors, const std::string 
         quote->append(errors[i] + "\n");
 }
 
-void Wipechan::crash (const std::string &username, const long &relation) {
+void Wipechan::crash (const std::string &reason, const std::string &username, const long &relation) {
     if (relation < 1000) add_quote_part(quoteBank.crash[0], {}, username);
     else if (relation < 4000) add_quote_part(quoteBank.crash[1], {}, username);
     else if (relation < 7000) add_quote_part(quoteBank.crash[2], {}, username);
     else if (relation < 10000) add_quote_part(quoteBank.crash[3], {}, username);
     else add_quote_part(quoteBank.crash[4], {}, username);
+    quote->append("\n");
+    quote->append(reason);
 }
 
 void Wipechan::tip (const std::vector<std::string> &params, const std::string &username) {

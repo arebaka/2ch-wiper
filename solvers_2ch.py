@@ -43,7 +43,7 @@ class CaptchaSolver_XCaptcha:
                     time.sleep(3)
             elif data.text == "ERROR_KEY_USER":
                 print("\nОшибка ключа, не могу продолжать работу...")
-                safe_quit(badproxies, forbiddenproxy, postsCounter)
+                crash_quit("Ошибка ключа!", badproxies, forbiddenproxy, postsCounter)
             time.sleep(3)
 
 
@@ -74,16 +74,16 @@ class CaptchaSolver_captchaguru:
         elif (data["errorId"] == 1):
             if (data["errorDescription"] == "ERROR_KEY_DOES_NOT_EXIST"):
                 print("\nКлюч отозван, не могу продолжать работу...")
-                safe_quit(badproxies, forbiddenproxy, postsCounter)
+                crash_quit("Ключ отозван!", badproxies, forbiddenproxy, postsCounter)
             elif (data["errorDescription"] == "ERROR_ZERO_BALANCE"):
                 print("\nЗакончились деньги на капче, не могу продолжать работу...")
-                safe_quit(badproxies, forbiddenproxy, postsCounter)
+                crash_quit("Закончились деньги!", badproxies, forbiddenproxy, postsCounter)
             elif (data["errorDescription"] == "ERROR_NO_SLOT_AVAILABLE"):
                 print("\nНет свободных индуссов на сервере, таймаут 10 секунд...")
                 time.sleep(7)
             else:
                 print("\nПроизошла неведомая ебаная хуйня, сорян. Вот ответ от сервера:", (data["errorDescription"]))
-                safe_quit(badproxies, forbiddenproxy, postsCounter)
+                crash_quit(data["errorDescription"], badproxies, forbiddenproxy, postsCounter)
         time.sleep(3)
 
 
@@ -119,12 +119,12 @@ class CaptchaSolver_anticaptcha:
         elif (data["errorId"] == 1):
             if (data["errorDescription"] == "ERROR_KEY_DOES_NOT_EXIST"):
                 print("\nКлюч отозван, не могу продолжать работу...")
-                safe_quit(badproxies, forbiddenproxy, postsCounter)
+                crash_quit("Ключ отозван!", badproxies, forbiddenproxy, postsCounter)
             elif (data["errorDescription"] == "ERROR_ZERO_BALANCE"):
                 print("\nЗакончились деньги на капче, не могу продолжать работу...")
-                safe_quit(badproxies, forbiddenproxy, postsCounter)
+                crash_quit("Ключ отозван!", badproxies, forbiddenproxy, postsCounter)
             else:
                 print("\nПроизошла неведомая ебаная хуйня, сорян. Вот ответ от сервера:", (data["errorDescription"]))
-                safe_quit(badproxies, forbiddenproxy, postsCounter)
+                crash_quit(data["errorDescription"], badproxies, forbiddenproxy, postsCounter)
         time.sleep(3)
 

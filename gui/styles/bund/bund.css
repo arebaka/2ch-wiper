@@ -70,15 +70,15 @@ QLabel {
 #chan {
 	background: url(gui/Wipe-chan/image.png);
 	background-repeat: no-repeat;
+	margin-left: -100px;
+	margin-top: -50px;
 }
 #blockquote {
 	color: red;
-	font-family: monospace;
+	font-family: "Anime Ace v05";
 	font-size: 12px !important;
-	font-weight: bold;
-	font-style: italic;
-	padding: 5px 5px 5px 5px;
 	background: white !important;
+	padding: 5px;
 	border: 2px solid black;
 	border-radius: 10px;
 }
@@ -103,23 +103,23 @@ QLabel {
 /* Формы */
 .gui-frame {
 	background: #20272B;
-	border: 1px solid #17191B;
+	border-top: 5px solid;
 	border-radius: 5px;
 }
 #mainSet {
-	border-top: 5px solid #37C8C6;
+	border-color: #37C8C6;
 }
 #solverSet {
-	border-top: 5px solid #9870AD;
+	border-color: #9870AD;
 }
 #postSet {
-	border-top: 5px solid #C89637;
+	border-color: #C89637;
 }
 #mediaSet {
-	border-top: 5px solid #557230;
+	border-color: #557230;
 }
 #stats {
-	border-top: 5px solid navy;
+	border-color: navy;
 }
 #mainSet:hover, #solverSet:hover, #postSet:hover, #mediaSet:hover, #stats:hover {
 	border-style: outset;

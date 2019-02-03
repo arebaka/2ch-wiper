@@ -666,7 +666,7 @@
 	"y": 0,
 	"width": 40,
 	"height": 25,
-	"text": "1",
+	"value": 1,
 	"disable": true,
 	"disabled": true
 },
@@ -708,7 +708,7 @@
 	"y": 60,
 	"width": 40,
 	"height": 25,
-	"text": "1",
+	"value": 1,
 	"disable": true,
 	"disabled": true
 },

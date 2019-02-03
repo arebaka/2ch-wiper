@@ -136,13 +136,13 @@ class Setup:
 			key = keyreq.text
 		elif keyreq.status_code == 404 or len(keyreq.text) == 0:
 			print("Ключ недоступен!")
-			exit()
+			crash_quit("Ключ недоступен!")
 		elif keyreq.status_code == 401:
 			print("Неверный логин/пароль!")
-			exit()
+			crash_quit("Неверный логин/пароль!")
 		else:
 			print("Получен неожиданный ответ от сервера:", keyreq, keyreq.text)
-			exit()
+			crash_quit("Получен неожиданный ответ от сервера с ключом!")
 		self.set_key(solver, key, username, password)
 		return key, keyreq
 
@@ -157,16 +157,16 @@ class Setup:
 				if keyStatus.status_code == 200:
 					if keyStatus.text == "ERROR_KEY_USER":
 						print("Ключ не существует!")
-						exit()
+						crash_quit("Ключ не существует!")
 					elif keyStatus.text == "ERROR_PAUSE_SERVICE":
 						print("Сервер на профилактике, используй другой солвер.")
-						exit()
+						crash_quit("Сервер на профилактике, используй другой решатель!")
 					keyxc = keyStatus.text
 					keyxc = keyxc.split("|")
 					print("Ключ подтверждён, ваш баланс:", keyxc[1])
 				elif keyStatus.status_code == 500:
 					print("Икскапча заблокировала твой IP, перезагрузи роутер!")
-					exit()
+					crash_quit("Икскапча заблокировала твой IP, перезагрузи роутер!")
 
 			elif solver == 1 or solver == 2:
 				if solver == 1:
@@ -178,14 +178,14 @@ class Setup:
 				elif (keyStatus["errorId"] == 1):
 					if (keyStatus["errorDescription"] == "ERROR_KEY_DOES_NOT_EXIST"):
 						print("Ключ не существует!")
-						exit()
+						crash_quit("Ключ не существует!")
 					else:
 						print(keyStatus["errorDescription"])
-						exit()
+						crash_quit(keyStatus["errorDescription"])
 			keyreq = 0
 		else:
 			print("Неправильно введен ключ!")
-			exit()
+			crash_quit("Неправильно введен ключ!")
 		return solver, key, keyreq
 
 	# === установка режима вайпалки ===
@@ -220,7 +220,10 @@ class Setup:
 	# === установка триггера ===
 	def set_trigger(self, form, shrapnelCharge, minPostsCount, args):
 		if shrapnelCharge == 0: # and self.thread > 1
-			self.threads.append(Thread(self.board, self.thread, self.mode, form))
+			try:
+				self.threads.append(Thread(self.board, self.thread, self.mode, form))
+			except Exception:
+				crash_quit("Тред не существует!")
 		elif shrapnelCharge > 0: # and self.thread > 0
 			self.catalog = Catalog(self.board)
 			if minPostsCount == -1:

@@ -100,14 +100,15 @@ class Thread:
 	def __init__(self, board, ID, mode, triggerForm):
 		self.board = board  # доска
 		self.ID = ID  # номер треда на доске
-		print("Скачиваю тред", self.ID)
-		self.schema = json.loads(requests.get(''.join(["https://2ch.hk/", board, "/res/", ID, ".json"])).text)  # DOM треда
-		self.postsCount = self.schema["posts_count"] + 1  # число постов в треде
-		self.lastID = str(self.schema["max_num"])  # номер последнего поста треда
-		self.posts = self.download_posts(mode, triggerForm)  # посты
-		self.loaf = ""  # "батон"
-		for postNum in range(min(len(self.posts), 30)):
-			self.loaf += (">>"+self.posts[postNum].ID+" ")
+		if (int(ID) != 0):
+			print("Скачиваю тред", self.ID)
+			self.schema = json.loads(requests.get(''.join(["https://2ch.hk/", board, "/res/", ID, ".json"])).text)  # DOM треда
+			self.postsCount = self.schema["posts_count"] + 1  # число постов в треде
+			self.lastID = str(self.schema["max_num"])  # номер последнего поста треда
+			self.posts = self.download_posts(mode, triggerForm)  # посты
+			self.loaf = ""  # "батон"
+			for postNum in range(min(len(self.posts), 30)):
+				self.loaf += (">>"+self.posts[postNum].ID+" ")
 
 	# === загрузка DOM постов ===
 	def download_posts(self, mode, triggerForm):

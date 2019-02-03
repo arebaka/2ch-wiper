@@ -236,13 +236,14 @@ vector<string> Setup::validate () {
         if (!hasMaxBan) errors.push_back("Не задан верхний номер банов!");
     }
     if (thread == "1" && shrapnelCharge == "0" && shrapnelThreads.size() == 0) errors.push_back("Не заданы треды для шрапнели!");
-    if ((mediaKind == '1' || mediaKind == '2') && !hasMediaKind) errors.push_back("Не задано число прикреплений!");
+    if ((mediaKind == '1' || mediaKind == '2') && !hasMediasCount) errors.push_back("Не задано число прикреплений!");
     if (board == "d" && mediasCount != "0") errors.push_back("Прикрепления в /d/!");
     if (thread == "0" && (mode == "3" || mode == "7")) errors.push_back("Этим режимом нельзя вайпать нулевую!");
     if (thread == "0" && triggerForm != "0") errors.push_back("Триггер на нулевой!");
     if (thread == "0" && chaos != "-1") errors.push_back("Нельзя устраивать хаос с нулевой!");
     if (shrapnelCharge == "0" && chaos == "0") errors.push_back("Для полного хаоса требуется шрапнель!");
     if (thread == "0" && sageMode == '2') errors.push_back("Нельзя копировать сажу с нулевой!");
+    if (thread == "0" && mediaKind == '3') errors.push_back("Нельзя копировать прикрепления с нулевой!");
     if (mode == "2" && triggerForm == "0" && (mediaKind == '0' || ((mediaKind == '1' || mediaKind == '2') && mediasCount == "0"))) errors.push_back("Ничего не запостится!");
 
     if (errors.size() == 0) errors.push_back("OK");
@@ -311,11 +312,11 @@ string Setup::comline () {
 #endif
 
 
-    command += ("-b " + board + " -t " + thread + " -c " + chaos + " -p " + potocksCount + " -d ");
+    command += ("-b " + board + " -t " + thread + " -c " + chaos + " -p " + potocksCount + " -d " + logMode);
     command += logMode;
 
     command += (" -s " + solver + " -k ");
-    if (!hasKey || key == "") command += "0 -r";
+    if (!hasKey || key == "") command += "0 -r ";
     else command += (key + " -r ");
     command += (proxyRepeatsCount + " -m " + mode + " ");
 

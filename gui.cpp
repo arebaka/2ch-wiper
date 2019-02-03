@@ -449,7 +449,7 @@ void GUI::loadData () {
 }
 
 void GUI::updateData (const bool &chanIsCalled) {
-    std::string key, datum, value;
+    std::string key, datum, value, reason;
     int posts, bans;
     long result;
     bool crashed(false);
@@ -473,13 +473,15 @@ void GUI::updateData (const bool &chanIsCalled) {
                 totalBans = to_string(atoi(totalBans.c_str()) + bans);
                 ui->totalBans->setText(totalBans.c_str());
                 ui->totalBansLCD->display(atoi(totalBans.c_str()));
-            } else if (key == "crash")
+            } else if (key == "crash") {
                 crashed = true;
+                reason = value;
+            }
         }
 
         if (chanIsCalled) {
             if (crashed) {
-                ui->chan->call(Wipechan::CRASH, {}, username, relation);
+                ui->chan->call(Wipechan::CRASH, {reason}, username, relation);
             } else {
                 result = (posts - bans * 50);
                 relation += result;
@@ -553,6 +555,11 @@ void GUI::on_startButton_clicked () {
 }
 
 bool GUI::start () {
+    if (proxiesCount == "0") {
+        ui->chan->call(Wipechan::ERROR, {"Нет ни одной прокси!"}, username, relation);
+        return false;
+    }
+
     setup.clear();
     setup.set_username(username);
     setup.set_password(ui->password->text().toStdString());
