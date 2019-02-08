@@ -3425,9 +3425,23 @@
       <string/>
      </property>
     </widget>
+    <widget class="QCheckBox" name="randMediaName">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>280</y>
+       <width>260</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Random name</string>
+     </property>
+    </widget>
     <zorder>mediaBox</zorder>
     <zorder>shackalLabel</zorder>
     <zorder>shackalBox</zorder>
+    <zorder>randMediaName</zorder>
    </widget>
    <widget class="QFrame" name="stats">
     <property name="geometry">
@@ -3966,11 +3980,11 @@
  </resources>
  <connections/>
  <buttongroups>
+  <buttongroup name="buttonGroup_9"/>
   <buttongroup name="buttonGroup_5"/>
+  <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_4"/>
-  <buttongroup name="buttonGroup_9"/>
-  <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

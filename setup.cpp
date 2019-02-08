@@ -9,7 +9,7 @@ Setup::Setup ()
       hasProxyRepeatsCount(false) , hasMode(false) , hasMinBan(false) , hasMaxBan(false) , hasTriggerForm(false) , \
       hasShrapnelCharge(false) , hasMinPostsCount(false) , hasMediaKind(false) , hasMediaGroup(false) , \
       hasMediasCount(false) , hasSageMode(false) , hasShackalPower(false) , shackalColor(false) , shackalAffine(false) , \
-      toPNG(false) , hasComplainBoard(false) , hasComplainsCount(false) , complainWithPosts(false)
+      toPNG(false) , hasComplainBoard(false) , hasComplainsCount(false) , complainWithPosts(false) , randMediaName(false)
 {}
 
 Setup::~Setup () {}
@@ -172,6 +172,9 @@ void Setup::set_sageMode (const char &sageMode) {
         hasSageMode = true;
     } else
         hasSageMode = false;
+}
+void Setup::set_rand_media_name (const bool &status) {
+    randMediaName = status;
 }
 void Setup::set_shackal_power (const unsigned char &value) {
     shackalPower = value;
@@ -349,6 +352,10 @@ string Setup::comline () {
     else command += ("-mc " + mediasCount + " -S ");
 
     command += sageMode;
+
+    command += " -rn ";
+    if (randMediaName) command += "1";
+    else command += "0";
 
     command += (" -SH " + to_string(shackalPower) + " ");
     if (shackalColor) command += "-C 1 ";

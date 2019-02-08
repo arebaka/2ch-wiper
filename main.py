@@ -161,14 +161,16 @@ class Post:
 		self.params.append(("email", (None, "sage")))
 		self.params.append(("sage", (None, "on")))
 
-	def set_image(self, file_name, shakalPower=0, shakalColor=False, shakalAffine=False, toPNG=False):
+	def set_image(self, file_name, randName, shakalPower=0, shakalColor=False, shakalAffine=False, toPNG=False):
 		image = self.shakal(file_name, shakalPower, shakalColor, shakalAffine, toPNG)
-		file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
-		if toPNG: file_name_displayed += ".png"
-		else: file_name_displayed += ".jpg"
+		if randName:
+			file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
+			if toPNG: file_name_displayed += ".png"
+			else: file_name_displayed += ".jpg"
+		else: file_name_displayed = file_name
 		self.params.append(("formimages[]", (file_name_displayed, image, "image/jpeg")))
 
-	def set_video(self, file_name):
+	def set_video(self, file_name, randName):
 		if file_name.find(".mp4") != -1: ext = "mp4"
 		elif file_name.find(".webm") != -1: ext = "webm"
 
@@ -176,12 +178,15 @@ class Post:
 		video_bytes = video.read()
 		video.close()
 
-		file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
-		file_name_displayed += str("." + ext)
+		if randName:
+			file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
+			file_name_displayed += str("." + ext)
+		else: file_name_displayed = file_name
 		self.params.append(("formimages[]", (file_name_displayed, video_bytes, str("video/" + ext))))
 
-	def set_media(self, mediaName, media, shakalPower=0, shakalColor=False, shakalAffine=False, toPNG=False):
-		file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
+	def set_media(self, mediaName, media, randName, shakalPower=0, shakalColor=False, shakalAffine=False, toPNG=False):
+		if randName: file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
+		else: file_name_displayed = mediaName
 
 		if mediaName.find(".jpg") != -1 or mediaName.find(".png") != -1 or mediaName.find(".gif") != -1 or mediaName.find(".bmp") != -1:
 			media = self.shakal(io.BytesIO(media), shakalPower, shakalColor, shakalAffine, toPNG)
@@ -419,11 +424,11 @@ class Wiper:
 								if self.setup.mediaKind != 3:
 									blue_anus = random.randint(0, len(self.setup.mediaPaths)-1)  # номер пикчи или видео с диска
 								if self.setup.mediaKind == 1:
-									post.set_image(self.setup.mediaPaths[blue_anus], self.setup.shakalPower, self.setup.shakalColor, self.setup.shakalAffine, self.setup.toPNG)
+									post.set_image(self.setup.mediaPaths[blue_anus], self.setup.randMediaName, self.setup.shakalPower, self.setup.shakalColor, self.setup.shakalAffine, self.setup.toPNG)
 								elif self.setup.mediaKind == 2:
-									post.set_video(self.setup.mediaPaths[blue_anus])
+									post.set_video(self.setup.mediaPaths[blue_anus], self.setup.randMediaName)
 								elif self.setup.mediaKind == 3:
-									post.set_media(self.threads[threadNum].posts[white_anus].medias[mediaNum].name, self.threads[threadNum].posts[white_anus].medias[mediaNum].file, self.setup.shakalPower, self.setup.shakalColor, self.setup.shakalAffine, self.setup.toPNG)
+									post.set_media(self.threads[threadNum].posts[white_anus].medias[mediaNum].name, self.threads[threadNum].posts[white_anus].medias[mediaNum].file, self.setup.randMediaName, self.setup.shakalPower, self.setup.shakalColor, self.setup.shakalAffine, self.setup.toPNG)
 						except Exception as e:
 							print(e)
 							print("Не могу скачать / прикрепить файл.")

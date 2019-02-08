@@ -80,7 +80,7 @@ void GUI::set_layout (std::string path) {
 
     "media_set", "media_set_header",
     "media_box", "media_label", "images", "images_count_label", "images_count", "images_folder_label", "images_folder", "videos", "videos_count_label", "videos_count", "videos_folder_label", "videos_folder", "medias_from_posts", "no_media",
-    "shackal_box", "shackal_label", "shackal_degree_label", "shackal_degree", "colorization", "affine", "to_PNG",
+    "random_media_name", "shackal_box", "shackal_label", "shackal_degree_label", "shackal_degree", "colorization", "affine", "to_PNG",
 
     "stats", "stats_header", "total_posts_label", "total_posts", "total_posts_LCD", "total_bans_label", "total_bans", "total_bans_LCD", "posts_label", "posts", "posts_LCD", "proxies_label", "proxies", "proxies_LCD",
 
@@ -253,6 +253,7 @@ void GUI::set_layout (std::string path) {
                     else if (members[i] == "medias_from_posts") { widget = radioButton = ui->medias; type = 'r'; }
                     else if (members[i] == "no_media") { widget = radioButton = ui->noMedia; type = 'r'; }
 
+                    else if (members[i] == "random_media_name") { widget = checkBox = ui->randMediaName; type = 'c'; }
                     else if (members[i] == "shackal_box") { widget = ui->shackalBox; type = 'w'; }
                     else if (members[i] == "shackal_label") { widget = label = ui->shackalLabel; type = 'l'; }
                     else if (members[i] == "shackal_degree_label") { widget = label = ui->shackalDegreeLabel; type = 'l'; }
@@ -366,6 +367,7 @@ void GUI::install_filter () {
     ui->videosFolder->installEventFilter(this);
     ui->medias->installEventFilter(this);
     ui->noMedia->installEventFilter(this);
+    ui->randMediaName->installEventFilter(this);
     ui->shackalDegree->installEventFilter(this);
     ui->shackalColor->installEventFilter(this);
     ui->shackalAffine->installEventFilter(this);
@@ -676,6 +678,7 @@ bool GUI::start () {
             setup.set_sageMode('1');
     else setup.set_sageMode('0');
 
+    setup.set_rand_media_name(ui->randMediaName->isChecked());
     setup.set_shackal_power(ui->shackalDegree->value());
     setup.set_shackal_color(ui->shackalColor->isChecked());
     setup.set_shackal_affine(ui->shackalAffine->isChecked());
@@ -1016,6 +1019,7 @@ void GUI::on_openButton_clicked () {
         ui->noMedia->setChecked(true);
         check_media("nothing");
     } else {
+        ui->randMediaName->setChecked(false);
         ui->images->setChecked(false);
         ui->videos->setChecked(false);
         ui->medias->setChecked(false);
@@ -1030,6 +1034,8 @@ void GUI::on_openButton_clicked () {
         if (ui->videosFolderLabel->property("hidden").toBool()) ui->videosFolderLabel->hide();
         if (ui->videosFolder->property("hidden").toBool()) ui->videosFolder->hide();
 
+        if (ui->randMediaName->property("disabled").toBool()) ui->randMediaName->setDisabled(true);
+        if (ui->randMediaName->property("hidden").toBool()) ui->randMediaName->hide();
         if (ui->shackalBox->property("disabled").toBool()) ui->shackalBox->setDisabled(true);
         if (ui->shackalBox->property("hidden").toBool()) ui->shackalBox->hide();
     }
@@ -1051,6 +1057,8 @@ void GUI::on_openButton_clicked () {
     ui->shackalAffine->setChecked(value == "affine");
     getline(config, value);
     ui->toPNG->setChecked(value == "to PNG");
+    getline(config, value);
+    ui->randMediaName->setChecked(value == "random");
 }
 
 void GUI::on_saveButton_clicked () {
@@ -1124,6 +1132,8 @@ void GUI::on_saveButton_clicked () {
     if (ui->shackalAffine->isChecked()) config << "affine";
     config << std::endl;
     if (ui->toPNG->isChecked()) config << "to PNG";
+    config << std::endl;
+    if (ui->randMediaName->isChecked()) config << "random";
     config << std::endl;
 }
 
@@ -1300,6 +1310,8 @@ void GUI::check_media (std::string type) {
         if (ui->videosFolderLabel->property("hiding").toBool()) ui->videosFolderLabel->hide();
         if (ui->videosFolder->property("hiding").toBool()) ui->videosFolder->hide();
 
+        ui->randMediaName->setDisabled(false);
+        ui->randMediaName->show();
         ui->shackalBox->setDisabled(false);
         ui->shackalBox->show();
 
@@ -1316,6 +1328,8 @@ void GUI::check_media (std::string type) {
         if (ui->imagesFolderLabel->property("hiding").toBool()) ui->imagesFolderLabel->hide();
         if (ui->imagesFolder->property("hiding").toBool()) ui->imagesFolder->hide();
 
+        ui->randMediaName->setDisabled(false);
+        ui->randMediaName->show();
         if (ui->shackalBox->property("disable").toBool()) ui->shackalBox->setDisabled(true);
         if (ui->shackalBox->property("hiding").toBool()) ui->shackalBox->hide();
 
@@ -1338,6 +1352,8 @@ void GUI::check_media (std::string type) {
         if (ui->imagesFolderLabel->property("hiding").toBool()) ui->imagesFolderLabel->hide();
         if (ui->imagesFolder->property("hiding").toBool()) ui->imagesFolder->hide();
 
+        ui->randMediaName->setDisabled(false);
+        ui->randMediaName->show();
         ui->shackalBox->setDisabled(false);
         ui->shackalBox->show();
 
@@ -1360,6 +1376,8 @@ void GUI::check_media (std::string type) {
         if (ui->imagesFolderLabel->property("hiding").toBool()) ui->imagesFolderLabel->hide();
         if (ui->imagesFolder->property("hiding").toBool()) ui->imagesFolder->hide();
 
+        if (ui->randMediaName->property("disable").toBool()) ui->randMediaName->setDisabled(true);
+        if (ui->randMediaName->property("hiding").toBool()) ui->randMediaName->hide();
         if (ui->shackalBox->property("disable").toBool()) ui->shackalBox->setDisabled(true);
         if (ui->shackalBox->property("hiding").toBool()) ui->shackalBox->hide();
     }
@@ -1482,6 +1500,8 @@ bool GUI::eventFilter (QObject * object, QEvent * event) {
             ui->chan->call(Wipechan::TIP, {"MEDIAS_FROM_POSTS"}, username);
         } else if (object == ui->noMedia) {
             ui->chan->call(Wipechan::TIP, {"NO_MEDIA"}, username);
+        } else if (object == ui->randMediaName) {
+            ui->chan->call(Wipechan::TIP, {"RANDOM_MEDIA_NAME"}, username);
         } else if (object == ui->shackalDegree) {
             ui->chan->call(Wipechan::TIP, {"SHACKAL_DEGREE"}, username);
         } else if (object == ui->shackalColor) {

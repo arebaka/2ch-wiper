@@ -52,6 +52,7 @@ class Setup:
 		parser.add_argument("-g", "--group", dest="mediaGroup")  # подкаталог прикреплений (или ".", если из корня)
 		parser.add_argument("-mc", "--medias", dest="mediasCount")  # число прикреплений (или -1, если из постов)
 		parser.add_argument("-S", "--sage", dest="sageMode")  # номер режима сажи
+		parser.add_argument("-rn", dest="randMediaName")  # флаг рандомизации имён прикреплений
 		parser.add_argument("-SH", "--shakal", dest="shakalPower")  # уровень шакала от 0 до 100
 		parser.add_argument("-C", "--color", dest="shakalColor")  # флаг цветного шакала
 		parser.add_argument("-a", "--affine", dest="shakalAffine")  # флаг аффинного шакала
@@ -94,6 +95,9 @@ class Setup:
 		self.mediaKind, self.mediaPaths, self.mediasCount = self.set_media(int(args.mediaKind), args.mediaGroup, int(args.mediasCount))  # тип прикреплений, подкаталог, число прикреплений к треду
 		
 		self.sageMode = int(args.sageMode) # режим сажи
+
+		if args.randMediaName == "1": self.randMediaName = True  # флаг рандомизации имён прикреплений
+		else: self.randMediaName = False
 		
 		self.shakalPower = int(args.shakalPower)  # уровень шакала
 		if args.shakalColor == "1": self.shakalColor = True  # флаг цветного шакала
