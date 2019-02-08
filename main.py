@@ -1,5 +1,6 @@
 ## -*- coding: utf-8 -*-
 
+import tools
 # import base64
 import time
 import sys
@@ -12,8 +13,14 @@ import os
 import signal
 #import socks
 # import asyncio
-import requests
-import PIL.Image
+try:
+	import requests
+except:
+	tools.crash_quit("Не установлен python-пакет \"requests\". Беги устанавливать!")
+try:
+	import PIL.Image
+except:
+	tools.crash_quit("Не установлен python-пакет \"pillow\". Беги устанавливать")
 # from python3_anticaptcha import NoCaptchaTaskProxyless
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

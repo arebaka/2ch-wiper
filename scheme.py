@@ -1,10 +1,17 @@
 ## -*- coding: utf-8 -*-
 
+import tools
 import json
-import requests
-from bs4 import BeautifulSoup
-import urllib3
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+try:
+	import requests
+except:
+	tools.crash_quit("Не установлен python-пакет \"requests\". Беги устатавливать!")
+try:
+	from bs4 import BeautifulSoup
+except:
+	tools.crash_quit("Не установлен python-пакет \"bs4\". Беги устатавливать!")
+	import urllib3
+	urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # ====== Модель доски ======
 class Catalog:

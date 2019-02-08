@@ -1,7 +1,11 @@
 ## -*- coding: utf-8 -*-
 
+import tools
 import os
-import requests
+try:
+	import requests
+except:
+	tools.crash_quit("Не установлен python-пакет \"requests\". Беги устанавливать!")
 import argparse
 import urllib3
 from requests.auth import HTTPBasicAuth

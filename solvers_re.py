@@ -1,7 +1,11 @@
 ## -*- coding: utf-8 -*-
 
+import tools
 import time
-import requests
+try:
+    import requests
+except:
+    tools.crash_quit("Не установлен python-пакет \"requests\". Беги устанавливать!")
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 

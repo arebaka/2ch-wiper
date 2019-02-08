@@ -70,8 +70,6 @@ QLabel {
 #chan {
 	background: url(gui/Wipe-chan/image.png);
 	background-repeat: no-repeat;
-	margin-left: -100px;
-	margin-top: -50px;
 }
 #blockquote {
 	color: red;
