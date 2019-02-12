@@ -494,7 +494,8 @@ void GUI::updateData (const bool &chanIsCalled) {
         }
     }
     responce.close();
-    remove(std::string(QDir::currentPath().toStdString() + "/.responce").c_str());
+    QFile file(QDir::currentPath()+"/.responce");
+    file.remove();
 
     responce.open("proxies");
     unsigned long i;

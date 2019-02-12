@@ -1,7 +1,9 @@
 #include "setup.h"
 #include "gui.h"
+#include "banner.h"
 #include <QApplication>
 #include <QSplashScreen>
+#include <QMessageBox>
 
 int main (int argc, char * argv[]) {
     QApplication a(argc, argv);
@@ -15,7 +17,10 @@ int main (int argc, char * argv[]) {
     }
 
     w.show();
+    Banner banner;
+    // banner.show();
     splash.finish(&w);
+    QMessageBox::information(NULL, "АХТУНГ", "Данная программа создана в ознакомительных целях, её предназначением не является оскорбление чьих-либо чувств, а создатели не несут ответственности за действия, совершаемые с её помощью и не поддерживают никаких противозаконных намерений.");
 
     return a.exec();
 }

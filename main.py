@@ -149,6 +149,7 @@ class Post:
 			return True
 		except Exception as e:
 			#print(e)
+			print("У проксички "+self.proxy["http"]+" вышел таймаут.")
 			return False
 
 	def set_subject(self, text):
@@ -167,7 +168,8 @@ class Post:
 			file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
 			if toPNG: file_name_displayed += ".png"
 			else: file_name_displayed += ".jpg"
-		else: file_name_displayed = file_name
+		else:
+			file_name_displayed = file_name[file_name.rfind('/')+1:]
 		self.params.append(("formimages[]", (file_name_displayed, image, "image/jpeg")))
 
 	def set_video(self, file_name, randName):
@@ -181,12 +183,15 @@ class Post:
 		if randName:
 			file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
 			file_name_displayed += str("." + ext)
-		else: file_name_displayed = file_name
+		else:
+			file_name_displayed = file_name[file_name.rfind('/')+1:]
 		self.params.append(("formimages[]", (file_name_displayed, video_bytes, str("video/" + ext))))
 
 	def set_media(self, mediaName, media, randName, shakalPower=0, shakalColor=False, shakalAffine=False, toPNG=False):
-		if randName: file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
-		else: file_name_displayed = mediaName
+		if randName:
+			file_name_displayed = str(''.join(str(random.randint(0, 9)) for _ in range(NAME_SIZE-1)) + "0")
+		else:
+			file_name_displayed = mediaName
 
 		if mediaName.find(".jpg") != -1 or mediaName.find(".png") != -1 or mediaName.find(".gif") != -1 or mediaName.find(".bmp") != -1:
 			media = self.shakal(io.BytesIO(media), shakalPower, shakalColor, shakalAffine, toPNG)
@@ -361,6 +366,7 @@ class Wiper:
 						thread = self.setup.targetThread
 
 				post = Post(proxy, agent, self.board, thread.ID, self.solver, self.captchaType)
+
 				if (post.prepare(self.setup.TIMEOUT)):
 					charnum = random.randint(1, 100)
 					if self.thread != "0":

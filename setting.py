@@ -246,6 +246,8 @@ class Setup:
 						if i == shrapnelCharge:
 							break
 				shrapnelCharge = i
+				if (shrapnelCharge == 0):
+					crash_quit("Нет ни одного треда с указанными параметрами!")
 
 		if self.chaos != "-1" and self.chaos != "0":
 			targetThread = Thread(self.board, self.chaos, self.mode, form)
@@ -268,11 +270,13 @@ class Setup:
 				if len(mediaGroup) > 0 and mediaGroup != ".":
 					mediaDir += "/"
 					mediaDir += mediaGroup
+					if os.path.exists(mediaDir) == False:
+						crash_quit("Каталога "+mediaDir+" не существует!")
 				for media in os.listdir("./"+mediaDir):
 					if media.endswith(".jpg") or media.endswith(".png") or media.endswith(".gif") or media.endswith(".bmp") or media.endswith(".mp4") or media.endswith(".webm"):
 						mediaPaths.append("./"+mediaDir+"/"+media)
-				if mediasCount == 0:
-					mediaKind = 0
+				if len(mediaPaths) == 0:
+					crash_quit("Нет контента в каталоге "+mediaDir+"!")
 
 			elif self.shrapnelCharge == 0:
 				for post in self.threads[0].posts:
