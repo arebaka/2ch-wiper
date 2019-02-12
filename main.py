@@ -268,6 +268,8 @@ class Wiper:
 		print("\nЗА БУНД И САГУ, ЗА ЧЕСТЬ И ОТВАГУ!")
 		# print("Patched by @owodelta / X-Captcha by kobato / patched again by @owodelta")
 		self.proxies = [proxy[:-1] for proxy in open("proxies", "r").readlines()]
+		if len(self.proxies) == 0:
+			crash_quit("Нет проксей в файле proxy!")
 		random.shuffle(self.proxies)
 		Stats.setProxies(len(self.proxies))
 		self.agents = [agent[:-1] for agent in open("useragents").readlines()]
