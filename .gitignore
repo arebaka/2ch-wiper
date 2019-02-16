@@ -120,8 +120,10 @@ build-wipe-Desktop_Qt_5_11_1_GCC_64bit-Debug
 *.o
 wipe
 wiper
-./images
-./videos
+images
+videos
+!*/images
+!*/videos
 *.csv
 save
 *.exe

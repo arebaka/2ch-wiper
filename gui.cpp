@@ -549,8 +549,10 @@ void GUI::delAll (std::ifstream &responce) {
 
 void GUI::on_startButton_clicked () {
     if (started == false) {
-        if (ui->chan->is_called())
+        if (ui->chan->is_called()) {
             ui->chan->call(Wipechan::START, {username}, username, relation);
+            ui->blockquote->repaint();
+        }
         //if (start()) started = true;
         if (start())
             updateData(ui->chan->is_called());

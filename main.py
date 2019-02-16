@@ -455,6 +455,7 @@ class Wiper:
 					success, response = post.send(self.setup.TIMEOUT, self.setup.PAUSE)
 					if success:
 						Stats.incPosts()
+						Stats.addGoodProxy(proxy)
 						post_id = 0
 						postsCounter += 1
 						try:

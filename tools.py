@@ -34,6 +34,17 @@ def safe_quit(badproxies, forbiddenproxy, postsCounter, sig=0, frame=0):
 	with open(".responce", "a") as file:
 		for key in data:
 			file.write(key+" "+data[key]+"\n")
+	
+	goodProxies = Stats.goodProxies
+	with open("good", "r") as file:
+		proxies = file.readlines();
+	for proxy in proxies:
+		goodProxies.append(proxy[:-1])
+	goodProxies = list(set(goodProxies))
+	with open("good", "w") as file:
+		for proxy in goodProxies:
+			file.write(proxy + "\n")
+
 
 	print("Выключаюсь...")
 	os._exit(0)
@@ -72,6 +83,7 @@ class Stats:
 	numOfThreads = 0
 	postsSent = 0
 	captchasSolved = 0
+	goodProxies = []
 
 	def setProxies(amount):
 		Stats.numOfProxies = amount
@@ -84,6 +96,9 @@ class Stats:
 
 	def incPosts():
 		Stats.postsSent += 1
+
+	def addGoodProxy(proxy):
+		Stats.goodProxies.append(proxy)
 
 	def printStats(badproxies, forbiddenproxy):
 		print("=====================================")
