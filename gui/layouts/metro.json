@@ -32,14 +32,14 @@
 	"height": 25
 },
 "open_config_button": {
-	"x": 1185,
+	"x": 1178,
 	"y": 275,
 	"width": 170,
 	"height": 25,
 	"text": "Открыть конфиг"
 },
 "save_config_button": {
-	"x": 1184,
+	"x": 1185,
 	"y": 300,
 	"width": 170,
 	"height": 25,
