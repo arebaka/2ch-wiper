@@ -442,7 +442,7 @@ void GUI::loadData () {
     }
     config.close();
 
-    config.open("proxies");
+    config.open("proxies.cfg");
     unsigned long i;
     for (i = 0; !config.eof(); i++) getline(config, datum);
     proxiesCount = to_string(i-1);
@@ -455,10 +455,10 @@ void GUI::updateData (const bool &chanIsCalled) {
     int posts, bans;
     long result;
     bool crashed(false);
-    std::ifstream responce(QDir::currentPath().toStdString() + "/.responce");
-    if (responce.is_open()) {
-        while(!responce.eof()) {
-            getline(responce, datum);
+    std::ifstream response(QDir::currentPath().toStdString() + "/.response");
+    if (response.is_open()) {
+        while(!response.eof()) {
+            getline(response, datum);
             key = datum.substr(0, datum.find(' '));
             value = datum.substr(datum.find(' ')+1, datum.length()-1);
             if (key == "posts") {
@@ -487,19 +487,19 @@ void GUI::updateData (const bool &chanIsCalled) {
             } else {
                 result = (posts - bans * 50);
                 relation += result;
-                if (relation <= 0) delAll(responce);
+                if (relation <= 0) delAll(response);
 
                 ui->chan->call(Wipechan::FINISH, {postsCount, to_string(bans)}, username, 5000 + result * 10);
             }
         }
     }
-    responce.close();
-    QFile file(QDir::currentPath()+"/.responce");
+    response.close();
+    QFile file(QDir::currentPath()+"/.response");
     file.remove();
 
-    responce.open("proxies");
+    response.open("proxies.cfg");
     unsigned long i;
-    for (i = 0; !responce.eof(); i++) { getline(responce, datum); if (datum.empty()) i--; }
+    for (i = 0; !response.eof(); i++) { getline(response, datum); if (datum.empty()) i--; }
     proxiesCount = to_string(i-1);
     ui->proxies->setText(proxiesCount.c_str());
     ui->proxiesLCD->display(proxiesCount.c_str());
@@ -515,9 +515,9 @@ void GUI::updateConfig () {
     config << "relation " << relation << std::endl;
 }
 
-void GUI::delAll (std::ifstream &responce) {
-    responce.close();
-    remove(std::string(QDir::currentPath().toStdString() + "/.responce").c_str());
+void GUI::delAll (std::ifstream &response) {
+    response.close();
+    remove(std::string(QDir::currentPath().toStdString() + "/.response").c_str());
 
     remove(std::string(QDir::currentPath().toStdString() + "/.config").c_str());
     remove(std::string(QDir::currentPath().toStdString() + "/.gui").c_str());
