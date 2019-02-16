@@ -1,7 +1,6 @@
 ## -*- coding: utf-8 -*-
 
 import tools
-# import base64
 import time
 import sys
 import threading
@@ -9,19 +8,29 @@ import io
 import random
 import string
 import os
-#import json
 import signal
-#import socks
-# import asyncio
 try:
 	import requests
 except:
-	tools.crash_quit("Не установлен python-пакет \"requests\". Беги устанавливать!")
+	print("\nНе установлен модуль \"requests\". Попытаемся установить!\n")
+	os.system('pip install --user requests pysocks' if os.name == 'nt' else 'pip3 install --user requests pysocks')
+	try:
+		import requests
+		print("\nОтлично, модуль установлен! Нажми любую клавишу для продолжения...")
+		input()
+	except:
+		tools.crash_quit("Не удалось поставить модуль \"requests\". Аварийное завершение...")
 try:
 	import PIL.Image
 except:
-	tools.crash_quit("Не установлен python-пакет \"pillow\". Беги устанавливать")
-# from python3_anticaptcha import NoCaptchaTaskProxyless
+	print("\nНе установлен модуль \"pillow\". Попытаемся установить!\n")
+	os.system('pip install --user pillow' if os.name == 'nt' else 'pip3 install --user pillow')
+	try:
+		import pillow
+		print("\nОтлично, модуль установлен! Нажми любую клавишу для продолжения...")
+		input()
+	except:
+		tools.crash_quit("Не удалось поставить модуль \"pillow\". Аварийное завершение...")
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -43,9 +52,8 @@ postsCounter = 0
 # ====== Шапка ======
 def show_logo():
 	os.system('cls' if os.name == 'nt' else 'clear')
-	print("\n***************************************** v2.5 **")
+	print("\n***************************************** v2.6 **")
 	print("*    2CH.HK WIPE MACHINE - ReCaptcha edition    *")
-	print("*     Только для внутреннего использования      *")
 	print("*        Оригинальный проект: glow_stick        *")
 	print("*      Быдлокод: owodelta, kobato, arelive      *")
 	print("*            cryptostimor, tsunamaru            *")
@@ -266,13 +274,12 @@ class Wiper:
 
 	def __init__(self, setup, catalog, threads):
 		print("\nЗА БУНД И САГУ, ЗА ЧЕСТЬ И ОТВАГУ!")
-		# print("Patched by @owodelta / X-Captcha by kobato / patched again by @owodelta")
-		self.proxies = [proxy[:-1] for proxy in open("proxies", "r").readlines()]
+		self.proxies = [proxy[:-1] for proxy in open("proxies.cfg", "r").readlines()]
 		if len(self.proxies) == 0:
 			crash_quit("Нет проксей в файле proxy!")
 		random.shuffle(self.proxies)
 		Stats.setProxies(len(self.proxies))
-		self.agents = [agent[:-1] for agent in open("useragents").readlines()]
+		self.agents = [agent[:-1] for agent in open("engine/useragents.cfg").readlines()]
 		self.board = setup.board
 		self.thread = setup.thread
 		self.setup = setup
@@ -296,7 +303,7 @@ class Wiper:
 		captcha = requests.get("https://2ch.hk/api/captcha/2chaptcha/id?board=b&thread=0", headers={"User-Agent": self.agents[0]}, timeout=self.setup.TIMEOUT, verify=False).json()
 		captchaID = captcha["id"]
 		image = requests.get("https://2ch.hk/api/captcha/2chaptcha/image/" + captchaID, headers={"User-Agent": self.agents[0]}, timeout=self.setup.TIMEOUT, verify=False).content
-		error = open("error.gif","rb")
+		error = open("engine/error.gif","rb")
 
 		if image == error.read():
 			self.captchaType = "re"
@@ -377,7 +384,7 @@ class Wiper:
 						if self.setup.mode == 7 and self.setup.mediaKind == 0 and len(self.threads[threadNum].posts[white_anus].comment) == 0:
 							for i in range(10):
 								white_anus = random.randint(0, len(self.threads[threadNum].posts)-1)
-								if len(self.threads[threadNum].posts[white_anus].comment) != 0: break;  # это КОСТЬIЛЬ
+								if len(self.threads[threadNum].posts[white_anus].comment) != 0: break  # это КОСТЬIЛЬ
 
 					# === берём сначала триггер ===
 					if self.setup.triggerForm == 1:
@@ -485,7 +492,7 @@ class Wiper:
 									proxy = self.proxies.pop(0)
 									counter = 0
 							elif response["Error"] == -4:
-								print("Заносим "+proxy+" в forbidden.csv")
+								print("Заносим "+proxy+" в forbidden.txt")
 								badproxies.append(proxy)
 								forbiddenproxy.append(proxy)
 								if len(self.proxies) == 0:
@@ -569,5 +576,5 @@ try:
 	safe_quit(badproxies, forbiddenproxy, postsCounter)
 
 except Exception as e:
-	crash_quit("Потеряна связь с интернетами, проверь соединение. А может, arelive обосрался, тогда дрочи в присядку.")
+	crash_quit("Потеряна связь с интернетами, проверь соединение. А может, погроммисты обосрались, тогда дрочи в присядку.")
 

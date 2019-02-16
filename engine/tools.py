@@ -9,7 +9,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 def safe_quit(badproxies, forbiddenproxy, postsCounter, sig=0, frame=0):
 	print("\n\nЖду, пока обновится лист с проксичками...")
 
-	f = open("proxies", "r+")
+	f = open("proxies.cfg", "r+")
 	d = f.readlines()
 	f.seek(0)
 
@@ -20,7 +20,7 @@ def safe_quit(badproxies, forbiddenproxy, postsCounter, sig=0, frame=0):
 	f.truncate()
 	f.close()
 
-	d = open("forbidden.csv", "a")
+	d = open("forbidden.txt", "a")
 	for proxy in forbiddenproxy:
 		d.write(proxy + '\n')
 	d.close()
@@ -31,7 +31,7 @@ def safe_quit(badproxies, forbiddenproxy, postsCounter, sig=0, frame=0):
 	data = {}
 	data["posts"] = str(postsCounter)
 	data["bans"] = str(len(badproxies) - len(forbiddenproxy))
-	with open(".responce", "a") as file:
+	with open(".response", "a", encoding="utf-8") as file:
 		for key in data:
 			file.write(key+" "+data[key]+"\n")
 	
@@ -50,7 +50,7 @@ def safe_quit(badproxies, forbiddenproxy, postsCounter, sig=0, frame=0):
 	os._exit(0)
 
 def crash_quit (reason, badproxies=[], forbiddenproxy=[], postsCounter=0):
-	with open(".responce", "w") as file:
+	with open(".response", "w", encoding="utf-8") as file:
 		file.write("crash "+reason+"\n")
 	safe_quit(badproxies, forbiddenproxy, postsCounter)
 
@@ -78,6 +78,9 @@ def eternal_input(badproxies, forbiddenproxy, postsCounter):
 
 # ====== Стата ======
 class Stats:
+
+	# почините уже хоть кто-нибудь эту стату, ну пожалуйста 
+	# //tsunamaru
 
 	numOfProxies = 0
 	numOfThreads = 0
@@ -108,7 +111,6 @@ class Stats:
 		print("Забаненые проксички:\t", str((len(badproxies) - len(forbiddenproxy))))
 		print("Доступ запрещен:\t", str(len(forbiddenproxy)))
 		print("Текущие потоки:\t\t", str(threading.active_count()))
-		#print("Создано тредов/постов: ", posti, "\n")
 		if threading.active_count() <= 2:
 			print("ALL THREADS FINISHED, PRESS \"Q\"")
 		print("=====================================\n")

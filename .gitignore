@@ -122,8 +122,8 @@ wipe
 wiper
 images
 videos
-!*/images
-!*/videos
+!gui/**/images
+!gui/**/videos
 *.csv
 save
 *.exe
